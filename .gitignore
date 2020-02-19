@@ -1,0 +1,16 @@
+.DS_Store
+.vscode
+.venv
+.pyc
+*.ipynb*
+*.sqlite3
+__pycache__
+/venv/
+/.idea/
+/media/
+/tmp/
+/static/
+
+
+resources/settings_*.py
+resources/*.json

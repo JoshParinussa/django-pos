@@ -1,0 +1,21 @@
+django==3.0.3
+mysqlclient==1.4.4
+django-storages[google]==1.8
+sorl-thumbnail==12.6.2
+Pillow==7.0.0
+django-widget-tweaks==1.4.5
+django-mptt==0.11.0
+djangorestframework==3.11.0
+djangorestframework-datatables==0.5.1
+drf-flex-fields==0.7.5
+
+# Test, Coverage, Standard
+flake8==3.7.8
+flake8-bugbear==19.8.0
+flake8-import-order==0.18.1
+flake8-builtins==1.4.1
+flake8-docstrings==1.5.0
+pep8-naming==0.8.2
+black==19.3b0
+coverage==5.0.3
+unittest-xml-reporting==2.5.1

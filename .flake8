@@ -1,0 +1,67 @@
+[flake8]
+
+################### FILE PATTERNS ##########################
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    *migrations/*,
+    media/*,
+    static/*,
+    tmp/*
+    faced/vendors/*,
+    ./manage.py,
+    resources/settings.py,
+    resources/wsgi.py,
+    resources/asgi.py
+
+filename =
+    *.py
+
+per-file-ignores = 
+    resources/settings_*:D100,F403,F405
+    */models/__init__.py:F401
+    *tests/*:D100,D101,D102,D107
+    *tests/__init__.py:D104
+    *tests.py:D100,D101,D102,D107
+
+########## OPTIONS ##########
+
+disable-noqa = False
+max-line-length = 160
+max-complexity = 10
+select = A,B,C,D,E,F,I,N,W,B9
+application-import-names = 
+                            faced,
+import-order-style = google
+docstring-convention = google
+
+################### OUTPUT #################################
+
+########## VERBOSITY ##########
+
+# Increase the verbosity of Flake8’s output.
+verbose = 0
+# Decrease the verbosity of Flake8’s output.
+quiet = 0
+
+
+########## FORMATTING ##########
+
+# Select the formatter used to display errors to the user.
+format = default
+
+# Print the total number of errors.
+count = True
+# Print the source code generating the error/warning in question.
+show-source = True
+# Count the number of occurrences of each error/warning code and print a report.
+statistics = True
+
+
+########## TARGETS ##########
+
+# Redirect all output to the specified file.
+output-file = tmp/reports/.flake8.log
+# Also print output to stdout if output-file has been configured.
+tee = True

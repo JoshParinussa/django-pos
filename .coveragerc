@@ -1,0 +1,11 @@
+[run]
+include = 
+        faced/services/*
+
+data_file = tmp/reports/.coverage
+
+[xml]
+output = tmp/reports/coverage.xml
+
+[html]
+directory = tmp/reports/coverage_html

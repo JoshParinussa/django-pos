@@ -5,6 +5,10 @@ ujson==1.35
 requests==2.22.0
 django-storages[google]==1.8
 gunicorn==20.0.4
+django-widget-tweaks==1.4.5
+sorl-thumbnail==12.6.2
+Pillow==7.0.0
+
 
 # Test, Coverage, Standard
 flake8==3.7.8

@@ -151,3 +151,6 @@ LOGGING = {
         }
     }
 }
+
+AUTH_USER_MODEL = 'cashier.User'
+

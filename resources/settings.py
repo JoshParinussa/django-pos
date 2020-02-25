@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'cashier',
 ]
 
@@ -118,6 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 
 LOGGING = {
@@ -153,4 +155,6 @@ LOGGING = {
 }
 
 AUTH_USER_MODEL = 'cashier.User'
+
+LOGIN_URL = "login"
 

@@ -156,3 +156,5 @@ LOGGING = {
 
 AUTH_USER_MODEL = 'cashier.User'
 
+LOGIN_URL = "login"
+

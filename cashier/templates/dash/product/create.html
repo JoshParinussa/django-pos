@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static widget_tweaks%}
   {% block page_css %}
     <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
   {% endblock %}
@@ -43,28 +43,44 @@
               <form role="form">
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    {{ form.name|add_label_class:"" }}
+                    {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
+                    {% for error in form.name.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                    {% if form.name.help_text %}
+                    <span class="form-text text-muted">{{ form.name.help_text }}</span>
+                    {% endif %}
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    {{ form.barcode|add_label_class:"" }}
+                    {% render_field form.barcode|add_error_class:"is-invalid" class="form-control" %}
+                    {% for error in form.barcodecategorystock.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                    {% if form.barcode.help_text %}
+                    <span class="form-text text-muted">{{ form.barcode.help_text }}</span>
+                    {% endif %}
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text" id="">Upload</span>
-                      </div>
-                    </div>
+                    {{ form.category|add_label_class:"" }}
+                    {% render_field form.category|add_error_class:"is-invalid" class="form-control" %}
+                    {% for error in form.category.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                    {% if form.category.help_text %}
+                    <span class="form-text text-muted">{{ form.category.help_text }}</span>
+                    {% endif %}
                   </div>
-                  <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                  <div class="form-group">
+                    {{ form.stock|add_label_class:"" }}
+                    {% render_field form.stock|add_error_class:"is-invalid" class="form-control" %}
+                    {% for error in form.stock.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                    {% if form.stock.help_text %}
+                    <span class="form-text text-muted">{{ form.stock.help_text }}</span>
+                    {% endif %}
                   </div>
                 </div>
                 <!-- /.card-body -->

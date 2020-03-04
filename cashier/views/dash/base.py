@@ -63,7 +63,7 @@ class CmsCrudMixin:
         """
         s = slugify(camel_case_to_spaces(self.get_model().__name__))
         s = s.replace('-', '_')
-        return f'cms_{s}_{action}'
+        return f'dash_{s}_{action}'
 
     def get_actions(self):
         """Get type actions."""
@@ -112,7 +112,7 @@ class DashListView(CmsCrudMixin, TemplateView):
         raise NotImplementedError()
 
 
-class CmsUpdateView(CmsCrudMixin, CustomUpdateView):
+class DashUpdateView(CmsCrudMixin, CustomUpdateView):
     """CmsUpdateView."""
     pass
 
@@ -131,3 +131,14 @@ class DashCreateView(CmsCrudMixin, CustomCreateView):
 class CmsDeleteView(CmsCrudMixin, CustomDeleteView):
     """CmsDeleteView."""
     pass
+
+
+class DashCustomCreateView(CmsCrudMixin):
+    """DashCreateView."""
+
+    def get_model(self):
+        """Get model representation of list."""
+        if self.model:
+            return self.model
+
+        raise NotImplementedError()

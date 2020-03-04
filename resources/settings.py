@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    "rest_framework",
+    "rest_framework_datatables",
+    "django_filters",
     'cashier',
 ]
 
@@ -154,7 +157,23 @@ LOGGING = {
     }
 }
 
+
 AUTH_USER_MODEL = 'cashier.User'
 
-LOGIN_URL = "login"
+"""DJANGO REST FRAMEWORK
+"""
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework_datatables.renderers.DatatablesRenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_datatables.filters.DatatablesFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
+    'PAGE_SIZE': 50,
+}
 
+LOGIN_URL = "login"
+CASHIER_DASH_LOGOUT_REDIRECT_URL = 'login'

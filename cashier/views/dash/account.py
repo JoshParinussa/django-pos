@@ -1,6 +1,8 @@
 """User authorisation module."""
 from django.contrib.auth import views as account_views
 from django.shortcuts import resolve_url
+from django.urls import reverse_lazy
+from django.conf import settings
 
 
 class Login(account_views.LoginView):
@@ -15,3 +17,8 @@ class Login(account_views.LoginView):
 
         if user.is_superuser:
             return url or resolve_url('dash_view')
+
+
+class LogoutView(account_views.LogoutView):
+    """LogoutView."""
+    next_page = reverse_lazy(settings.CASHIER_DASH_LOGOUT_REDIRECT_URL)

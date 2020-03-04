@@ -2,11 +2,10 @@
 {% load static %}
   {% block page_css %}
     <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.dataTables.min.css">
   {% endblock %}
 
   {% block title%}
-    <title>DjangoCashier | Products</title>
+    <title>DjangoCashier | Categories</title>
   {% endblock %}
 
 <!-- Content Wrapper. Contains page content -->
@@ -16,10 +15,13 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
+          {% comment %} <div class="col-sm-6">
+            <h1>Categories</h1>
+          </div> {% endcomment %}
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Products</li>
+              <li class="breadcrumb-item active">Categories</li>
             </ol>
           </div>
         </div>
@@ -36,33 +38,22 @@
             <div class="card-header container-fluid">
               <div class="row">
                 <div class="col-10">
-                  <h3 >Products</h3>
+                  <h3 >Categories</h3>
                 </div>
                 <div class="col-2 float-right">
-                  <a href="{% url 'dash_product_create' %}" class="btn btn-primary">
-                        Add Products
+                  <a href="{% url 'dash_product_category_create' %}" class="btn btn-primary">
+                        Add Categories
                   </a>
                 </div>
               </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table responsive table-hover" style="width:100%">
-                <thead style="width:100%">
-                <tr >
+                <table id="example1" class="table table-hover">
+                <thead>
+                <tr>
                     <th>Name</th>
-                    <th>Barcode</th>
-                    <th>Stock</th>
-                    <th>Category</th>
-                    <th>Unit</th>
-                    <th>Purchase Price</th>
-                    <th>Selling Price</th>
-                    <th>Quantity Grosir 1</th>
-                    <th>Grosir 1 Price</th>
-                    <th>Quantity Grosir 2</th>
-                    <th>Grosir 2 Price</th>
-                    <th>Quantity Grosir 3</th>
-                    <th>Grosir 3 Price</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,12 +79,5 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'vendors/js/demo.js' %}"></script>
 <!-- page script -->
-<script src="{% static 'admin/products.js' %}"></script>
-<script>
-  
-  //$(".dataTables_scrollHeadInner .table").css("width","100%");
-  $(".table").css("width","100%");
-  
-  
-</script>
+<script src="{% static 'admin/category.js' %}"></script>
 {% endblock %}

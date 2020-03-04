@@ -1,7 +1,7 @@
 """Product forms module."""
 
 from cashier.forms.base import CustomModelForm
-from cashier.models import Product
+from cashier.models import Product, HargaBertingkat
 
 
 class DashProductCreationForm(CustomModelForm):
@@ -9,7 +9,7 @@ class DashProductCreationForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Product
-        fields = ("name", "barcode", "category", "stock")
+        fields = '__all__'
 
 
 class DashProductUpdateForm(CustomModelForm):
@@ -18,3 +18,11 @@ class DashProductUpdateForm(CustomModelForm):
     class Meta:  # noqa D106
         model = Product
         fields = ("name", "barcode", "category", "stock")
+
+
+class DashHargaBertingkatCreationForm(CustomModelForm):
+    """DashHargaBertingkatCreationForm."""
+
+    class Meta:  # noqa D106
+        model = HargaBertingkat
+        fields = '__all__'

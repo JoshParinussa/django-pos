@@ -11,3 +11,4 @@ class UnitSerializer(serializers.ModelSerializer):
         model = Unit
         name = 'unit'
         fields = '__all__'
+        datatables_always_serialize = ('id')

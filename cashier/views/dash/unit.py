@@ -1,7 +1,7 @@
 """Product views."""
 from cashier.forms import unit as unit_forms
 from cashier.models import Unit
-from cashier.views.dash.base import DashCreateView, DashListView
+from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView
 
 
 class DashUnitMixin:
@@ -23,3 +23,10 @@ class UnitCreateView(DashUnitMixin, DashCreateView):
     model = Unit
     form_class = unit_forms.DashUnitCreationForm
     template_name = 'dash/unit/create.html'
+
+
+class UnitUpdateView(DashUnitMixin, DashUpdateView):
+    """UnitUpdateView."""
+    model = Unit
+    form_class = unit_forms.DashUnitCreationForm
+    template_name = 'dash/unit/update.html'

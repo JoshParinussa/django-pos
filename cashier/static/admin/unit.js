@@ -30,20 +30,20 @@ var KTDatatablesDataSourceAjaxServer = function() {
 					// 	return `<a href="products/${row.id}" title="Product Details">${data}</a>`;
 					// }
 				},
-				// {
-				// 	targets: -1,
-				// 	title: 'Actions',
-				// 	orderable: false,
-				// 	render: function(data, type, row) {
-				// 		return `<a href="products/${row.id}/variants" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
-                //           <i class="flaticon2-layers-2"></i>
-                //     </a>`;
-				// 	},
-				// },
+				{
+					targets: -1,
+					title: 'Actions',
+					orderable: false,
+					render: function(data, type, row) {
+						return `<a href="units/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                          <i class="nav-icon fas fa-edit"></i>
+                    </a>`;
+					},
+				},
       ],
 			columns: [
 				{data: 'name', orderable: true, searchable:true, name: 'name'},
-				// {data: 'Actions', searchable: false, orderable: false, responsivePriority: -1}
+				{data: 'Actions', searchable: false, orderable: false, responsivePriority: -1}
 			],
 		});
 	};

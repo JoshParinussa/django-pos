@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static widget_tweaks%}
+  {% block page_css %}
+    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+  {% endblock %}
+
+  {% block title%}
+    <title>DjangoCashier | Units</title>
+  {% endblock %}
+
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    {% block content_header %}
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
+              <li class="breadcrumb-item active">Units</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    {% endblock %}
+
+    <!-- Main content -->
+    {% block content %}
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" method="post">
+              {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group row pt-4">
+                    {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.name.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.name.help_text %}
+                      <span class="form-text text-muted">{{ form.name.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <div class="row">
+                    <div class="col-lg-3 col-xl-3">
+                    </div>
+                    <div class="col-lg-9 col-xl-9">
+                        <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp;
+                    </div>
+                </div>
+                </div>
+              </form>
+            </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    {% endblock %}
+    <!-- /.content -->
+
+
+{% block page_js %}
+<!-- DataTables -->
+<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'vendors/js/demo.js' %}"></script>
+<!-- page script -->
+<script type="text/javascript">
+    $(document).ready(function () {
+    bsCustomFileInput.init();
+    });
+</script>
+{% endblock %}

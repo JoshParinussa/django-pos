@@ -6,14 +6,14 @@ var KTDatatablesDataSourceAjaxServer = function() {
 		console.log("A");
 		// begin first table
 		table.DataTable({
-			scrollX: true,
+			autoWidth: false,
 			processing: true,
             serverSide: true,
             serverSide: false,
 			pageLength: 10,
 			ordering: true,
 			paging: true,
-			scrollX: true,
+			// scrollX: true,
 			order: [[ 0, "asc" ]],
             ajax: {
 					'type': 'GET',

@@ -10,6 +10,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 		// begin first table
 		table.DataTable({
+			responsive: true,
+			// scrollX: true,
+			autoWidth: false,
 			serverSide: true,
 			pageLength: 50,
 			order: [[ 3, "desc" ]],

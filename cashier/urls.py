@@ -30,6 +30,7 @@ urlpatterns = [
     # ADMIN UNIT
     path('dash/units', dash_unit_view.UnitListView.as_view(), name='dash_unit_list'),
     path('dash/units/create', dash_unit_view.UnitCreateView.as_view(), name='dash_unit_create'),
+    path('dash/units/<str:pk>', dash_unit_view.UnitUpdateView.as_view(), name='dash_unit_update'),
 
     # ADMIN CATEGORY
     path('dash/categories', dash_category_view.ProductCategoryListView.as_view(), name='dash_product_category_list'),

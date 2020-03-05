@@ -40,7 +40,7 @@ urlpatterns = [
     # ADMIN PRODUCT
     path('dash/products', dash_product_view.ProductListView.as_view(), name='dash_product_list'),
     path('dash/products/create', dash_product_view.ProductCreateView.as_view(), name='dash_product_create'),
-    # path('dash/products/create', dash_product_view.product_create, name='dash_product_create'),
+    path('dash/products/<str:pk>', dash_product_view.ProductUpdateView.as_view(), name='dash_product_update'),
 
     # EMPLOYEES
     path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),

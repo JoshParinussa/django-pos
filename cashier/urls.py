@@ -42,5 +42,8 @@ urlpatterns = [
     # path('dash/products/create', dash_product_view.product_create, name='dash_product_create'),
 
     # EMPLOYEES
-    path('dash/employees', dash_user_view.UserListView.as_view(), name='dash_user_list'),
+    path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),
+    path('dash/users/create', dash_user_view.UserCreateView.as_view(), name='dash_user_create'),
+    path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
+    path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
 ]

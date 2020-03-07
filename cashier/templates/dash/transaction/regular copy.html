@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static widget_tweaks%}
+  {% block page_css %}
+    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+  {% endblock %}
+
+  {% block title%}
+    <title>DjangoCashier | Units</title>
+  {% endblock %}
+
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    {% block content_header %}
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
+              <li class="breadcrumb-item active">Transaction</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    {% endblock %}
+
+    <!-- Main content -->
+    {% block content %}
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+            <div class="card mx-auto col">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bold text-muted">Transaction <small>Regular</small></h3>
+                </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" method="post">
+              {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group row pt-4">
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Barcode</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Nama Item</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Qty</label>
+                        <input type="number" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Nama Item</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Total</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-lg-9 col-xl-6">
+                  </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <div class="row">
+                    <div class="col-lg-3 col-xl-3">
+                    </div>
+                    <div class="col-lg-9 col-xl-9">
+                        {% comment %} <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp; {% endcomment %}
+                    </div>
+                </div>
+                </div>
+
+                </form>
+            </div>
+            <div class="card mx-auto col">
+                <div class="card-body">
+                    <div class="form-group row pt-4">
+                        <label class="col-form-label">Date</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Kasir</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Customer</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    {% endblock %}
+    <!-- /.content -->
+
+
+{% block page_js %}
+<!-- DataTables -->
+<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'vendors/js/demo.js' %}"></script>
+<!-- page script -->
+<script type="text/javascript">
+    $(document).ready(function () {
+    bsCustomFileInput.init();
+    });
+</script>
+{% endblock %}

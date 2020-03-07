@@ -12,6 +12,7 @@ from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
 from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
+from cashier.views.dash import transaction as dash_transaction_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'units', api_unit.UnitViewSet)
@@ -47,4 +48,7 @@ urlpatterns = [
     path('dash/users/create', dash_user_view.UserCreateView.as_view(), name='dash_user_create'),
     path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
+
+    # TRANSACTION
+    path('dash/transaction/regular', dash_transaction_view.RegularTransactionView.as_view(), name='dash_transaction_create'),
 ]

@@ -26,11 +26,13 @@ class ProductCreateView(DashProductMixin, DashCreateView):
     form_class = product_forms.DashProductCreationForm
     template_name = 'dash/product/create.html'
 
+
 class ProductUpdateView(DashProductMixin, DashUpdateView):
     """ProductCreateView."""
     model = Product
     form_class = product_forms.DashProductCreationForm
     template_name = 'dash/product/update.html'
+
 
 class NewProductCreateView(DashProductMixin, DashCustomCreateView, View):
     """ProductCreateView."""

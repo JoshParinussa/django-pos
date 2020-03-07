@@ -2,7 +2,7 @@
 from cashier.forms import product as product_forms
 from cashier.forms import product as product_forms
 from cashier.models import Product
-from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView
+from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView, DashUpdateView
 from django.shortcuts import render
 from django.views.generic import View
 
@@ -26,6 +26,11 @@ class ProductCreateView(DashProductMixin, DashCreateView):
     form_class = product_forms.DashProductCreationForm
     template_name = 'dash/product/create.html'
 
+class ProductUpdateView(DashProductMixin, DashUpdateView):
+    """ProductUpdateView."""
+    model = Product
+    form_class = product_forms.DashProductUpdateForm
+    template_name = 'dash/product/update.html'
 
 class NewProductCreateView(DashProductMixin, DashCustomCreateView, View):
     """ProductCreateView."""

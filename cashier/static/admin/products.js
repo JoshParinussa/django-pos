@@ -22,9 +22,11 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			columnDefs: [
 				{
 					targets: 0,
-					render: function(data){
-						return !$.trim(data) ? '' : data;
-					}
+					render: function(data, type, row) {
+						return `<a href="convert/${row.id}" title="Convert">
+                          `+(!$.trim(data) ? '' : data)+`
+                    </a>`;
+					},
 				},
 				{
 					targets: 1,
@@ -98,16 +100,16 @@ var KTDatatablesDataSourceAjaxServer = function() {
 						return !$.trim(data) ? '' : data;
 					}
 				},
-				// {
-				// 	targets: -1,
-				// 	title: 'Actions',
-				// 	orderable: false,
-				// 	render: function(data, type, row) {
-				// 		return `<a href="products/${row.id}/variants" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
-                //           <i class="flaticon2-layers-2"></i>
-                //     </a>`;
-				// 	},
-				// },
+				{
+					targets: -1,
+					title: 'Actions',
+					orderable: false,
+					render: function(data, type, row) {
+						return `<a href="products/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                          <i class="nav-icon fas fa-edit"></i>
+                    </a>`;
+					},
+				},
       ],
 			columns: [
 				{data: 'name', orderable: true, searchable:true, name: 'name'},
@@ -123,8 +125,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				{data: 'grosir_2_price', orderable: true, searchable:true, name: 'grosir_2_price'},
 				{data: 'quantity_grosir_3', orderable: true, searchable:true, name: 'quantity_grosir_3'},
 				{data: 'grosir_3_price', orderable: true, searchable:true, name: 'grosir_3_price'},
-				
-				// {data: 'Actions', searchable: false, orderable: false, responsivePriority: -1}
+				{data: 'Actions', searchable: false, orderable: false, responsivePriority: -1}
 			],
 		});
 		$("#sidebar").on('click', function(e){

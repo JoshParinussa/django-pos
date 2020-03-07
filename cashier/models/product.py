@@ -21,6 +21,8 @@ class Product(BaseModel):
     quantity_grosir_3 = models.IntegerField(blank=False, null=True)
     grosir_3_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
 
+    supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         """String representation."""
         return self.name
@@ -56,4 +58,8 @@ class ConvertBarang(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField(blank=False, null=False)
+    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    grosir_1_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    grosir_2_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    grosir_3_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)

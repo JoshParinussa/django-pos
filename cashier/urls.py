@@ -7,17 +7,20 @@ from cashier.views.apis import product as api_product
 from cashier.views.apis import category as api_category
 from cashier.views.apis import unit as api_unit
 from cashier.views.apis import user as api_user
+from cashier.views.apis import supplier as api_supplier
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
 from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
+from cashier.views.dash import supplier as dash_supplier_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'units', api_unit.UnitViewSet)
 router.register(r'categories', api_category.ProductCategoryViewSet)
 router.register(r'products', api_product.ProductViewSet)
 router.register(r'employees', api_user.UserViewSet)
+router.register(r'supplier', api_supplier.SupplierViewSet)
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
 
@@ -40,7 +43,12 @@ urlpatterns = [
     # ADMIN PRODUCT
     path('dash/products', dash_product_view.ProductListView.as_view(), name='dash_product_list'),
     path('dash/products/create', dash_product_view.ProductCreateView.as_view(), name='dash_product_create'),
-    # path('dash/products/create', dash_product_view.product_create, name='dash_product_create'),
+    path('dash/products/<str:pk>', dash_product_view.ProductUpdateView.as_view(), name='dash_product_update'),
+
+    # ADMIN SUPPLIER
+    path('dash/supplier', dash_supplier_view.SupplierListView.as_view(), name='dash_supplier_list'),
+    path('dash/supplier/create', dash_supplier_view.SupplierCreateView.as_view(), name='dash_supplier_create'),
+    path('dash/supplier/<str:pk>', dash_supplier_view.SuplierUpdateView.as_view(), name='dash_supplier_update'),
 
     # EMPLOYEES
     path('dash/employees', dash_user_view.UserListView.as_view(), name='dash_user_list'),

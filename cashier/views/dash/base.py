@@ -10,13 +10,13 @@ from django.views.generic import (CreateView, DeleteView, FormView,
 class CustomCreateView(SuccessMessageMixin, CreateView):
     """CustomCreateView."""
 
-    success_message = "%(name)s was created successfully"
+    success_message = "Create success"
 
 
 class CustomUpdateView(SuccessMessageMixin, UpdateView):
     """CustomUpdateView."""
 
-    success_message = "%(name)s was Updated successfully"
+    success_message = "Update success"
 
 
 class CustomDeleteView(SuccessMessageMixin, DeleteView):

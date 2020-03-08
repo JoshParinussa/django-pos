@@ -50,5 +50,5 @@ urlpatterns = [
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
 
     # TRANSACTION
-    path('dash/transaction/regular', dash_transaction_view.RegularTransactionView.as_view(), name='dash_transaction_create'),
+    path('dash/transaction/sale', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
 ]

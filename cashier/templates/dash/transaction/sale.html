@@ -37,13 +37,13 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Date</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control">
+                                    <input type="text" id="sale-date" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Kasir</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control">
+                                    <input type="text" id="cashier" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -59,26 +59,36 @@
             <div class="col">
                 <div class="card mx-auto">
                     <form class="form-horizontal">
+                    {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Barcode</label>
-                                <div class="col-7">
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <button type="button" class="btn btn-info"><i class="fas fa-search"></i></button>&nbsp;
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input class="form-control" id="barcode" type="text" placeholder="Barcode" >
+                                        <div class="input-group-append">
+                                            <button type="button" id="search-product" class="btn btn-info input-group-text">
+                                            <i class="fas fa-search" ></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Nama Item</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control">
+                                    <input type="text" id="item-name" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Qty</label>
                                 <div class="col-9">
-                                    <input type="number" class="form-control">
+                                    <div class="input-group">
+                                        <input type="number" id="qty-item-cart" min="1" value='1' class="form-control">
+                                        <div class="input-group-append">
+                                            <button type="button" id="add-item-cart" class="btn btn-info input-group-text">
+                                            <i class="fas fa-cart-plus" ></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -120,6 +130,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -204,10 +216,14 @@
 <script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'vendors/js/demo.js' %}"></script>
-<!-- page script -->
+
 <script type="text/javascript">
-    $(document).ready(function () {
-    bsCustomFileInput.init();
-    });
+    let currentUser = '{{ request.user.username }}';
 </script>
+<!-- page script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script src="{% static 'admin/sale.js' %}"></script>
+<script src="{% static 'common.js' %}"></script>
+
+
 {% endblock %}

@@ -33,3 +33,10 @@ class DashConvertBarangCreationForm(CustomModelForm):
     class Meta:  # noqa D106
         model = ConvertBarang
         fields = '__all__'
+
+class DashConvertBarangUpdateForm(CustomModelForm):
+    """DashConvertBarangUpdateForm."""
+
+    class Meta:  # noqa D106
+        model = ConvertBarang
+        fields = '__all__'

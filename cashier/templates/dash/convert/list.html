@@ -5,7 +5,7 @@
   {% endblock %}
 
   {% block title%}
-    <title>DjangoCashier | Categories</title>
+    <title>DjangoCashier | Products | Convert</title>
   {% endblock %}
 
 <!-- Content Wrapper. Contains page content -->
@@ -21,7 +21,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item"><a href="{% url 'dash_product_list' %}">Product</a></li>
+              <li class="breadcrumb-item active">Convert</li>
             </ol>
           </div>
         </div>
@@ -38,12 +39,12 @@
             <div class="card-header container-fluid">
               <div class="row">
                 <div class="col-10">
-                  <h3 >Categories</h3>
+                  <h3 >Products</h3>
                 </div>
                 <div class="col-2 float-right">
-                  <a href="{% url 'dash_product_category_create' %}" class="btn btn-primary">
-                        Add Categories
-                  </a>
+                  <!-- <a href="{% url 'dash_product_convert_create' %}" class="btn btn-primary">
+                        Add Convert
+                  </a> -->
                 </div>
               </div>
             </div>
@@ -52,7 +53,14 @@
                 <table id="example1" class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Product ID</th>
+                    <th>Unit </th>
+                    <th>Quantity </th>
+                    <th>Purchase Price </th>
+                    <th>Selling Price </th>
+                    <th>Grosir 1 Price </th>
+                    <th>Grosir 2 Price </th>
+                    <th>Grosir 3 Price </th>
                     <th>Actions</th>
                 </tr>
                 </thead>

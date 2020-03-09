@@ -1,7 +1,6 @@
 """Product views."""
 from cashier.forms import product as product_forms
-from cashier.forms import product as product_forms
-from cashier.models import Product
+from cashier.models import Product, ConvertBarang
 from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView, DashUpdateView
 from django.shortcuts import render
 from django.views.generic import View
@@ -89,3 +88,21 @@ def product_create(request):
     }
 
     return render(request, template_name, context)
+
+
+class ConvertListView(DashProductMixin, DashListView):
+    """ConvertListView."""
+    template_name = 'dash/convert/list.html'
+    model = ConvertBarang
+
+class ConvertCreateView(DashProductMixin, DashCreateView):
+    """ConvertCreateView."""
+    model = ConvertBarang
+    form_class = product_forms.DashConvertBarangCreationForm
+    template_name = 'dash/convert/create.html'
+
+class ConvertUpdateView(DashProductMixin, DashUpdateView):
+    """ConvertUpdateView."""
+    model = ConvertBarang
+    form_class = product_forms.DashConvertBarangUpdateForm
+    template_name = 'dash/convert/update.html'

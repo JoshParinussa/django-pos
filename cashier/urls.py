@@ -44,6 +44,8 @@ urlpatterns = [
     path('dash/products', dash_product_view.ProductListView.as_view(), name='dash_product_list'),
     path('dash/products/create', dash_product_view.ProductCreateView.as_view(), name='dash_product_create'),
     path('dash/products/<str:pk>', dash_product_view.ProductUpdateView.as_view(), name='dash_product_update'),
+    path('dash/products/<str:pk>/convert', dash_product_view.ConvertListView.as_view(), name='dash_product_convert_list'),
+    path('dash/products/<str:pk>/convert/create', dash_product_view.ConvertCreateView.as_view(), name='dash_product_convert_create'),
 
     # ADMIN SUPPLIER
     path('dash/supplier', dash_supplier_view.SupplierListView.as_view(), name='dash_supplier_list'),

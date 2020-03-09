@@ -23,7 +23,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				{
 					targets: 0,
 					render: function(data, type, row) {
-						return `<a href="convert/${row.id}" title="Convert">
+						return `<a href="products/${row.id}/convert" title="Convert">
                           `+(!$.trim(data) ? '' : data)+`
                     </a>`;
 					},

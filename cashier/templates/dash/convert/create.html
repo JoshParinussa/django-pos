@@ -5,7 +5,7 @@
   {% endblock %}
 
   {% block title%}
-    <title>DjangoCashier | Product | Convert</title>
+    <title>DjangoCashier | Products | Convert</title>
   {% endblock %}
 
 <!-- Content Wrapper. Contains page content -->
@@ -39,14 +39,98 @@
               {% csrf_token %}
                 <div class="card-body">
                   <div class="form-group row pt-4">
-                    {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    {{ form.product_id|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                     <div class="col-lg-9 col-xl-6">
-                      {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.name.errors %}
+                      {% render_field form.product_id|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.product_id.errors %}
                       <div class="invalid-feedback">{{ error }}</div>
                       {% endfor %}
-                      {% if form.name.help_text %}
-                      <span class="form-text text-muted">{{ form.name.help_text }}</span>
+                      {% if form.product_id.help_text %}
+                      <span class="form-text text-muted">{{ form.product_id.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.unit_id|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.unit_id|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.unit_id.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.unit_id.help_text %}
+                      <span class="form-text text-muted">{{ form.unit_id.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.quantity|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.quantity|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.quantity.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.quantity.help_text %}
+                      <span class="form-text text-muted">{{ form.quantity.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.purchase_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.purchase_price|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.purchase_price.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.purchase_price.help_text %}
+                      <span class="form-text text-muted">{{ form.purchase_price.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.selling_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.selling_price|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.selling_price.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.selling_price.help_text %}
+                      <span class="form-text text-muted">{{ form.selling_price.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.grosir_1_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.grosir_1_price|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.grosir_1_price.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.grosir_1_price.help_text %}
+                      <span class="form-text text-muted">{{ form.grosir_1_price.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.grosir_2_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.grosir_2_price|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.grosir_2_price.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.grosir_2_price.help_text %}
+                      <span class="form-text text-muted">{{ form.grosir_2_price.help_text }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="form-group row pt-4">
+                    {{ form.grosir_3_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                    <div class="col-lg-9 col-xl-6">
+                      {% render_field form.grosir_3_price|add_error_class:"is-invalid" class="form-control" %}
+                      {% for error in form.grosir_3_price.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                      {% endfor %}
+                      {% if form.grosir_3_price.help_text %}
+                      <span class="form-text text-muted">{{ form.grosir_3_price.help_text }}</span>
                       {% endif %}
                     </div>
                   </div>

@@ -6,6 +6,7 @@ var itemName;
 var itemPrice;
 var purchaseItemQty;
 var purchaseItemTotal;
+let lineNo = 1;
 
 var date = moment().format("DD/MM/YYYY"); 
 $('#sale-date').val(date);
@@ -37,11 +38,10 @@ var getProductByBarcode = function (){
 }
 
 var drawPurchaseRow = function (){
-    let lineNo = 1;
     purchaseItemQty = $('#qty-item-cart').val();
     purchaseItemTotal = itemPrice * purchaseItemQty;
     var row = "<tr>"+
-            "<td>"+1+"</td>"+
+            "<td>"+lineNo+"</td>"+
             "<td>"+itemBarcode+"</td>"+
             "<td>"+itemName+"</td>"+
             "<td>"+itemPrice+"</td>"+
@@ -77,5 +77,7 @@ $('#add-item-cart').click(function (e){
 })
 
 $('#qty-item-cart').on('keypress', function(e){
-    drawPurchaseRow();
+    if(e.which == 13) {
+        drawPurchaseRow();
+    }
 })

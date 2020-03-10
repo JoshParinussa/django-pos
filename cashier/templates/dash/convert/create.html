@@ -32,7 +32,10 @@
     <section class="content">
       <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+          <div class="card w-75 mx-auto">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold text-muted">Convert <small>Create Convert</small></h3>
+            </div>
               <!-- /.card-header -->
               <!-- form start -->
               <form role="form" method="post">
@@ -132,6 +135,9 @@
                     </div>
                     <div class="col-lg-9 col-xl-9">
                         <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp;
+                        <a href="{% url 'dash_convert_barang_list' product_id %}">
+                          <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+                        </a>
                     </div>
                 </div>
                 </div>

@@ -17,7 +17,7 @@ class DashProductUpdateForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Product
-        fields = ("name", "barcode", "category", "stock")
+        fields = '__all__'
 
 
 class DashHargaBertingkatCreationForm(CustomModelForm):

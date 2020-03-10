@@ -17,7 +17,8 @@ class ProductSerializer(serializers.ModelSerializer):
 class ConvertBarangSerializer(serializers.ModelSerializer):
     """ConvertBarangSerializer."""
     product = serializers.CharField(source='product.name', read_only=True)
-
+    unit = serializers.CharField(source='unit.name', read_only=True)
+    
     class Meta:  # noqa D106
         model = ConvertBarang
         name = 'convertbarang'

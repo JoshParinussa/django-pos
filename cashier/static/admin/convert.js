@@ -1,4 +1,5 @@
 "use strict";
+window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 var KTDatatablesDataSourceAjaxServer = function() {
 
     var initTable1 = function() {
@@ -18,6 +19,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ajax: {
 					'type': 'POST',
 					'url': '/v1/converts/get_by_product?format=datatables',
+					'data': {'product':currentProduct},
 			},
 			columnDefs: [
 				{
@@ -76,7 +78,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 					title: 'Actions',
 					orderable: false,
 					render: function(data, type, row) {
-						return `<a href="products/${row.id}/converts/" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+						return `<a href="update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
 					},
@@ -84,7 +86,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
       ],
 			columns: [
 				{data: 'quantity', orderable: true, searchable:true, name: 'quantity'},
-				{data: 'unit_id', orderable: true, searchable:true, name: 'unit_id'},
+				{data: 'unit', orderable: true, searchable:true, name: 'unit'},
                 {data: 'purchase_price', orderable: true, searchable:true, name: 'purchase_price'},
                 {data: 'selling_price', orderable: true, searchable:true, name: 'selling_price'},
                 {data: 'grosir_1_price', orderable: true, searchable:true, name: 'grosir_1_price'},

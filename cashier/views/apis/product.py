@@ -29,7 +29,6 @@ class ConvertViewSet(viewsets.ModelViewSet):
     def get_by_product(self, request):
         """get_by_product."""
         product = request.POST.get('product')
-        # product = Product.objects.get(barcode=barcode)
         queryset = self.get_queryset().filter(product=product)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

@@ -1,7 +1,7 @@
 """Product views."""
 from cashier.forms import category as category_forms
 from cashier.models import ProductCategory
-from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView
+from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView, DashDeleteView
 
 
 class DashCategoryMixin:
@@ -30,3 +30,8 @@ class ProductCategoryUpdateView(DashCategoryMixin, DashUpdateView):
     model = ProductCategory
     form_class = category_forms.DashProductCategoryUpdateForm
     template_name = 'dash/category/update.html'
+
+class ProductCategoryDeleteView(DashCategoryMixin, DashDeleteView):
+    """ProductUpdateView."""
+    model = ProductCategory
+    template_name = 'dash/category/delete.html'

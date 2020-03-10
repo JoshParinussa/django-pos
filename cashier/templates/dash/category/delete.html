@@ -5,7 +5,7 @@
   {% endblock %}
 
   {% block title%}
-    <title>DjangoCashier | User</title>
+    <title>DjangoCashier | Category</title>
   {% endblock %}
 
 <!-- Content Wrapper. Contains page content -->
@@ -18,7 +18,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">User</li>
+              <li class="breadcrumb-item active">Category</li>
             </ol>
           </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="col-12">
             <div class="card w-75 mx-auto">
                 <div class="card-header">
-                    <h3 class="card-title font-weight-bold">User <small>Delete User</small></h3>
+                    <h3 class="card-title font-weight-bold">Category <small>Delete Category</small></h3>
                 </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -51,7 +51,7 @@
                         <label class="col-xl-3"></label>
                         <div class="col-lg-9 col-xl-6">
                             <span class="form-text text-muted">
-                                User will be permanently removed and cannot be restored.
+                                Category will be permanently removed and cannot be restored.
                             </span>
                         </div>
                     </div>
@@ -59,8 +59,8 @@
                     <div class="row">
                         <label class="col-xl-3"></label>
                         <div class="col-lg-9 col-xl-6">
-                            <a href="{% url 'dash_user_update' object.id %}">
-                                <h4>User : {{ object.email }} </h4>
+                            <a href="{% url 'dash_product_category_update' object.id %}">
+                                <h4>Category : {{ object.name }} </h4>
                             </a>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-lg-9 col-xl-9">
                         <button type="submit" class="btn btn-danger">Delete</button>&nbsp;
-                        <a href="{% url 'dash_user_update' object.id %}">
+                        <a href="{% url 'dash_product_category_update' object.id %}">
                             <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
                         </a>
                     </div>

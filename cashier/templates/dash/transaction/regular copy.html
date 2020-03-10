@@ -18,7 +18,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Units</li>
+              <li class="breadcrumb-item active">Transaction</li>
             </ol>
           </div>
         </div>
@@ -31,9 +31,9 @@
     <section class="content">
       <div class="row">
         <div class="col-12">
-            <div class="card w-75 mx-auto">
+            <div class="card mx-auto col">
                 <div class="card-header">
-                    <h3 class="card-title font-weight-bold text-muted">Unit <small>Create Unit</small></h3>
+                    <h3 class="card-title font-weight-bold text-muted">Transaction <small>Regular</small></h3>
                 </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -41,16 +41,23 @@
               {% csrf_token %}
                 <div class="card-body">
                   <div class="form-group row pt-4">
-                    {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                    <div class="col-lg-9 col-xl-6">
-                      {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.name.errors %}
-                      <div class="invalid-feedback">{{ error }}</div>
-                      {% endfor %}
-                      {% if form.name.help_text %}
-                      <span class="form-text text-muted">{{ form.name.help_text }}</span>
-                      {% endif %}
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Barcode</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Nama Item</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Qty</label>
+                        <input type="number" class="form-control">
                     </div>
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Nama Item</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="col-form-label">Total</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-lg-9 col-xl-6">
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -60,11 +67,24 @@
                     <div class="col-lg-3 col-xl-3">
                     </div>
                     <div class="col-lg-9 col-xl-9">
-                        <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp;
+                        {% comment %} <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp; {% endcomment %}
                     </div>
                 </div>
                 </div>
-              </form>
+
+                </form>
+            </div>
+            <div class="card mx-auto col">
+                <div class="card-body">
+                    <div class="form-group row pt-4">
+                        <label class="col-form-label">Date</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Kasir</label>
+                        <input type="text" class="form-control">
+                        <label class="col-form-label">Customer</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /.col -->

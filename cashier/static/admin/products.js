@@ -6,7 +6,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 		console.log("A");
 		// begin first table
 		table.DataTable({
-			scrollX: true,
+			autoWidth: false,
 			processing: true,
             serverSide: true,
             serverSide: false,
@@ -23,7 +23,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				{
 					targets: 0,
 					render: function(data, type, row) {
-						return `<a href="products/${row.id}/converts" title="Convert">
+						return `<a href="products/${row.id}/converts/get_by_product" title="Convert">
                           `+(!$.trim(data) ? '' : data)+`
                     </a>`;
 					},

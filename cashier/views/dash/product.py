@@ -123,7 +123,24 @@ class ConvertBarangCreateView(DashProductMixin, DashCreateView):
     form_class = product_forms.DashConvertBarangCreationForm
     template_name = 'dash/convert/create.html'
 
+    def get_context_data(self, **kwargs):
+        """Override get context."""
+        model = self.get_model()
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = model._meta.verbose_name.title()
+        context['model_name_plural'] = model._meta.verbose_name_plural.title()
+        context['icon'] = self.get_icon()
+        context['action'] = self.get_current_action()
+        object_product = Product.objects.filter(id=self.kwargs.get('pk'))
+        context['product_name'] = object_product.first().name
+        context['product_id'] = self.kwargs.get('pk')
 
+        for action in self.get_actions():
+            url_name = self._get_url_name(action)
+            context[f'{action}_url_name'] = url_name
+
+        return context
+        
     def get_success_url(self):
         """Override get_success_url."""
         next = self.request.POST.get('next', None)

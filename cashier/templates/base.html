@@ -36,7 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" id="sidebar" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="{% url 'dash_view' %}" class="nav-link">Home</a>
       </li>
     </ul>
 
@@ -45,7 +45,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <li class="dropdown user user-menu open">
             <a class="nav-link" data-toggle="dropdown" href="#">
               <img src="{% static 'vendors/img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs">{{ user.username }}</span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -113,7 +113,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
               <li class="nav-item">
                 <a href="{% url 'dash_product_category_list' %}" class="nav-link">
-                  <i class="nav-icon fas fa-buffer"></i>
+                  <i class="nav-icon fas fa-clipboard-list"></i>
                   <p>Categories</p>
                 </a>
               </li>
@@ -127,6 +127,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="{% url 'dash_supplier_list' %}" class="nav-link">
                   <i class="nav-icon fas fa-shopping-basket"></i>
                   <p>Suppliers</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Transaction
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+              <li class="nav-item">
+                <a href="{% url 'dash_transaction_create' %}" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Sale</p>
                 </a>
               </li>
             </ul>

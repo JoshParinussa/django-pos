@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% load static widget_tweaks%}
+  {% block page_css %}
+    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+  {% endblock %}
+
+  {% block title%}
+    <title>DjangoCashier | Units</title>
+  {% endblock %}
+
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    {% block content_header %}
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
+              <li class="breadcrumb-item active">Transaction</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    {% endblock %}
+
+    <!-- Main content -->
+    {% block content %}
+    <section class="content">
+        <div class="row">
+            <div class="col">
+                <div class="card mx-auto">
+                    <form class="form-horizontal">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Date</label>
+                                <div class="col-9">
+                                    <input type="text" id="sale-date" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Kasir</label>
+                                <div class="col-9">
+                                    <input type="text" id="cashier" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Customer</label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control">    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mx-auto">
+                    <form class="form-horizontal">
+                    {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Barcode</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input class="form-control" id="barcode" type="text" placeholder="Barcode" >
+                                        <div class="input-group-append">
+                                            <button type="button" id="search-product" class="btn btn-info input-group-text">
+                                            <i class="fas fa-search" ></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Nama Item</label>
+                                <div class="col-9">
+                                    <input type="text" id="item-name" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Qty</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input type="number" id="qty-item-cart" min="1" value='1' class="form-control">
+                                        <div class="input-group-append">
+                                            <button type="button" id="add-item-cart" class="btn btn-info input-group-text">
+                                            <i class="fas fa-cart-plus" ></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mx-auto">
+                    <div class="card-body">
+                        <div class="row">
+                            <h4><label class="col-form-label text-muted">Invoice</label>&nbsp;</h4>
+                            <h4><label class="col-form-label">MJ03032020</label></h4>
+                        </div>
+                        <div class="row">
+                            <label class="col-form-label" >
+                                <h3 class='col'>Rp.</h3>
+                            </label>
+                            <label class="col-form-label" >
+                                <h1 class='col' style="font-size: 70px;">7500</h1>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mx-auto">
+                    <div class="card-body">
+                        <table id="example1" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Barcode</th>
+                                    <th>Nama Item</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mx-auto">
+                    <form class="form-horizontal">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Sub Total</label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Grand Total</label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mx-auto">
+                    <form class="form-horizontal">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Cash</label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">Change</label>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mx-auto">
+                    <form class="form-horizontal">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-form-label col-2">Note</label>
+                                <div class="col">
+                                    <textarea class="col" rows="4">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group row">
+                    <button type="button" class="btn btn-danger">Cancel</button>&nbsp;
+                </div>
+                <div class="form-group row">
+                    <button type="button" class="btn btn-success">
+                        <i class="fas fa-shopping-cart"></i>&nbsp;Process Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    {% endblock %}
+    <!-- /.content -->
+
+
+{% block page_js %}
+<!-- DataTables -->
+<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'vendors/js/demo.js' %}"></script>
+
+<script type="text/javascript">
+    let currentUser = '{{ request.user.username }}';
+</script>
+<!-- page script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script src="{% static 'admin/sale.js' %}"></script>
+<script src="{% static 'common.js' %}"></script>
+
+
+{% endblock %}

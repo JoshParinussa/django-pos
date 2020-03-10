@@ -16,8 +16,8 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			paging: true,
 			order: [[ 0, "asc" ]],
             ajax: {
-					'type': 'GET',
-					'url': '/v1/converts?format=datatables',
+					'type': 'POST',
+					'url': '/v1/converts/get_by_product?format=datatables',
 			},
 			columnDefs: [
 				{

@@ -1,7 +1,7 @@
 """Product views."""
-# from cashier.forms import product as product_forms
+from cashier.forms.user import DashUserCreationForm, DashUserUpdateForm
 from django.contrib.auth import get_user_model
-from cashier.views.dash.base import DashCreateView, DashListView
+from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView, DashDeleteView
 
 User = get_user_model()
 
@@ -20,8 +20,23 @@ class UserListView(DashUserMixin, DashListView):
     model = User
 
 
-# class UserCreateView(DashUserMixin, DashCreateView):
-#     """ProductCreateView."""
-#     model = Product
-#     form_class = product_forms.DashProductCreationForm
-#     template_name = 'dash/product/create.html'
+class UserCreateView(DashUserMixin, DashCreateView):
+    """UserCreateView."""
+    model = User
+    form_class = DashUserCreationForm
+    template_name = 'dash/user/create.html'
+
+
+class UserUpdateView(DashUserMixin, DashUpdateView):
+    """UserUpdateView."""
+    model = User
+    form_class = DashUserUpdateForm
+    template_name = 'dash/user/update.html'
+    success_message = 'User %(email)s updated successfully'
+
+
+class UserDeleteView(DashUserMixin, DashDeleteView):
+    """UserDeleteView."""
+    model = User
+    template_name = 'dash/user/delete.html'
+    success_message = 'User %(email)s deleted successfully'

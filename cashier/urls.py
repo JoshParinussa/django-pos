@@ -14,6 +14,7 @@ from cashier.views.dash import category as dash_category_view
 from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
 from cashier.views.dash import supplier as dash_supplier_view
+from cashier.views.dash import transaction as dash_transaction_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'units', api_unit.UnitViewSet)
@@ -45,7 +46,7 @@ urlpatterns = [
     path('dash/products', dash_product_view.ProductListView.as_view(), name='dash_product_list'),
     path('dash/products/create', dash_product_view.ProductCreateView.as_view(), name='dash_product_create'),
     path('dash/products/<str:pk>', dash_product_view.ProductUpdateView.as_view(), name='dash_product_update'),
-    path('dash/products/<str:pk>/converts', dash_product_view.ConvertBarangListView.as_view(), name='dash_convert_barang_list'),
+    path('dash/products/<str:pk>/converts/get_by_product', dash_product_view.ConvertBarangListView.as_view(), name='dash_convert_barang_list'),
     path('dash/products/<str:pk>/converts/create', dash_product_view.ConvertBarangCreateView.as_view(), name='dash_convert_barang_create'),
 
     # ADMIN SUPPLIER
@@ -54,5 +55,11 @@ urlpatterns = [
     path('dash/supplier/<str:pk>', dash_supplier_view.SuplierUpdateView.as_view(), name='dash_supplier_update'),
 
     # EMPLOYEES
-    path('dash/employees', dash_user_view.UserListView.as_view(), name='dash_user_list'),
+    path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),
+    path('dash/users/create', dash_user_view.UserCreateView.as_view(), name='dash_user_create'),
+    path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
+    path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
+
+    # TRANSACTION
+    path('dash/transaction/sale', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
 ]

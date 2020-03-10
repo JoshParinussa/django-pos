@@ -10,7 +10,7 @@ from django.views.generic import (CreateView, DeleteView, FormView,
 class CustomCreateView(SuccessMessageMixin, CreateView):
     """CustomCreateView."""
 
-    success_message = "Create success"
+    success_message = "Record was created successfully"
 
 
 class CustomUpdateView(SuccessMessageMixin, UpdateView):
@@ -128,7 +128,7 @@ class DashCreateView(CmsCrudMixin, CustomCreateView):
         raise NotImplementedError()
 
 
-class CmsDeleteView(CmsCrudMixin, CustomDeleteView):
+class DashDeleteView(CmsCrudMixin, CustomDeleteView):
     """CmsDeleteView."""
     pass
 

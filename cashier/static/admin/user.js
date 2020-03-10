@@ -10,6 +10,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 		// begin first table
 		table.DataTable({
+			responsive: true,
+			// scrollX: true,
+			autoWidth: false,
 			serverSide: true,
 			pageLength: 50,
 			order: [[ 3, "desc" ]],
@@ -22,7 +25,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				{
 					targets: 0, 
 					render: function(data, type, row){
-						return !$.trim(data) ? '' : data;	
+						var output = `
+								<span class="kt-user-card-v2__name"><a href="users/${row.id}" title="User Details">${data}</a></span>`;
+						return !$.trim(data) ? '' : output;	
 				}},
 				{targets: 1, render: function(data){
 					var d = moment(data).format("ll");
@@ -30,16 +35,16 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				}},
 				{targets: 2, render: function(data){
 					if (data === true){
-						return '<span class="kt-badge kt-badge--info kt-badge--inline kt-badge--pill">Admin</span>';
+						return '<span class="badge badge-primary">Admin</span>';
 					}else{
-						return '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">Client</span>';
+						return '<span class="badge badge-warning">Employee</span>';
 					}
 				}},
                 {targets: 3, render: function(data){
 					if (data === true){
-						return '<span class="kt-badge kt-badge--primary kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-primary">Active</span>';
+						return '<span class="text-primary">.Active</span>';
 					}else{
-						return '<span class="kt-badge kt-badge--danger kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-danger">Inactive</span>';
+						return '<span class="text-danger">.Inactive</span>';
 					}
 				}}
             ],

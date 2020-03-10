@@ -55,8 +55,8 @@ class HargaBertingkat(BaseModel):
 
 class ConvertBarang(BaseModel):
     """ConvertBarang."""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='convert_barang')
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField(blank=False, null=False)
     purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)

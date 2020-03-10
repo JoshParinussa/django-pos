@@ -36,6 +36,7 @@
               <!-- /.card-header -->
               <!-- form start -->
               <form role="form" method="post">
+              <input type="hidden" name="product_id" value="{{product_id}}"/>
               {% csrf_token %}
                 <div class="card-body">
                   <div class="form-group row pt-4">

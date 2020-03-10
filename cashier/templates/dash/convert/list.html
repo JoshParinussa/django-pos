@@ -15,9 +15,6 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          {% comment %} <div class="col-sm-6">
-            <h1>Categories</h1>
-          </div> {% endcomment %}
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
@@ -39,12 +36,12 @@
             <div class="card-header container-fluid">
               <div class="row">
                 <div class="col-10">
-                  <h3 >Products</h3>
+                  <h3 >{{product_name}}</h3>
                 </div>
                 <div class="col-2 float-right">
-                  {% comment %} <a href="{% url 'dash_product_convert_create' %}" class="btn btn-primary">
+                  <a href="{% url 'dash_convert_barang_create' product_id %}" class="btn btn-primary">
                         Add Convert
-                  </a> {% endcomment %}
+                  </a>
                 </div>
               </div>
             </div>
@@ -53,9 +50,8 @@
                 <table id="example1" class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Product ID</th>
-                    <th>Unit </th>
                     <th>Quantity </th>
+                    <th>Unit </th>
                     <th>Purchase Price </th>
                     <th>Selling Price </th>
                     <th>Grosir 1 Price </th>
@@ -87,5 +83,5 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'vendors/js/demo.js' %}"></script>
 <!-- page script -->
-<script src="{% static 'admin/category.js' %}"></script>
+<script src="{% static 'admin/convert.js' %}"></script>
 {% endblock %}

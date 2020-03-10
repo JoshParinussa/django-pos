@@ -16,9 +16,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class ConvertBarangSerializer(serializers.ModelSerializer):
     """ConvertBarangSerializer."""
+    product = serializers.CharField(source='product.name', read_only=True)
 
     class Meta:  # noqa D106
         model = ConvertBarang
         name = 'convertbarang'
         fields = '__all__'
-        datatables_always_serialize = ('id','product_id','unit_id','quantity','purchase_price','selling_price','grosir_1_price','grosir_2_price','grosir_3_price')
+        # datatables_always_serialize = ('id','product','unit_id','quantity','purchase_price','selling_price','grosir_1_price','grosir_2_price','grosir_3_price')

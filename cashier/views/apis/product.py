@@ -12,4 +12,4 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ConvertViewSet(viewsets.ModelViewSet):
     """ConvertViewSet."""
     serializer_class = ConvertBarangSerializer
-    queryset = Product.objects.order_by('created_at')
+    queryset = ConvertBarang.objects.order_by('created_at')

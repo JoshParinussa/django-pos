@@ -8,6 +8,7 @@ from cashier.views.apis import category as api_category
 from cashier.views.apis import unit as api_unit
 from cashier.views.apis import user as api_user
 from cashier.views.apis import supplier as api_supplier
+from cashier.views.apis import sale as api_sale
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
@@ -17,6 +18,7 @@ from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
 
 router = routers.SimpleRouter(trailing_slash=False)
+router.register(r'sales', api_sale.SaleViewSet)
 router.register(r'units', api_unit.UnitViewSet)
 router.register(r'categories', api_category.ProductCategoryViewSet)
 router.register(r'products', api_product.ProductViewSet)

@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 from cashier.models import (Pembayaran, PembayaranProduct, Product,
-                            ProductCategory, HargaBertingkat, ConvertBarang, User)
+                            ProductCategory, HargaBertingkat, ConvertBarang, User, Invoice, Sale)
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -40,6 +40,16 @@ class ConvertBarangAdmin(admin.ModelAdmin):
     pass
 
 
+class InvoiceAdmin(admin.ModelAdmin):
+    """InvoiceAdmin."""
+    pass
+
+
+class SaleAdmin(admin.ModelAdmin):
+    """InvoiceAdmin."""
+    pass
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Pembayaran, PembayaranAdmin)
 admin.site.register(PembayaranProduct, PembayaranProductAdmin)
@@ -47,3 +57,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(HargaBertingkat, HargaBertingkatAdmin)
 admin.site.register(ConvertBarang, ConvertBarangAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(Sale, SaleAdmin)

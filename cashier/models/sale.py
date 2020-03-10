@@ -24,12 +24,16 @@ class Invoice(BaseModel):
         return self.invoice
 
 
-class Sales(BaseModel):
+class Sale(BaseModel):
     """Sales."""
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_sale')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_sale')
     qty = models.IntegerField(blank=False, null=False)
     total = models.DecimalField(max_digits=9, decimal_places=0)
+
+    def __str__(self):
+        """String representation."""
+        return self.product.name
 
 
 class Pembayaran(BaseModel):

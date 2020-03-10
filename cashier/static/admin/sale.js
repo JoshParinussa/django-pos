@@ -7,6 +7,7 @@ var itemPrice;
 var purchaseItemQty;
 var purchaseItemTotal;
 let lineNo = 1;
+var invoice_number = $('#invoice_number').text();
 
 var date = moment().format("DD/MM/YYYY"); 
 $('#sale-date').val(date);
@@ -40,6 +41,21 @@ var getProductByBarcode = function (){
 var drawPurchaseRow = function (){
     purchaseItemQty = $('#qty-item-cart').val();
     purchaseItemTotal = itemPrice * purchaseItemQty;
+
+    $.ajax({
+        type: "POST",
+        url: "/v1/sales/add_item",
+        data:{
+            "invoice_number": invoice_number,
+            "barcode": itemBarcode,
+            "qty": purchaseItemQty,
+            "total": purchaseItemTotal
+        },
+        success: function(result){
+
+        }
+    });
+
     var row = "<tr>"+
             "<td>"+lineNo+"</td>"+
             "<td>"+itemBarcode+"</td>"+
@@ -55,6 +71,10 @@ var drawPurchaseRow = function (){
     var tableBody = $("table tbody"); 
     tableBody.append(row); 
     lineNo++; 
+}
+
+var getInvoiceSaleItem = function (){
+    
 }
 
 

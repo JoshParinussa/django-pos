@@ -29,6 +29,7 @@
     <!-- Main content -->
     {% block content %}
     <section class="content">
+    {% csrf_token %}
         <div class="row">
             <div class="col">
                 <div class="card mx-auto">
@@ -107,7 +108,7 @@
                                 <h3 class='col'>Rp.</h3>
                             </label>
                             <label class="col-form-label" >
-                                <h1 class='col' style="font-size: 70px;">7500</h1>
+                                <h1 class='col' style="font-size: 70px;" id="grand_total">0</h1>
                             </label>
                         </div>
                     </div>
@@ -118,7 +119,7 @@
             <div class="col">
                 <div class="card mx-auto">
                     <div class="card-body">
-                        <table id="example1" class="table table-hover">
+                        <table id="item_table" class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -165,13 +166,13 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Cash</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control">
+                                    <input type="number" min="0"  class="form-control" id="cash">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Change</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control" disabled>
+                                    <input type="number" min="0" class="form-control" id="change" disabled>
                                 </div>
                             </div>
                         </div>
@@ -195,10 +196,10 @@
             </div>
             <div class="col">
                 <div class="form-group row">
-                    <button type="button" class="btn btn-danger">Cancel</button>&nbsp;
+                    <button type="button" class="btn btn-danger" id="btn-cancel-payment">Cancel</button>&nbsp;
                 </div>
                 <div class="form-group row">
-                    <button type="button" class="btn btn-success">
+                    <button type="button" class="btn btn-success" id="process_payment">
                         <i class="fas fa-shopping-cart"></i>&nbsp;Process Payment
                     </button>
                 </div>
@@ -222,8 +223,9 @@
 </script>
 <!-- page script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-<script src="{% static 'admin/sale.js' %}"></script>
 <script src="{% static 'common.js' %}"></script>
+<script src="{% static 'admin/sale.js' %}"></script>
+
 
 
 {% endblock %}

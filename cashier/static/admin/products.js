@@ -13,7 +13,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			pageLength: 10,
 			ordering: true,
 			paging: true,
-			scrollX: true,
+			// scrollX: true,
 			order: [[ 0, "asc" ]],
             ajax: {
 					'type': 'GET',
@@ -22,11 +22,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			columnDefs: [
 				{
 					targets: 0,
-					render: function(data, type, row) {
-						return `<a href="products/${row.id}/converts/get_by_product" title="Convert">
-                          `+(!$.trim(data) ? '' : data)+`
-                    </a>`;
-					},
+					render: function(data){
+						return !$.trim(data) ? '' : data;
+					}
 				},
 				{
 					targets: 1,

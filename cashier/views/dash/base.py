@@ -16,7 +16,7 @@ class CustomCreateView(SuccessMessageMixin, CreateView):
 class CustomUpdateView(SuccessMessageMixin, UpdateView):
     """CustomUpdateView."""
 
-    success_message = "Update success"
+    success_message = "%(name)s was Updated successfully"
 
 
 class CustomDeleteView(SuccessMessageMixin, DeleteView):

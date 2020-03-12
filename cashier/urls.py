@@ -7,14 +7,12 @@ from cashier.views.apis import product as api_product
 from cashier.views.apis import category as api_category
 from cashier.views.apis import unit as api_unit
 from cashier.views.apis import user as api_user
-from cashier.views.apis import supplier as api_supplier
 from cashier.views.apis import sale as api_sale
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
 from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
-from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
 
 router = routers.SimpleRouter(trailing_slash=False)
@@ -22,9 +20,7 @@ router.register(r'sales', api_sale.SaleViewSet)
 router.register(r'units', api_unit.UnitViewSet)
 router.register(r'categories', api_category.ProductCategoryViewSet)
 router.register(r'products', api_product.ProductViewSet)
-router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
-router.register(r'supplier', api_supplier.SupplierViewSet)
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
 
@@ -38,29 +34,16 @@ urlpatterns = [
     path('dash/units', dash_unit_view.UnitListView.as_view(), name='dash_unit_list'),
     path('dash/units/create', dash_unit_view.UnitCreateView.as_view(), name='dash_unit_create'),
     path('dash/units/<str:pk>', dash_unit_view.UnitUpdateView.as_view(), name='dash_unit_update'),
-    path('dash/units/<str:pk>/delete', dash_unit_view.UnitDeleteView.as_view(), name='dash_unit_delete'),
 
     # ADMIN CATEGORY
     path('dash/categories', dash_category_view.ProductCategoryListView.as_view(), name='dash_product_category_list'),
     path('dash/categories/create', dash_category_view.ProductCategoryCreateView.as_view(), name='dash_product_category_create'),
     path('dash/categories/<str:pk>', dash_category_view.ProductCategoryUpdateView.as_view(), name='dash_product_category_update'),
-    path('dash/categories/<str:pk>/delete', dash_category_view.ProductCategoryDeleteView.as_view(), name='dash_product_category_delete'),
 
     # ADMIN PRODUCT
     path('dash/products', dash_product_view.ProductListView.as_view(), name='dash_product_list'),
     path('dash/products/create', dash_product_view.ProductCreateView.as_view(), name='dash_product_create'),
     path('dash/products/<str:pk>', dash_product_view.ProductUpdateView.as_view(), name='dash_product_update'),
-    path('dash/products/<str:pk>/delete', dash_product_view.ProductDeleteView.as_view(), name='dash_product_delete'),
-    path('dash/products/<str:pk>/converts/get_by_product', dash_product_view.ConvertBarangListView.as_view(), name='dash_convert_barang_list'),
-    path('dash/products/<str:pk>/converts/create', dash_product_view.ConvertBarangCreateView.as_view(), name='dash_convert_barang_create'),
-    path('dash/products/<str:product>/converts/<str:pk>', dash_product_view.ConvertBarangUpdateView.as_view(), name='dash_convert_barang_update'),
-    path('dash/products/<str:product>/converts/<str:pk>/delete', dash_product_view.ConvertBarangDeleteView.as_view(), name='dash_convert_barang_delete'),
-
-    # ADMIN SUPPLIER
-    path('dash/supplier', dash_supplier_view.SupplierListView.as_view(), name='dash_supplier_list'),
-    path('dash/supplier/create', dash_supplier_view.SupplierCreateView.as_view(), name='dash_supplier_create'),
-    path('dash/supplier/<str:pk>', dash_supplier_view.SupplierUpdateView.as_view(), name='dash_supplier_update'),
-    path('dash/supplier/<str:pk>/delete', dash_supplier_view.SupplierDeleteView.as_view(), name='dash_supplier_delete'),
 
     # EMPLOYEES
     path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),

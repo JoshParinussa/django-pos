@@ -80,3 +80,18 @@ class SaleViewSet(viewsets.ModelViewSet):
         item = Sale.objects.get(invoice=invoice, product=product)
         item.delete()
         return Response(model_to_dict(item))
+
+    @action(detail=False, methods=['POST'])
+    def update_item(self, request):
+        """update_item."""
+        invoice_number = request.POST.get('invoice_number')
+        barcode = request.POST.get('barcode')
+        new_qty = request.POST.get('qty')
+
+        invoice = Invoice.objects.get(invoice=invoice_number)
+        product = Product.objects.get(barcode=barcode)
+
+        item = Sale.objects.get(invoice=invoice, product=product)
+        item.qty = new_qty
+        item.save()
+        return Response(model_to_dict(item))

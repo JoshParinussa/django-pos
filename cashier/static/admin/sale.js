@@ -12,6 +12,10 @@ var grandTotal = 0;
 var cash = 0;
 var change = 0;
 
+//Modal
+var row;
+
+
 var date = moment().format("DD/MM/YYYY"); 
 $('#sale-date').val(date);
 $('#cashier').val(currentUser);
@@ -72,13 +76,13 @@ var drawPurchaseRow = function (){
             }else{
                 var row = "<tr id='"+idRow+"'"+itemBarcode+"'>"+
                         "<td>"+lineNo+"</td>"+
-                        "<td>"+itemBarcode+"</td>"+
-                        "<td>"+itemName+"</td>"+
+                        "<td class='product-barcode'>"+itemBarcode+"</td>"+
+                        "<td class='product-name'>"+itemName+"</td>"+
                         "<td class='price'>"+itemPrice+"</td>"+
                         "<td class='qty'>"+purchaseItemQty+"</td>"+
                         "<td class='purchase_total'>"+purchaseItemTotal+"</td>"+
                         "<td>"+
-                            "<button type='button' onclick='updateItem(this)' class='btn btn-info'>Update</button>&nbsp;"+
+                            "<button type='button' onclick='updateItem(this)' class='btn btn-info' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;"+
                             "<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;"+
                         "</td>"+
                     "</tr>";
@@ -117,13 +121,13 @@ var getInvoiceSaleItem = function (){
                 }else{
                     var row = "<tr id='"+item.barcode+"'>"+
                             "<td>"+lineNo+"</td>"+
-                            "<td>"+item.barcode+"</td>"+
-                            "<td>"+item.product+"</td>"+
+                            "<td class='product-barcode'>"+item.barcode+"</td>"+
+                            "<td class='product-name'>"+item.product+"</td>"+
                             "<td class='price' data-price='"+item.price+"'>"+item.price+"</td>"+
                             "<td class='qty'>"+item.qty+"</td>"+
                             "<td class='purchase_total'>"+item.total+"</td>"+
                             "<td>"+
-                                "<button type='button' onclick='updateItem(this) id='btn-update' class='btn btn-info btn-update'>Update</button>&nbsp;"+
+                                "<button type='button' onclick='updateItem(this)' id='btn-update' class='btn btn-info btn-update' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;"+
                                 "<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;"+
                             "</td>"+
                         "</tr>";
@@ -209,3 +213,32 @@ var deleteItem = function(e){
         }
     });
 }
+
+var updateItem = function(e){
+    row = $(e).closest('tr')
+    var row_barcode = row.attr('id');
+    var itemName = row.find(".product-name").html();
+    var itemQty = row.find(".qty").html();
+    var itemBarcode = row.find(".product-barcode").html();
+    $('#modal-item-name').val(itemName);
+    $('#modal-qty-item-cart').val(itemQty);
+    $('#modal-barcode').val(itemBarcode);
+}
+
+$('#modal-btn-update').click(function(e){
+    var newQty = $('#modal-qty-item-cart').val();
+    $.ajax({
+        type: "POST",
+        url: "/v1/sales/update_item",
+        data:{
+            "invoice_number": invoice_number,
+            "barcode": $('#modal-barcode').val(),
+            "qty": newQty
+        },
+        success: function(result){
+            row.find(".qty").html(newQty);
+            $('#modal-default').modal('toggle');
+        }
+    });
+});
+

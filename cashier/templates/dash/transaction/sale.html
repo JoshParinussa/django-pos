@@ -2,6 +2,7 @@
 {% load static widget_tweaks%}
   {% block page_css %}
     <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/sale.css' %}">
   {% endblock %}
 
   {% block title%}
@@ -206,10 +207,52 @@
             </div>
         </div>
         <!-- /.row -->
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Nama Item</label>
+                            <div class="col-9">
+                                <input type="text" id="modal-item-name" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Qty</label>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
+        
+        
     </section>
     {% endblock %}
     <!-- /.content -->
 
+    
 
 {% block page_js %}
 <!-- DataTables -->

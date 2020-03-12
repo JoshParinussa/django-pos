@@ -14,12 +14,12 @@ class Product(BaseModel):
     purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
 
-    quantity_grosir_1 = models.IntegerField(blank=False, null=True)
-    grosir_1_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
-    quantity_grosir_2 = models.IntegerField(blank=False, null=True)
-    grosir_2_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
-    quantity_grosir_3 = models.IntegerField(blank=False, null=True)
-    grosir_3_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    quantity_grosir_1 = models.IntegerField(blank=True, null=True)
+    grosir_1_price = models.DecimalField(max_digits=9, blank=True, decimal_places=0, null=True)
+    quantity_grosir_2 = models.IntegerField(blank=True, null=True)
+    grosir_2_price = models.DecimalField(max_digits=9, blank=True, decimal_places=0, null=True)
+    quantity_grosir_3 = models.IntegerField(blank=True, null=True)
+    grosir_3_price = models.DecimalField(max_digits=9, blank=True, decimal_places=0, null=True)
 
     supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, blank=True, null=True)
 

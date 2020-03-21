@@ -227,18 +227,88 @@ var updateItem = function(e){
 
 $('#modal-btn-update').click(function(e){
     var newQty = $('#modal-qty-item-cart').val();
+    grandTotal -= Number(row.find(".purchase_total").html());
+    var newTotal = Number(newQty) * Number(row.find(".price").html());
+    grandTotal += newTotal;
     $.ajax({
         type: "POST",
         url: "/v1/sales/update_item",
         data:{
             "invoice_number": invoice_number,
             "barcode": $('#modal-barcode').val(),
-            "qty": newQty
+            "qty": newQty,
+            'total': newTotal
         },
         success: function(result){
             row.find(".qty").html(newQty);
+            row.find(".purchase_total").html(newTotal)
             $('#modal-default').modal('toggle');
+            $('#grand_total').text(grandTotal);
         }
     });
 });
 
+var printResult = function () {
+
+    var htmlReceiptHead = 
+
+    $("#item_table tbody").find("tr").each(function(){
+        console.log($(this).find('.product-name').html());
+    });
+    var html = 
+    '<div id="print-receipt">' +
+        '<div class="receipt" id="receipt">'+
+            '<p class="centered" id="ticket-title">Django Cashier Receipt'+
+                '<br>Address line 1' +
+                '<br>Address line 2</p>' +
+            '<table>' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th class="quantity">Qty.</th>' +
+                        '<th class="description">Item</th>' +
+                        '<th class="price">Total</th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '<td class="quantity">1.00</td>' +
+                        '<td class="description">ARDUINO UNO R3</td>' +
+                        '<td class="price">$25.00</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td class="quantity">2.00</td>' +
+                        '<td class="description">JAVASCRIPT BOOK</td>' +
+                        '<td class="price">$10.00</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td class="quantity">1.00</td>' +
+                        '<td class="description">STICKER PACK</td>' +
+                        '<td class="price">$10.00</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td class="quantity"></td>' +
+                        '<td class="description">TOTAL</td>' +
+                        '<td class="price">$55.00</td>' +
+                    '</tr>' +
+                '</tbody>' +
+            '</table>' +
+            '<p class="centered">Thanks for your purchase!' +
+                '<br>parzibyte.me/blog</p>' +
+        '</div>' +
+    '</div>';
+    // var myPrintContent = document.getElementById('print-receipt');
+    var myPrintWindow = window.open('', 'Print', '');
+    myPrintWindow.document.write(html);
+    // myPrintWindow.document.getElementById('receipt').style.display='block'
+    myPrintWindow.document.close();
+    myPrintWindow.focus();
+    myPrintWindow.print();
+    myPrintWindow.close();    
+    return false;
+}
+
+$('#btn-check').click(function(){
+    $("#item_table tbody").find("tr").each(function(){
+        console.log($(this).find('.product-name').html());
+    });
+})

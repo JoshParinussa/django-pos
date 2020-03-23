@@ -2,6 +2,7 @@
 {% load static widget_tweaks%}
   {% block page_css %}
     <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/sale.css' %}">
   {% endblock %}
 
   {% block title%}
@@ -29,6 +30,7 @@
     <!-- Main content -->
     {% block content %}
     <section class="content">
+    {% csrf_token %}
         <div class="row">
             <div class="col">
                 <div class="card mx-auto">
@@ -107,7 +109,7 @@
                                 <h3 class='col'>Rp.</h3>
                             </label>
                             <label class="col-form-label" >
-                                <h1 class='col' style="font-size: 70px;">7500</h1>
+                                <h1 class='col' style="font-size: 70px;" id="grand_total">0</h1>
                             </label>
                         </div>
                     </div>
@@ -118,7 +120,7 @@
             <div class="col">
                 <div class="card mx-auto">
                     <div class="card-body">
-                        <table id="example1" class="table table-hover">
+                        <table id="item_table" class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -165,13 +167,13 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Cash</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control">
+                                    <input type="number" min="0"  class="form-control" id="cash">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-3">Change</label>
                                 <div class="col-9">
-                                    <input type="text" class="form-control" disabled>
+                                    <input type="number" min="0" class="form-control" id="change" disabled>
                                 </div>
                             </div>
                         </div>
@@ -195,26 +197,72 @@
             </div>
             <div class="col">
                 <div class="form-group row">
-                    <button type="button" class="btn btn-danger">Cancel</button>&nbsp;
+                    <button type="button" class="btn btn-danger" id="btn-cancel-payment" onclick="printResult()">Cancel</button>&nbsp;
                 </div>
                 <div class="form-group row">
-                    <button type="button" class="btn btn-success">
+                    <button type="button" class="btn btn-success" id="process_payment">
                         <i class="fas fa-shopping-cart"></i>&nbsp;Process Payment
+                    </button>
+                    <button type="button" class="btn btn-success" id="btn-check">
+                        <i class="fas fa-shopping-cart"></i>&nbsp;CHECK
                     </button>
                 </div>
             </div>
         </div>
         <!-- /.row -->
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Nama Item</label>
+                            <div class="col-9">
+                                <input type="text" id="modal-item-name" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Qty</label>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+      <!-- /.modal -->
     </section>
     {% endblock %}
     <!-- /.content -->
 
+    
+
+    
 
 {% block page_js %}
 <!-- DataTables -->
 <script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
 <script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
+<script src="{% static 'vendors/js/printThis.js' %}"></script>
 <script src="{% static 'vendors/js/demo.js' %}"></script>
 
 <script type="text/javascript">
@@ -222,8 +270,9 @@
 </script>
 <!-- page script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-<script src="{% static 'admin/sale.js' %}"></script>
 <script src="{% static 'common.js' %}"></script>
+<script src="{% static 'admin/sale.js' %}"></script>
+
 
 
 {% endblock %}

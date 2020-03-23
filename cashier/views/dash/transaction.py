@@ -10,18 +10,18 @@ class SaleTransactionView(TemplateView):
     def get_context_data(self, **kwargs):
         """Override get context."""
         context = super().get_context_data(**kwargs)
-        user = self.request.user.username.upper()[0]
+        user = self.request.user
         today_invoice = datetime.now().date().strftime("%d%m%Y")
-        last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).first()
+        last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
         if not last_invoice:
             count = 1
-            invoice_number = 'K' + user + today_invoice + str(count)
-            Invoice.objects.create(invoice=invoice_number)
+            invoice_number = 'K' + user.username.upper()[0] + today_invoice + str(count)
+            Invoice.objects.create(invoice=invoice_number, cashier=user)
         else:
             if last_invoice.status == 1 or last_invoice.status == 2:
                 count = int((last_invoice.invoice)[10:]) + 1
-                invoice_number = 'K' + user + today_invoice + str(count)
-                Invoice.objects.create(invoice=invoice_number)
+                invoice_number = 'K' + user.username.upper()[0] + today_invoice + str(count)
+                Invoice.objects.create(invoice=invoice_number, cashier=user)
             else:
                 invoice_number = last_invoice.invoice
 

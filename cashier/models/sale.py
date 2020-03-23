@@ -17,6 +17,10 @@ class Invoice(BaseModel):
     """Invoice."""
     invoice = models.CharField(max_length=128, db_index=True)
     date = models.DateTimeField(auto_now_add=True)
+    cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name='invoice_cashier')
+    cash = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
+    change = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
+    total = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     status = models.PositiveSmallIntegerField(choices=InvoiceStatus.choices, default=InvoiceStatus.EMPTY, db_index=True)
 
     def __str__(self):
@@ -33,7 +37,7 @@ class Sale(BaseModel):
 
     def __str__(self):
         """String representation."""
-        return self.product.name
+        return self.invoice.invoice + ' - ' + self.product.name
 
 
 class Pembayaran(BaseModel):

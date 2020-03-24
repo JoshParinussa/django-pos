@@ -5,7 +5,7 @@
   {% endblock %}
 
   {% block title%}
-    <title>DjangoCashier | Units</title>
+    <title>DjangoCashier | Product</title>
   {% endblock %}
 
 <!-- Content Wrapper. Contains page content -->
@@ -18,7 +18,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Units</li>
+              <li class="breadcrumb-item active">Product</li>
             </ol>
           </div>
         </div>
@@ -28,46 +28,58 @@
 
     <!-- Main content -->
     {% block content %}
-    <section class="content">
+    <section class="content ">
       <div class="row">
         <div class="col-12">
             <div class="card w-75 mx-auto">
                 <div class="card-header">
-                    <h3 class="card-title font-weight-bold text-muted">Unit <small>Create Unit</small></h3>
+                    <h3 class="card-title font-weight-bold">Product <small>Delete Product</small></h3>
                 </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" method="post">
-              {% csrf_token %}
+                <form role="form" method="post">
+                {% csrf_token %}
                 <div class="card-body">
-                  <div class="form-group row pt-4">
-                    {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                    <div class="col-lg-9 col-xl-6">
-                      {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.name.errors %}
-                      <div class="invalid-feedback">{{ error }}</div>
-                      {% endfor %}
-                      {% if form.name.help_text %}
-                      <span class="form-text text-muted">{{ form.name.help_text }}</span>
-                      {% endif %}
+                    <div class="row">
+                        <label class="col-xl-3"></label>
+                        <div class="col-lg-9 col-xl-6">
+                            <h3><small>Are you sure?</small></h3>
+                        </div>
                     </div>
-                  </div>
+
+                    <div class="row">
+                        <label class="col-xl-3"></label>
+                        <div class="col-lg-9 col-xl-6">
+                            <span class="form-text text-muted">
+                                Product will be permanently removed and cannot be restored.
+                            </span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="col-xl-3"></label>
+                        <div class="col-lg-9 col-xl-6">
+                            <a href="{% url 'dash_product_update' object.id %}">
+                                <h4>Product : {{ object.name }} </h4>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <div class="row">
+                    <div class="row">
                     <div class="col-lg-3 col-xl-3">
                     </div>
                     <div class="col-lg-9 col-xl-9">
-                        <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp;
-                        <a href="{% url 'dash_unit_list' %}">
-                          <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+                        <button type="submit" class="btn btn-danger">Delete</button>&nbsp;
+                        <a href="{% url 'dash_product_update' object.id %}">
+                            <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
                         </a>
                     </div>
                 </div>
                 </div>
-              </form>
+                </form>
             </div>
         </div>
         <!-- /.col -->

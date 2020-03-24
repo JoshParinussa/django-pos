@@ -123,6 +123,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Products</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{% url 'dash_supplier_list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-shopping-basket"></i>
+                  <p>Suppliers</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -158,7 +164,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {% block content %}
     {% endblock %}
     <!-- /.content -->
-    
   </div>
   <!-- /.content-wrapper -->
 
@@ -198,9 +203,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {% endblock %}
 <!--end::Page Scripts -->
 
-<!-- Main Modal -->
-    {% block modal %}
-    {% endblock %}
-  <!-- /.Modal -->
 </body>
 </html>

@@ -18,7 +18,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item"><a href="{% url 'dash_product_list' %}">Product</a></li>
+              <li class="breadcrumb-item active">Convert</li>
             </ol>
           </div>
         </div>
@@ -125,6 +126,18 @@
                     {% endif %}
                   </div>
                 </div>
+                <div class="border-top my-3"></div>
+                    <div class="form-group form-group-last row">
+                        <div class="col-xl-3 col-lg-3"></div>
+                        <div class="col-lg-9 col-xl-6">
+                            <a href="{% url 'dash_convert_barang_delete' product_id object.id %}">
+                                <button type="button" class="btn btn-danger btn-bold btn-sm">Remove this convert ?</button>
+                                <span class="form-text text-muted">
+                                    <strong>Be sure!</strong> convert will be permanently removed and cannot be restored.
+                                </span>
+                            </a>
+                        </div>
+                    </div>
               </div>
                 <!-- /.card-body -->
 

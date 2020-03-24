@@ -78,7 +78,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 					title: 'Actions',
 					orderable: false,
 					render: function(data, type, row) {
-						return `<a href="update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+						return `<a href="${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
 					},

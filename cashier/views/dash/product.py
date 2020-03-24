@@ -1,19 +1,18 @@
 """Product views."""
 from cashier.forms import product as product_forms
 from cashier.models import Product, ConvertBarang
-from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView, DashUpdateView
+from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView, DashUpdateView, DashDeleteView
 from django.shortcuts import render
 from django.views.generic import View
 from django.urls import reverse
+
 
 class DashProductMixin:
     """Mixin for define common attribute between classes."""
 
     def get_icon(self):
         """Get icon."""
-        return 'flaticon-list-1'    
-
-        
+        return 'flaticon-list-1'
 
 
 class ProductListView(DashProductMixin, DashListView):
@@ -36,12 +35,19 @@ class ProductUpdateView(DashProductMixin, DashUpdateView):
     template_name = 'dash/product/update.html'
 
 
+class ProductDeleteView(DashProductMixin, DashDeleteView):
+    """ProductDeleteView."""
+    model = Product
+    template_name = 'dash/product/delete.html'
+
+
 class NewProductCreateView(DashProductMixin, DashCustomCreateView, View):
     """ProductCreateView."""
     template_name = 'dash/product/create.html'
     model = Product
 
     def get(self, request):
+        """Get."""
         if request.method == "POST":
             product_form = product_forms.DashProductCreationForm(request.POST)
             harga_bertingkat_form = [product_forms.DashHargaBertingkatCreationForm(prefix=str(x)) for x in range(3)]
@@ -67,7 +73,7 @@ class NewProductCreateView(DashProductMixin, DashCustomCreateView, View):
 
 
 def product_create(request):
-
+    """Product_create."""
     template_name = 'dash/product/create.html'
     if request.method == "POST":
         product_form = product_forms.DashProductCreationForm(request.POST)
@@ -115,8 +121,8 @@ class ConvertBarangListView(DashProductMixin, DashListView):
             context[f'{action}_url_name'] = url_name
 
         return context
-    
-    
+
+
 class ConvertBarangCreateView(DashProductMixin, DashCreateView):
     """ConvertBarangCreateView."""
     model = ConvertBarang
@@ -157,7 +163,7 @@ class ConvertBarangUpdateView(DashProductMixin, DashUpdateView):
     model = ConvertBarang
     form_class = product_forms.DashConvertBarangUpdateForm
     template_name = 'dash/convert/update.html'
-        
+
     def get_context_data(self, **kwargs):
         """Override get context."""
         model = self.get_model()
@@ -178,9 +184,46 @@ class ConvertBarangUpdateView(DashProductMixin, DashUpdateView):
 
     def get_success_url(self):
         """Override get_success_url."""
+        action = self.request.POST.get('next', None)
+        if action == 'update':
+            return reverse(self._get_url_name('update'), args=(self.object.pk,))
+        elif action == 'create':
+            return reverse(self._get_url_name('create'))
+        else:
+            return reverse(self._get_url_name('list'), args=(self.kwargs.get('product'),))
+
+
+class ConvertBarangDeleteView(DashProductMixin, DashDeleteView):
+    """ConvertBarangDeleteView."""
+    model = ConvertBarang
+    template_name = 'dash/convert/delete.html'
+
+    def get_context_data(self, **kwargs):
+        """Override get context."""
+        model = self.get_model()
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = model._meta.verbose_name.title()
+        context['model_name_plural'] = model._meta.verbose_name_plural.title()
+        context['icon'] = self.get_icon()
+        context['action'] = self.get_current_action()
+        object_product = Product.objects.filter(id=self.kwargs.get('product'))
+        context['product_name'] = object_product.first().name
+        context['product_id'] = self.kwargs.get('product')
+        context['object_id'] = self.kwargs.get('pk')
+        print("#TES", self.kwargs.get('pk'))
+
+        for action in self.get_actions():
+            url_name = self._get_url_name(action)
+            context[f'{action}_url_name'] = url_name
+
+        return context
+
+    def get_success_url(self):
+        """Override get_success_url."""
         next = self.request.POST.get('next', None)
         if next == 'update':
-            return reverse(self._get_url_name('update'), args=(self.object.pk,))
+            # return reverse(self._get_url_name('update'), args=(self.object.pk,))
+            return reverse(self._get_url_name('update'), kwargs={'product_id': self.kwargs.get('product'), 'pk': self.object.pk})
         elif next == 'create':
             return reverse(self._get_url_name('create'))
         else:

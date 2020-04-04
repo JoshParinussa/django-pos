@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from cashier.models import Invoice
 from datetime import datetime, date
+from cashier.views.dash.base import DashListView
 
 
 class SaleTransactionView(TemplateView):
@@ -28,3 +29,10 @@ class SaleTransactionView(TemplateView):
         context['invoice_number'] = invoice_number
 
         return context
+
+class ReportTransactionView(DashListView):
+    """ReportTransactionView"""
+    template_name = "dash/report/list_transaction.html"
+    model = Invoice
+    
+

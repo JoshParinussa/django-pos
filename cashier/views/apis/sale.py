@@ -1,6 +1,6 @@
 """Product Api view."""
 from cashier.models import Invoice, Product, Sale
-from cashier.serializers.sale import SaleSerializer
+from cashier.serializers.sale import SaleSerializer, InvoiceSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -97,3 +97,18 @@ class SaleViewSet(viewsets.ModelViewSet):
         item.total = new_total
         item.save()
         return Response(model_to_dict(item))
+
+class ReportTransactionViewSet(viewsets.ModelViewSet):
+    """ProductViewSet."""
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects.order_by('created_at')
+
+    # @action(detail=False, methods=['POST'])
+    # def get_by_user(self, request):
+    #     """get_by_user."""
+    #     user = self.request.user
+    #     if not user.is_superuser:
+    #         queryset = self.get_queryset().filter(cashier_id=user)
+    #         serializer = self.get_serializer(queryset, many=True)
+        
+    #     return Response(serializer.data)

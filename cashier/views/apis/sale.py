@@ -99,16 +99,49 @@ class SaleViewSet(viewsets.ModelViewSet):
         return Response(model_to_dict(item))
 
 class ReportTransactionViewSet(viewsets.ModelViewSet):
-    """ProductViewSet."""
+    """ReportTransactionViewSet."""
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.order_by('created_at')
 
-    # @action(detail=False, methods=['POST'])
-    # def get_by_user(self, request):
-    #     """get_by_user."""
-    #     user = self.request.user
-    #     if not user.is_superuser:
-    #         queryset = self.get_queryset().filter(cashier_id=user)
-    #         serializer = self.get_serializer(queryset, many=True)
-        
-    #     return Response(serializer.data)
+class ReportSaleViewSet(viewsets.ModelViewSet):
+    """ReportSaleViewSet."""
+    serializer_class = SaleSerializer
+    queryset = Sale.objects.order_by('created_at')
+
+    @action(detail=False, methods=['POST'])
+    def get_by_invoice(self, request):
+        """get_by_invoice."""
+        invoice_id = request.POST.get('invoice')
+        queryset = self.get_queryset().filter(invoice_id=invoice_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['POST'])
+    def delete_item(self, request):
+        """delete_item."""
+        invoice_number = request.POST.get('invoice_number')
+        barcode = request.POST.get('barcode')
+
+        invoice = Invoice.objects.get(invoice=invoice_number)
+        product = Product.objects.get(barcode=barcode)
+
+        item = Sale.objects.get(invoice=invoice, product=product)
+        item.delete()
+        return Response(model_to_dict(item))
+
+    @action(detail=False, methods=['POST'])
+    def update_item(self, request):
+        """update_item."""
+        invoice_number = request.POST.get('invoice_number')
+        barcode = request.POST.get('barcode')
+        new_qty = request.POST.get('qty')
+        new_total = request.POST.get('total')
+
+        invoice = Invoice.objects.get(invoice=invoice_number)
+        product = Product.objects.get(barcode=barcode)
+
+        item = Sale.objects.get(invoice=invoice, product=product)
+        item.qty = new_qty
+        item.total = new_total
+        item.save()
+        return Response(model_to_dict(item))

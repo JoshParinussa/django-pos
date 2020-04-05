@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from cashier.models import Invoice
+from cashier.models import Invoice, Sale, User
 from datetime import datetime, date
 from cashier.views.dash.base import DashListView
 
@@ -34,5 +34,29 @@ class ReportTransactionView(DashListView):
     """ReportTransactionView"""
     template_name = "dash/report/list_transaction.html"
     model = Invoice
-    
 
+class ReportSaleView(DashListView):
+    """ReportSaleView"""
+    template_name = "dash/report/list_sale.html"
+    model = Sale
+
+    def get_context_data(self, **kwargs):
+        """Override get context."""
+        model = self.get_model()
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = model._meta.verbose_name.title()
+        context['model_name_plural'] = model._meta.verbose_name_plural.title()
+        context['icon'] = self.get_icon()
+        context['action'] = self.get_current_action()
+        object_invoice = Invoice.objects.filter(id=self.kwargs.get('pk')).first()
+        object_cashier = User.objects.filter(id=object_invoice.cashier_id).first()
+        context['date'] = object_invoice.date
+        context['invoice_number'] = object_invoice.invoice
+        context['cashier'] = object_cashier.username
+        context['invoice_id'] = self.kwargs.get('pk')
+
+        for action in self.get_actions():
+            url_name = self._get_url_name(action)
+            context[f'{action}_url_name'] = url_name
+
+        return context

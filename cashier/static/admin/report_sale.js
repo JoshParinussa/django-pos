@@ -1,8 +1,17 @@
 "use strict";
+window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+var itemBarcode;
+var itemName;
+var itemPrice;
+var grandTotal = 0;
+
+var row;
+var table;
+
 var KTDatatablesDataSourceAjaxServer = function() {
 
     var initTable1 = function() {
-	    var table = $('#example1');
+	    table = $('#example1');
 		console.log("A");
 		// begin first table
 		table.DataTable({
@@ -16,8 +25,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			scrollX: true,
 			order: [[ 0, "asc" ]],
             ajax: {
-					'type': 'GET',
-					'url': '/v1/report_transaction?format=datatables',
+					'type': 'POST',
+					'url': '/v1/report_sale/get_by_invoice?format=datatables',
+					'data': {'invoice':currentInvoiceID},
 			},
 			columnDefs: [
 				{
@@ -47,7 +57,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				{
 					targets: 4,
 					render: function(data){
-						return !$.trim(data) ? '' : data == 1 ? 'SUCCESS' : 'FAIL';
+						return !$.trim(data) ? '' : data;
 					}
 				},
 				{
@@ -55,18 +65,17 @@ var KTDatatablesDataSourceAjaxServer = function() {
 					title: 'Actions',
 					orderable: false,
 					render: function(data, type, row) {
-						return `<a href="../report/sale/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detail">
-                          <i class="nav-icon fas fa-edit"></i>
-                    </a>`;
+						return `<button type='button' onclick='updateItem(this)' id='btn-update' class='btn btn-info btn-update' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;
+								<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;`;
 					},
 				},
       ],
 			columns: [
-				{data: 'invoice', orderable: true, searchable:true, name: 'invoice'},
-				{data: 'date', orderable: true, searchable:true, name: 'date'},
-				{data: 'cashier', orderable: true, searchable:true, name: 'cashier'},
+				{data: 'barcode', orderable: true, searchable:true, name: 'barcode'},
+				{data: 'product', orderable: true, searchable:true, name: 'product'},
+				{data: 'price', orderable: true, searchable:true, name: 'price'},
+				{data: 'qty', orderable: true, searchable:true, name: 'qty'},
 				{data: 'total', orderable: true, searchable:true, name: 'total'},
-				{data: 'status', orderable: true, searchable:true, name: 'status'},
 				{data: 'Actions', searchable: false, orderable: false, responsivePriority: -1}
 			],
 		});
@@ -94,6 +103,60 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 }();
 
+var updateItem = function(e){
+    row = $(e).closest('tr');
+	row_barcode = row.attr('id');
+	console.log(row.val());
+    // var itemName = row.attr('product');
+    // var itemQty = row.attr('qty');
+    // var itemBarcode = row.attr('barcode');
+    // $('#modal-item-name').val(itemName);
+    // $('#modal-qty-item-cart').val(itemQty);
+	// $('#modal-barcode').val(itemBarcode);
+	// console.log(row);
+}
+
+$('#modal-btn-update').click(function(e){
+    var newQty = $('#modal-qty-item-cart').val();
+    grandTotal -= Number(row.attr('total'));
+    var newTotal = Number(newQty) * Number(row.attr('price'));
+    grandTotal += newTotal;
+    $.ajax({
+        type: "POST",
+        url: "/v1/report_sale/update_item",
+        data:{
+            "invoice_number": invoice_number,
+            "barcode": $('#modal-barcode').val(),
+            "qty": newQty,
+            'total': newTotal
+        },
+        success: function(result){
+            row.find(".qty").html(newQty);
+            row.find(".purchase_total").html(newTotal)
+            $('#modal-default').modal('toggle');
+            $('#grand_total').text(grandTotal);
+        }
+    });
+});
+
+var deleteItem = function(e){
+    var row = $(e).closest('tr')
+    var row_barcode = row.attr('id');
+    
+    $.ajax({
+        type: "POST",
+        url: "/v1/report_item/delete_item",
+        data:{
+            "invoice_number": invoice_number,
+            "barcode": row_barcode,
+        },
+        success: function(result){
+            grandTotal -= result.total;
+            $('#grand_total').text(grandTotal);
+			row.remove();
+        }
+    });
+}
 
 // Class definition
 // var ProductsForm = function () {

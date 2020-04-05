@@ -26,6 +26,7 @@ router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
 router.register(r'supplier', api_supplier.SupplierViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
+router.register(r'report_sale', api_sale.ReportSaleViewSet)
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
 
@@ -73,4 +74,5 @@ urlpatterns = [
 
     #REPORTS
     path('dash/report/transaction', dash_transaction_view.ReportTransactionView.as_view(), name='dash_report_transaction'),
-]
+    path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
+]   

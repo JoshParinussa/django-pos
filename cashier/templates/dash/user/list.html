@@ -1,96 +1,69 @@
-{% extends 'base.html' %}
-{% load static %}
-  {% block page_css %}
-    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
-  {% endblock %}
+{% extends 'dash/layout/base.html' %}
+{% load static i18n %}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 
-  {% block title%}
-    <title>DjangoCashier | Products</title>
-  {% endblock %}
+{% block js %}
+<script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+<script src="{% static 'admin/user.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+{% endblock %}
 
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    {% block content_header %}
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Employees</li>
-            </ol>
-          </div>
+{% block breadcrumb %}
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Pegawai</span>
+{% comment %} <a href="{% url 'dash_view' %}" class="kt-subheader__breadcrumbs-link">Dashboard</a> {% endcomment %}
+{% endblock %}
+
+
+{% block content %}
+
+{% comment %} {% if messages %}
+<div class="alert alert-light alert-elevate" role="alert">
+    <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+    <div class="alert-text">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+</div>
+{% endif %} {% endcomment %}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-soft-icons"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                List Pegawai
+            </h3>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    {% endblock %}
-
-    <!-- Main content -->
-    {% block content %}
-    <section class="content">
-      <div class="row">
-        <div class="col-12">
-          <div class="card mx-auto">
-            <div class="card-header container-fluid">
-              <div class="row">
-                <div class="col-10">
-                  <h3 >Employees</h3>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <a href="{% url 'dash_user_create' %}" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        Tambah Pegawai
+                    </a>
                 </div>
-                <div class="col-2 float-right">
-                  <a href="{% url 'dash_user_create' %}" class="btn btn-primary">
-                        Add Employee
-                  </a>
-                </div>
-              </div>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                <table id="example1" class="table table-hover">
-                <thead>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <table class="table table-striped- table-hover table-checkable data-table">
+            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Created</th>
                     <th>Role</th>
                     <th>Status</th>
                 </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    {% endblock %}
-    <!-- /.content -->
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-
-{% block page_js %}
-<!-- DataTables -->
-<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
-<script src="{% static 'vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{% static 'vendors/js/demo.js' %}"></script>
-<!-- page script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="{% static 'admin/user.js' %}"></script>
-{% comment %} <script>
-  $(function () {
-    $("#example1").DataTable();
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-    });
-  });
-</script> {% endcomment %}
 {% endblock %}

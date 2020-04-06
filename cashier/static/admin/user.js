@@ -4,8 +4,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 
 	var initTable1 = function() {
-		var table = $('#example1');
-
+		
+		var table = $('.data-table');
+		console.log(table.length)
 		if (!table.length) return;
 
 		// begin first table
@@ -35,16 +36,16 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				}},
 				{targets: 2, render: function(data){
 					if (data === true){
-						return '<span class="badge badge-primary">Admin</span>';
+						return '<span class="kt-badge kt-badge--info kt-badge--inline kt-badge--pill">Admin</span>';
 					}else{
-						return '<span class="badge badge-warning">Employee</span>';
+						return '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">Pegawai</span>';
 					}
 				}},
                 {targets: 3, render: function(data){
 					if (data === true){
-						return '<span class="text-primary">.Active</span>';
+						return '<span class="kt-badge kt-badge--primary kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-primary">Active</span>';
 					}else{
-						return '<span class="text-danger">.Inactive</span>';
+						return '<span class="kt-badge kt-badge--danger kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-danger">Inactive</span>';
 					}
 				}}
             ],

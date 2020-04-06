@@ -1,117 +1,83 @@
-{% extends 'base.html' %}
-{% load static widget_tweaks%}
-  {% block page_css %}
-    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
-  {% endblock %}
+{% extends 'dash/layout/base.html' %}
+{% load static widget_tweaks %}
 
-  {% block title%}
-    <title>DjangoCashier | Units</title>
-  {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'buildr/manage/pages/css/product.css' %}">
+{% endblock %}
 
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    {% block content_header %}
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Units</li>
-            </ol>
-          </div>
+{% block js %}
+<script src="{% static 'buildr/manage/pages/js/product_category.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'dash_user_list' %}" class="kt-subheader__breadcrumbs-link">Pegawai</a>
+{% if object %}
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Pegawai <small>Tambah Pegawai</small></h3>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    {% endblock %}
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+            </div>
+        </div>
+    </div>
 
-    <!-- Main content -->
-    {% block content %}
-    <section class="content">
-      <div class="row">
-        <div class="col-12">
-            <div class="card w-75 mx-auto">
-              <div class="card-header">
-                  <h3 class="card-title font-weight-bold text-muted">User <small>Create User</small></h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form role="form" method="post">
-              {% csrf_token %}
-                <div class="card-body">
-                  <div class="form-group row pt-4">
-                    {{ form.email|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                    <div class="col-lg-9 col-xl-6">
-                      {% render_field form.email|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.email.errors %}
-                      <div class="invalid-feedback">{{ error }}</div>
-                      {% endfor %}
-                      {% if form.email.help_text %}
-                      <span class="form-text text-muted">{{ form.email.help_text }}</span>
-                      {% endif %}
+    <form class="kt-form kt-form--label-right form-main" id="kt_form" method="post">
+        {% csrf_token %}
+
+        <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+                <div class="kt-section__body">
+                    <div class="form-group row pt-4">
+                        {{ form.email|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.email|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.email.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.email.help_text %}<span class="form-text text-muted">{{ form.email.help_text }}</span>{% endif %}
+                        </div>
                     </div>
-                  </div>
-                  <div class="form-group row pt-4">
-                    {{ form.password1|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                    <div class="col-lg-9 col-xl-6">
-                      {% render_field form.password1|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.password1.errors %}
-                      <div class="invalid-feedback">{{ error }}</div>
-                      {% endfor %}
-                      {% if form.password1.help_text %}
-                      <span class="form-text text-muted">{{ form.password1.help_text }}</span>
-                      {% endif %}
+                    <div class="form-group row">
+                        {{ form.password1|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.password1|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.password1.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.password1.help_text %}<span class="form-text text-muted">{{ form.password1.help_text }}</span>{% endif %}
+                        </div>
                     </div>
-                  </div>
-                  <div class="form-group row pt-4">
-                    {{ form.password2|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                    <div class="col-lg-9 col-xl-6">
-                      {% render_field form.password2|add_error_class:"is-invalid" class="form-control" %}
-                      {% for error in form.password2.errors %}
-                      <div class="invalid-feedback">{{ error }}</div>
-                      {% endfor %}
-                      {% if form.password2.help_text %}
-                      <span class="form-text text-muted">{{ form.password2.help_text }}</span>
-                      {% endif %}
+                    <div class="form-group row form-group-last ">
+                        {{ form.password2|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.password2|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.password2.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.password2.help_text %}<span class="form-text text-muted">{{ form.password2.help_text }}</span>{% endif %}
+                        </div>
                     </div>
-                  </div>
+
                 </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer">
-                  <div class="row">
+            </div>
+        </div>
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
                     <div class="col-lg-3 col-xl-3">
                     </div>
                     <div class="col-lg-9 col-xl-9">
-                        <button type="submit" class="btn btn-primary">{{ action|title }}</button>&nbsp;
-                        <a href="{% url 'dash_user_list' %}">
-                            <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+                        <button type="submit" class="btn btn-primary">Tambah</button>&nbsp;
+                        <a href="{% url 'dash_user_list'%}">
+                            <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                         </a>
                     </div>
                 </div>
-                </div>
-              </form>
             </div>
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    {% endblock %}
-    <!-- /.content -->
+    </form>
+</div>
 
-
-{% block page_js %}
-<!-- DataTables -->
-<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
-<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{% static 'vendors/js/demo.js' %}"></script>
-<!-- page script -->
-<script type="text/javascript">
-    $(document).ready(function () {
-    bsCustomFileInput.init();
-    });
-</script>
 {% endblock %}

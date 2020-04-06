@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.forms.models import model_to_dict
-
+from django.http import HttpResponse
 
 class SaleViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
@@ -135,13 +135,20 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
         new_qty = request.POST.get('qty')
+        print("========",new_qty)
         new_total = request.POST.get('total')
+        grand_total = request.POST.get('grand_total')
 
-        invoice = Invoice.objects.get(invoice=invoice_number)
+        invoice = Invoice.objects.get(id=invoice_number)
+        print("+++++++++",invoice)
         product = Product.objects.get(barcode=barcode)
-
+        
         item = Sale.objects.get(invoice=invoice, product=product)
         item.qty = new_qty
         item.total = new_total
         item.save()
-        return Response(model_to_dict(item))
+
+        invoice.total = grand_total
+        invoice.save()
+
+        return HttpResponse(status=201)

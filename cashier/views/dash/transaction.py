@@ -52,6 +52,9 @@ class ReportSaleView(DashListView):
         object_cashier = User.objects.filter(id=object_invoice.cashier_id).first()
         context['date'] = object_invoice.date
         context['invoice_number'] = object_invoice.invoice
+        context['invoice_total'] = object_invoice.total
+        context['invoice_cash'] = object_invoice.cash
+        context['invoice_change'] = object_invoice.change
         context['cashier'] = object_cashier.username
         context['invoice_id'] = self.kwargs.get('pk')
 

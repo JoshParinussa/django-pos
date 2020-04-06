@@ -14,7 +14,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 	    table = $('#example1');
 		console.log("A");
 		// begin first table
-		table.DataTable({
+		table.dataTable({
 			autoWidth: false,
 			processing: true,
             serverSide: true,
@@ -80,7 +80,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 			],
 		});
 		$("#sidebar").on('click', function(e){
-			var table = $('#example1').DataTable();
+			table = $('#example1').dataTable();
 			table.columns.adjust().draw();
 			// $($.fn.dataTable.tables(true)).DataTable()
 			//   .columns.adjust();
@@ -104,37 +104,39 @@ var KTDatatablesDataSourceAjaxServer = function() {
 }();
 
 var updateItem = function(e){
-    row = $(e).closest('tr');
-	row_barcode = row.attr('id');
-	console.log(row.val());
-    // var itemName = row.attr('product');
-    // var itemQty = row.attr('qty');
-    // var itemBarcode = row.attr('barcode');
-    // $('#modal-item-name').val(itemName);
-    // $('#modal-qty-item-cart').val(itemQty);
-	// $('#modal-barcode').val(itemBarcode);
+    row = table.api().row($(e).closest('tr')).data();
+	console.log(row.product);
+    var itemName = row.product;
+    var itemQty = row.qty;
+    var itemBarcode = row.barcode;
+    $('#modal-item-name').val(itemName);
+    $('#modal-qty-item-cart').val(itemQty);
+	$('#modal-barcode').val(itemBarcode);
 	// console.log(row);
 }
 
 $('#modal-btn-update').click(function(e){
     var newQty = $('#modal-qty-item-cart').val();
-    grandTotal -= Number(row.attr('total'));
-    var newTotal = Number(newQty) * Number(row.attr('price'));
+    grandTotal -= Number(row.total);
+    var newTotal = Number(newQty) * Number(row.price);
     grandTotal += newTotal;
     $.ajax({
         type: "POST",
         url: "/v1/report_sale/update_item",
         data:{
-            "invoice_number": invoice_number,
+            "invoice_number": currentInvoiceID,
             "barcode": $('#modal-barcode').val(),
             "qty": newQty,
-            'total': newTotal
+			'total': newTotal,
+			'grand_total':grandTotal
         },
         success: function(result){
-            row.find(".qty").html(newQty);
-            row.find(".purchase_total").html(newTotal)
+            // row.qty=newQty;
+			// row.total=newTotal;
+			alert("Success");
             $('#modal-default').modal('toggle');
-            $('#grand_total').text(grandTotal);
+			// $('#grand_total').text(grandTotal);
+			
         }
     });
 });

@@ -20,7 +20,7 @@
             <ol class="breadcrumb float-sm-left">
               <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
               <li class="breadcrumb-item"><a href="{% url 'dash_report_transaction' %}">Report</a></li>
-              <li class="breadcrumb-item active">Invoice</li>
+              <li class="breadcrumb-item active">Invoice {{invoice_number}}</li>
             </ol>
           </div>
         </div>
@@ -63,16 +63,28 @@
           <div class="card mx-auto">
               <div class="card-body">
                   <div class="row">
-                      <h4><label class="col-form-label text-muted">Invoice</label>&nbsp;</h4>
-                      <h4><label class="col-form-label" id="invoice_number">{{ invoice_number }}</label></h4>
+                      <label class="col-form-label" >
+                          <h3 class='col'>Total</h3>
+                      </label>
+                      <label class="col-form-label" >
+                          <h3 class='col' style="font-size: 30px;" id="grand_total">{{invoice_total}}</h3>
+                      </label>
                   </div>
                   <div class="row">
-                      <label class="col-form-label" >
-                          <h3 class='col'>Rp.</h3>
-                      </label>
-                      <label class="col-form-label" >
-                          <h1 class='col' style="font-size: 70px;" id="grand_total">0</h1>
-                      </label>
+                    <label class="col-form-label" >
+                        <h4 class='col'>Cash</h4>
+                    </label>
+                    <label class="col-form-label" >
+                        <h5 class='col' id="cash">{{invoice_cash}}</h5>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <label class="col-form-label" >
+                        <h4 class='col'>Change</h4>
+                    </label>
+                    <label class="col-form-label" >
+                        <h5 class='col' id="change">{{invoice_change}}</h5>
+                    </label>
                   </div>
               </div>
           </div>

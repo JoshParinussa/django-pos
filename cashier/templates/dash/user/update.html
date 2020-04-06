@@ -2,18 +2,16 @@
 {% load static widget_tweaks %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'buildr/manage/pages/css/product.css' %}">
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'buildr/manage/pages/js/product_category.js' %}"></script>
 {% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'dash_user_list' %}" class="kt-subheader__breadcrumbs-link">Pegawai</a>
 {% if object %}
 <span class="kt-subheader__breadcrumbs-separator"></span>
-<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.email }}</span>
 {% endif %}
 {% endblock %}
 
@@ -124,7 +122,7 @@
                                         <a href="{% url 'dash_user_delete' object.id %}">
                                             <button type="button" class="btn btn-label-danger btn-bold btn-sm kt-margin-t-5 kt-margin-b-5">Remove this account ?</button>
                                             <span class="form-text text-muted">
-                                                <strong>Be sure!</strong> account will be permanently removed and cannot be restored.
+                                                <strong>Perhatian!</strong> akun akan dihapus permanen dan tidak dapat dikembalikan.
                                             </span>
                                         </a>
                                         </div>
@@ -139,7 +137,7 @@
                                     <div class="col-lg-3 col-xl-3">
                                     </div>
                                     <div class="col-lg-9 col-xl-9">
-                                        <button type="submit" class="btn btn-primary">Update</button>&nbsp;
+                                        <button type="submit" class="btn btn-primary">Perbaharui</button>&nbsp;
                                         <a href="{% url 'dash_user_list'%}">
                                             <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                                         </a>

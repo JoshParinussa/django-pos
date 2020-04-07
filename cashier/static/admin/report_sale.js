@@ -105,21 +105,24 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 var updateItem = function(e){
     row = table.api().row($(e).closest('tr')).data();
-	console.log(row.product);
-    var itemName = row.product;
-    var itemQty = row.qty;
-    var itemBarcode = row.barcode;
-    $('#modal-item-name').val(itemName);
-    $('#modal-qty-item-cart').val(itemQty);
-	$('#modal-barcode').val(itemBarcode);
-	// console.log(row);
+    $('#modal-item-name').val(row.product);
+    $('#modal-qty-item-cart').val(row.qty);
+	$('#modal-barcode').val(row.barcode);
 }
 
 $('#modal-btn-update').click(function(e){
     var newQty = $('#modal-qty-item-cart').val();
-    grandTotal -= Number(row.total);
-    var newTotal = Number(newQty) * Number(row.price);
-    grandTotal += newTotal;
+	var newTotal = Number(newQty) * Number(row.price);
+	var oldTotal = Number(row.qty) * Number(row.price);
+	var diffTotal = oldTotal - newTotal;
+	var oldChange = Number(InvoiceChange);
+	InvoiceGrandTotal = Number(InvoiceGrandTotal)- diffTotal;
+	InvoiceChange = Number(InvoiceCash)- Number(InvoiceGrandTotal);
+	var diffChange = Number(InvoiceChange) - oldChange;
+	if(diffChange<0){
+		InvoiceCash = Number(InvoiceCash) + Number(Math.abs(diffChange));
+		InvoiceChange = 0;
+	}
     $.ajax({
         type: "POST",
         url: "/v1/report_sale/update_item",
@@ -128,28 +131,36 @@ $('#modal-btn-update').click(function(e){
             "barcode": $('#modal-barcode').val(),
             "qty": newQty,
 			'total': newTotal,
-			'grand_total':grandTotal
+			'grand_total':InvoiceGrandTotal,
+			'cash':InvoiceCash,
+			'change':InvoiceChange
         },
         success: function(result){
-            // row.qty=newQty;
-			// row.total=newTotal;
-			alert("Success");
+            if(diffChange>0){
+				alert("Kembalian tambah Rp. "+diffChange);
+			}else if(diffChange<0){
+				alert("Uang kurang Rp. "+Math.abs(diffChange));
+			}
             $('#modal-default').modal('toggle');
-			// $('#grand_total').text(grandTotal);
-			
+			$('#grand_total').text(InvoiceGrandTotal);
+			$('#change').text(InvoiceChange);
+			$('#cash').text(InvoiceCash);
+			table.api().ajax.reload();
+			// location.reload();
         }
-    });
+	});
+	grandTotal = 0;
 });
 
 var deleteItem = function(e){
-    var row = $(e).closest('tr')
-    var row_barcode = row.attr('id');
+    var row = table.api().row($(e).closest('tr')).data()
+    var row_barcode = row.barcode;
     
     $.ajax({
         type: "POST",
         url: "/v1/report_item/delete_item",
         data:{
-            "invoice_number": invoice_number,
+            "invoice_number": currentInvoiceID,
             "barcode": row_barcode,
         },
         success: function(result){

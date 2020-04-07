@@ -135,12 +135,12 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
         new_qty = request.POST.get('qty')
-        print("========",new_qty)
         new_total = request.POST.get('total')
         grand_total = request.POST.get('grand_total')
+        cash = request.POST.get('cash')
+        change = request.POST.get('change')
 
         invoice = Invoice.objects.get(id=invoice_number)
-        print("+++++++++",invoice)
         product = Product.objects.get(barcode=barcode)
         
         item = Sale.objects.get(invoice=invoice, product=product)
@@ -149,6 +149,8 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         item.save()
 
         invoice.total = grand_total
+        invoice.cash = cash
+        invoice.change = change
         invoice.save()
 
         return HttpResponse(status=201)

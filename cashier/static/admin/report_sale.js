@@ -66,7 +66,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 					orderable: false,
 					render: function(data, type, row) {
 						return `<button type='button' onclick='updateItem(this)' id='btn-update' class='btn btn-info btn-update' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;
-								<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;`;
+								<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete' data-toggle='modal' data-target='#modal-box'>Delete</button>&nbsp;`;
 					},
 				},
       ],
@@ -164,33 +164,36 @@ $('#modal-btn-update').click(function(e){
 });
 
 var deleteItem = function(e){
-	var row = table.api().row($(e).closest('tr')).data()
+	row = table.api().row($(e).closest('tr')).data();
+	$('#modal-item-name-delete').html(row.product);
+}
+
+$('#modal-btn-delete').click(function(e){
 	var row_barcode = row.barcode;
-	var Total = Number(InvoiceGrandTotal);
-	var Cash = Number(InvoiceCash);
 	var Change = Number(InvoiceChange);
 	var oldTotal = Number(row.qty) * Number(row.price);
 	InvoiceGrandTotal = Number(InvoiceGrandTotal) - oldTotal;
 	InvoiceChange = Number(InvoiceCash) - Number(InvoiceGrandTotal);
 	var diffChange = Number(InvoiceChange) - Change;
-    $.ajax({
-        type: "POST",
-        url: "/v1/report_sale/delete_item",
-        data:{
-            "invoice_number": currentInvoiceID,
+   	$.ajax({
+       	type: "POST",
+       	url: "/v1/report_sale/delete_item",
+       	data:{
+           	"invoice_number": currentInvoiceID,
 			"barcode": row_barcode,
 			"total":InvoiceGrandTotal,
 			"change":InvoiceChange
-        },
-        success: function(e){
+       	},
+       	success: function(e){
 			alert("Kembalian tambah Rp. "+diffChange);
-            $('#grand_total').text(InvoiceGrandTotal);
+           	$('#grand_total').text(InvoiceGrandTotal);
 			$('#change').text(InvoiceChange);
 			$('#cash').text(InvoiceCash);
 			table.api().ajax.reload();
-        }
-    });
-}
+			$('#modal-box').modal('toggle');
+       	}
+   	});
+});
 
 // Class definition
 // var ProductsForm = function () {

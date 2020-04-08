@@ -9,6 +9,7 @@
     <title>DjangoCashier | Report</title>
   {% endblock %}
 
+    
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -153,9 +154,37 @@
         <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-    </div>
+      </div>
+
+      <div class="modal fade" id="modal-box">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="col-form-label col-12">Apakah anda yakin menghapus <span id="modal-item-name-delete"></span> ?</label>
+                    </div>
+                </form>
+            </div>
+                <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                <button type="button" id="modal-btn-delete" class="btn btn-primary">Ya</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      
     <!-- /.modal -->
     </section>
+  </div>
     {% endblock %}
     <!-- /.content -->
 

@@ -121,13 +121,20 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         """delete_item."""
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
+        total = request.POST.get('total')
+        change = request.POST.get('change')
 
-        invoice = Invoice.objects.get(invoice=invoice_number)
+        invoice = Invoice.objects.get(id=invoice_number)
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
         item.delete()
-        return Response(model_to_dict(item))
+
+        invoice.total = total
+        invoice.change = change
+        invoice.save()
+
+        return HttpResponse(status=201)
 
     @action(detail=False, methods=['POST'])
     def update_item(self, request):

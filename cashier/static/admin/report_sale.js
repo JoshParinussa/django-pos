@@ -116,13 +116,22 @@ $('#modal-btn-update').click(function(e){
 	var oldTotal = Number(row.qty) * Number(row.price);
 	var diffTotal = oldTotal - newTotal;
 	var oldChange = Number(InvoiceChange);
-	InvoiceGrandTotal = Number(InvoiceGrandTotal)- diffTotal;
-	InvoiceChange = Number(InvoiceCash)- Number(InvoiceGrandTotal);
-	var diffChange = Number(InvoiceChange) - oldChange;
-	if(diffChange<0){
-		InvoiceCash = Number(InvoiceCash) + Number(Math.abs(diffChange));
-		InvoiceChange = 0;
+	var Cash = Number(InvoiceCash);
+	var Total = Number(InvoiceGrandTotal) - diffTotal;
+	var diffChange, newChange = 0;
+
+	if(Total>Cash){
+		Cash = Total;
+		newChange = 0;
+	}else{
+		newChange = Cash - Total;
+		diffChange = newChange - oldChange;
 	}
+
+	InvoiceGrandTotal = Total;
+	InvoiceChange = newChange;
+	InvoiceCash = Cash;
+
     $.ajax({
         type: "POST",
         url: "/v1/report_sale/update_item",
@@ -136,11 +145,14 @@ $('#modal-btn-update').click(function(e){
 			'change':InvoiceChange
         },
         success: function(result){
-            if(diffChange>0){
+            if(Total > Cash){
+				alert("Uang kurang Rp. "+newChange);
+			}else if (diffChange>0){
 				alert("Kembalian tambah Rp. "+diffChange);
-			}else if(diffChange<0){
-				alert("Uang kurang Rp. "+Math.abs(diffChange));
+			}else{
+				alert("Kembalian kurang Rp. "+Math.abs(diffChange));
 			}
+
             $('#modal-default').modal('toggle');
 			$('#grand_total').text(InvoiceGrandTotal);
 			$('#change').text(InvoiceChange);
@@ -149,24 +161,33 @@ $('#modal-btn-update').click(function(e){
 			// location.reload();
         }
 	});
-	grandTotal = 0;
 });
 
 var deleteItem = function(e){
-    var row = table.api().row($(e).closest('tr')).data()
-    var row_barcode = row.barcode;
-    
+	var row = table.api().row($(e).closest('tr')).data()
+	var row_barcode = row.barcode;
+	var Total = Number(InvoiceGrandTotal);
+	var Cash = Number(InvoiceCash);
+	var Change = Number(InvoiceChange);
+	var oldTotal = Number(row.qty) * Number(row.price);
+	InvoiceGrandTotal = Number(InvoiceGrandTotal) - oldTotal;
+	InvoiceChange = Number(InvoiceCash) - Number(InvoiceGrandTotal);
+	var diffChange = Number(InvoiceChange) - Change;
     $.ajax({
         type: "POST",
-        url: "/v1/report_item/delete_item",
+        url: "/v1/report_sale/delete_item",
         data:{
             "invoice_number": currentInvoiceID,
-            "barcode": row_barcode,
+			"barcode": row_barcode,
+			"total":InvoiceGrandTotal,
+			"change":InvoiceChange
         },
-        success: function(result){
-            grandTotal -= result.total;
-            $('#grand_total').text(grandTotal);
-			row.remove();
+        success: function(e){
+			alert("Kembalian tambah Rp. "+diffChange);
+            $('#grand_total').text(InvoiceGrandTotal);
+			$('#change').text(InvoiceChange);
+			$('#cash').text(InvoiceCash);
+			table.api().ajax.reload();
         }
     });
 }

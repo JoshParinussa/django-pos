@@ -1,105 +1,94 @@
-{% extends 'base.html' %}
-{% load static widget_tweaks%}
-  {% block page_css %}
-    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
-  {% endblock %}
+{% extends 'dash/layout/base.html' %}
+{% load static widget_tweaks %}
 
-  {% block title%}
-    <title>DjangoCashier | Unit</title>
-  {% endblock %}
+{% block css %}
+{% endblock %}
 
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    {% block content_header %}
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item active">Unit</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    {% endblock %}
+{% block js %}
+{% endblock %}
 
-    <!-- Main content -->
-    {% block content %}
-    <section class="content ">
-      <div class="row">
-        <div class="col-12">
-            <div class="card w-75 mx-auto">
-                <div class="card-header">
-                    <h3 class="card-title font-weight-bold">Unit <small>Delete Unit</small></h3>
-                </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-                <form role="form" method="post">
-                {% csrf_token %}
-                <div class="card-body">
-                    <div class="row">
-                        <label class="col-xl-3"></label>
-                        <div class="col-lg-9 col-xl-6">
-                            <h3><small>Are you sure?</small></h3>
+{% block breadcrumb %}
+<a href="{% url 'dash_unit_list' %}" class="kt-subheader__breadcrumbs-link">Satuan</a>
+{% if object %}
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+    <!--Begin:: App Aside Mobile Toggle-->
+    <button class="kt-app__aside-close" id="kt_user_profile_aside_close">
+        <i class="la la-close"></i>
+    </button>
+    <!--End:: App Aside Mobile Toggle-->
+    <!--Begin:: App Content-->
+    <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="kt-portlet">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Satuan <small>Edit Satuan</small></h3>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <label class="col-xl-3"></label>
-                        <div class="col-lg-9 col-xl-6">
-                            <span class="form-text text-muted">
-                                Unit will be permanently removed and cannot be restored.
-                            </span>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <label class="col-xl-3"></label>
-                        <div class="col-lg-9 col-xl-6">
-                            <a href="{% url 'dash_unit_update' object.id %}">
-                                <h4>Unit : {{ object.name }} </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.card-body -->
+                    <form class="kt-form kt-form--label-right" id="kt_form" method="post" >
+                        {% csrf_token %}
 
-                <div class="card-footer">
-                    <div class="row">
-                    <div class="col-lg-3 col-xl-3">
-                    </div>
-                    <div class="col-lg-9 col-xl-9">
-                        <button type="submit" class="btn btn-danger">Delete</button>&nbsp;
-                        <a href="{% url 'dash_unit_update' object.id %}">
-                            <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
-                        </a>
-                    </div>
+                        <div class="kt-portlet__body">
+                            <div class="kt-section kt-section--first">
+                                <div class="kt-section__body">
+                                    <div class="row">
+                                        <label class="col-xl-3"></label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <h3 class="kt-section__title kt-section__title-sm">Anda yakin?</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xl-3"></label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <span class="form-text text-muted">
+                                                Satuan akan dihapus secara permanen dan tidak dapat dikembalikan.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <label class="col-xl-3"></label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <a href="{% url 'dash_unit_update' object.id %}">
+                                                <h3 class="kt-section__title kt-section__title-sm">Satuan : {{ object.name }}</h3>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__foot">
+                            <div class="kt-form__actions">
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <button type="submit" class="btn btn-danger">Hapus</button>&nbsp;
+                                        <a href="{% url 'dash_unit_update' object.id %}">
+                                            <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                </div>
-                </form>
             </div>
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    {% endblock %}
-    <!-- /.content -->
+    </div>
+
+    <!--End:: App Content-->
 
 
-{% block page_js %}
-<!-- DataTables -->
-<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
-<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{% static 'vendors/js/demo.js' %}"></script>
-<!-- page script -->
-<script type="text/javascript">
-    $(document).ready(function () {
-    bsCustomFileInput.init();
-    });
-</script>
+</div>
+
 {% endblock %}

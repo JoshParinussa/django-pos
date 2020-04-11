@@ -11,7 +11,7 @@ var table;
 var KTDatatablesDataSourceAjaxServer = function() {
 
     var initTable1 = function() {
-	    table = $('#example1');
+	    table = $('.data-table');
 		console.log("A");
 		// begin first table
 		table.dataTable({

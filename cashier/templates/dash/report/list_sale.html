@@ -1,195 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'dash/layout/base.html' %}
 {% load static %}
-  {% block page_css %}
-    <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.dataTables.min.css">
-  {% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.dataTables.min.css">
+{% endblock %}
 
-  {% block title%}
-    <title>DjangoCashier | Report</title>
-  {% endblock %}
-
-    
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    {% block content_header %}
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="{% url 'dash_view' %}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{% url 'dash_report_transaction' %}">Report</a></li>
-              <li class="breadcrumb-item active">Invoice {{invoice_number}}</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    {% endblock %}
-
-    <!-- Main content -->
-    {% block content %}
-    {% csrf_token %}
-    <section class="content">
-      <div class="row">
-        <div class="col">
-          <div class="card mx-auto">
-              <form class="form-horizontal">
-                  <div class="card-body">
-                      <div class="form-group row">
-                          <label class="col-form-label col-3">Date</label>
-                          <div class="col-9">
-                              <input type="text" id="sale-date" class="form-control" value = "{{date}}" disabled>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label class="col-form-label col-3">Kasir</label>
-                          <div class="col-9">
-                              <input type="text" id="cashier" class="form-control" value = "{{cashier}}" disabled>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label class="col-form-label col-3">Customer</label>
-                          <div class="col-9">
-                              <input type="text" class="form-control" disabled>    
-                          </div>
-                      </div>
-                  </div>
-              </form>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card mx-auto">
-              <div class="card-body">
-                  <div class="row">
-                      <label class="col-form-label" >
-                          <h3 class='col'>Total</h3>
-                      </label>
-                      <label class="col-form-label" >
-                          <h3 class='col' style="font-size: 30px;" id="grand_total">{{invoice_total}}</h3>
-                      </label>
-                  </div>
-                  <div class="row">
-                    <label class="col-form-label" >
-                        <h4 class='col'>Cash</h4>
-                    </label>
-                    <label class="col-form-label" >
-                        <h5 class='col' id="cash">{{invoice_cash}}</h5>
-                    </label>
-                  </div>
-                  <div class="row">
-                    <label class="col-form-label" >
-                        <h4 class='col'>Change</h4>
-                    </label>
-                    <label class="col-form-label" >
-                        <h5 class='col' id="change">{{invoice_change}}</h5>
-                    </label>
-                  </div>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-                <table id="example1" class="table responsive table-hover" style="width:100%">
-                <thead style="width:100%">
-                <tr >
-                    <th>Barcode</th>
-                    <th>Nama Item</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-
-      <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Update Item</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
-                <form class="form-horizontal">
-                    <div class="form-group row">
-                        <label class="col-form-label col-3">Nama Item</label>
-                        <div class="col-9">
-                            <input type="text" id="modal-item-name" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3">Qty</label>
-                        <div class="col-9">
-                            <div class="input-group">
-                                <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <div class="modal fade" id="modal-box">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Delete Item</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group row">
-                        <label class="col-form-label col-12">Apakah anda yakin menghapus <span id="modal-item-name-delete"></span> ?</label>
-                    </div>
-                </form>
-            </div>
-                <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                <button type="button" id="modal-btn-delete" class="btn btn-primary">Ya</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      
-    <!-- /.modal -->
-    </section>
-  </div>
-    {% endblock %}
-    <!-- /.content -->
-
-
-{% block page_js %}
+{% block js %}
 <!-- DataTables -->
 <script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
 <script src="{% static 'vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
@@ -212,3 +28,165 @@
   
 </script>
 {% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'dash_report_transaction' %}" class="kt-subheader__breadcrumbs-link">Laporan</a>
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active ">Invoice {{invoice_number}}</span>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+  <div class="row">
+    <div class="col">
+      <div class="card mx-auto">
+          <form class="form-horizontal">
+              <div class="card-body">
+                  <div class="form-group row">
+                      <label class="col-form-label col-3">Date</label>
+                      <div class="col-9">
+                          <input type="text" id="sale-date" class="form-control" value = "{{date}}" disabled>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-form-label col-3">Kasir</label>
+                      <div class="col-9">
+                          <input type="text" id="cashier" class="form-control" value = "{{cashier}}" disabled>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label class="col-form-label col-3">Customer</label>
+                      <div class="col-9">
+                          <input type="text" class="form-control" disabled>    
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card mx-auto">
+          <div class="card-body">
+              <div class="row">
+                  <label class="col-form-label" >
+                      <h3 class='col'>Total</h3>
+                  </label>
+                  <label class="col-form-label" >
+                      <h3 class='col' style="font-size: 30px;" id="grand_total">{{invoice_total}}</h3>
+                  </label>
+              </div>
+              <div class="row">
+                <label class="col-form-label" >
+                    <h4 class='col'>Cash</h4>
+                </label>
+                <label class="col-form-label" >
+                    <h5 class='col' id="cash">{{invoice_cash}}</h5>
+                </label>
+              </div>
+              <div class="row">
+                <label class="col-form-label" >
+                    <h4 class='col'>Change</h4>
+                </label>
+                <label class="col-form-label" >
+                    <h5 class='col' id="change">{{invoice_change}}</h5>
+                </label>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+            <table id="example1" class="table responsive table-hover" style="width:100%">
+            <thead style="width:100%">
+            <tr >
+                <th>Barcode</th>
+                <th>Nama Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Update Item</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
+            <form class="form-horizontal">
+                <div class="form-group row">
+                    <label class="col-form-label col-3">Nama Item</label>
+                    <div class="col-9">
+                        <input type="text" id="modal-item-name" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">Qty</label>
+                    <div class="col-9">
+                        <div class="input-group">
+                            <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+            <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal-box">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Delete Item</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="form-group row">
+                    <label class="col-form-label col-12">Apakah anda yakin menghapus <span id="modal-item-name-delete"></span> ?</label>
+                </div>
+            </form>
+        </div>
+            <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+            <button type="button" id="modal-btn-delete" class="btn btn-primary">Ya</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  
+<!-- /.modal -->
+{% endblock %}
+<!-- /.content -->
+

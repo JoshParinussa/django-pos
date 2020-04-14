@@ -1,11 +1,11 @@
 """Product Api view."""
 from cashier.models import Invoice, Product, Sale
-from cashier.serializers.sale import SaleSerializer
+from cashier.serializers.sale import SaleSerializer, InvoiceSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.forms.models import model_to_dict
-
+from django.http import HttpResponse
 
 class SaleViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
@@ -97,3 +97,67 @@ class SaleViewSet(viewsets.ModelViewSet):
         item.total = new_total
         item.save()
         return Response(model_to_dict(item))
+
+class ReportTransactionViewSet(viewsets.ModelViewSet):
+    """ReportTransactionViewSet."""
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects.order_by('created_at')
+
+class ReportSaleViewSet(viewsets.ModelViewSet):
+    """ReportSaleViewSet."""
+    serializer_class = SaleSerializer
+    queryset = Sale.objects.order_by('created_at')
+
+    @action(detail=False, methods=['POST'])
+    def get_by_invoice(self, request):
+        """get_by_invoice."""
+        invoice_id = request.POST.get('invoice')
+        queryset = self.get_queryset().filter(invoice_id=invoice_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['POST'])
+    def delete_item(self, request):
+        """delete_item."""
+        invoice_number = request.POST.get('invoice_number')
+        barcode = request.POST.get('barcode')
+        total = request.POST.get('total')
+        change = request.POST.get('change')
+
+        invoice = Invoice.objects.get(id=invoice_number)
+        product = Product.objects.get(barcode=barcode)
+
+        item = Sale.objects.get(invoice=invoice, product=product)
+        item.delete()
+
+        invoice.total = total
+        invoice.change = change
+        invoice.save()
+
+        return HttpResponse(status=201)
+
+    @action(detail=False, methods=['POST'])
+    def update_item(self, request):
+        """update_item."""
+        invoice_number = request.POST.get('invoice_number')
+        barcode = request.POST.get('barcode')
+        new_qty = request.POST.get('qty')
+        new_total = request.POST.get('total')
+        grand_total = request.POST.get('grand_total')
+        cash = request.POST.get('cash')
+        change = request.POST.get('change')
+
+        invoice = Invoice.objects.get(id=invoice_number)
+        product = Product.objects.get(barcode=barcode)
+        
+        item = Sale.objects.get(invoice=invoice, product=product)
+        item.qty = new_qty
+        item.total = new_total
+        item.save()
+
+        invoice.total = grand_total
+        invoice.cash = cash
+        invoice.change = change
+        invoice.save()
+
+        return HttpResponse(status=201)

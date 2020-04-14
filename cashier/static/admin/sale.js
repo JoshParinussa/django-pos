@@ -45,6 +45,12 @@ var getProductByBarcode = function (){
     }
 }
 
+var drawDetailTransactionRow = function () {
+    $.ajax({
+        
+    });
+}
+
 var drawPurchaseRow = function (){
     purchaseItemQty = $('#qty-item-cart').val();
     purchaseItemTotal = itemPrice * purchaseItemQty;

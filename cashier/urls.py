@@ -25,14 +25,14 @@ router.register(r'products', api_product.ProductViewSet)
 router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
 router.register(r'supplier', api_supplier.SupplierViewSet)
+router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
+router.register(r'report_sale', api_sale.ReportSaleViewSet)
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
 
-    path('', account_view.Login.as_view(), name="login"),
-    path('logout', account_view.LogoutView.as_view(), name="dash_logout"),
-    path('dash/',
-         dash_view.DashHomeView.as_view(),
-         name='dash_view'),
+    path('', account_view.Login.as_view(), name='login'),
+    path('logout', account_view.LogoutView.as_view(), name='dash_logout'),
+    path('dash/', dash_view.DashHomeView.as_view(), name='dash_view'),
 
     # ADMIN UNIT
     path('dash/units', dash_unit_view.UnitListView.as_view(), name='dash_unit_list'),
@@ -70,4 +70,9 @@ urlpatterns = [
 
     # TRANSACTION
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
-]
+    path('dash/transaction/sale/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
+
+    #REPORTS
+    path('dash/report/transaction', dash_transaction_view.ReportTransactionView.as_view(), name='dash_report_transaction'),
+    path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
+]   

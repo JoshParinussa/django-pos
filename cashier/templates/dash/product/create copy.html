@@ -24,7 +24,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Produk <small>Edit Produk</small></h3>
+                        <h3 class="kt-portlet__head-title">Produk <small>Tambah Produk</small></h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-wrapper">
@@ -98,18 +98,6 @@
                             {% if form.status.help_text %}<span class="form-text text-muted">{{ form.status.help_text }}</span>{% endif %}
                         </div>
                     </div>
-                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-separator--space-lg"></div>
-                    <div class="form-group row ">
-                        <label class="col-xl-3 col-lg-3 col-form-label"></label>
-                        <div class="col-lg-9 col-xl-6">
-                        <a href="{% url 'dash_product_delete' object.id %}">
-                            <button type="button" class="btn btn-label-danger btn-bold btn-sm kt-margin-t-5 kt-margin-b-5">Hapus produk ?</button>
-                            <span class="form-text text-muted">
-                                <strong>Perhatian!</strong> produk akan dihapus permanen dan tidak dapat dikembalikan.
-                            </span>
-                        </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="kt-portlet__foot">
                     <div class="kt-form__actions">
@@ -117,7 +105,7 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="submit" class="btn btn-primary">Perbaharui</button>&nbsp;
+                                <button type="submit" class="btn btn-primary">Tambah</button>&nbsp;
                                 <a href="{% url 'dash_product_list'%}">
                                     <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                                 </a>
@@ -187,5 +175,4 @@
         </div>
     </div>
 </form>
-
 {% endblock %}

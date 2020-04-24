@@ -24,7 +24,6 @@ $('#cashier').val(currentUser);
 
 var getProductByBarcode = function() {
     var barcode = $('#barcode').val();
-
     if (barcode.length > 0) {
         $.ajax({
             type: "POST",
@@ -38,9 +37,9 @@ var getProductByBarcode = function() {
                     itemBarcode = data.barcode;
                     itemName = data.name;
                     itemPrice = data.selling_price;
-                    drawPurchaseRow();
-                    $('#barcode').val(null);
+                    $('#item-name').val(itemName);
                 } else {
+                    $('#item-name').val("");
                     alert("Product not found");
                 }
             }
@@ -55,7 +54,7 @@ var drawDetailTransactionRow = function() {
 }
 
 var drawPurchaseRow = function() {
-    purchaseItemQty = 1
+    purchaseItemQty = $('#qty-item-cart').val();
     purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
@@ -84,27 +83,22 @@ var drawPurchaseRow = function() {
 
             } else {
                 var row = "<tr id='" + idRow + "'" + itemBarcode + "'>" +
-                    // "<td>" + lineNo + "</td>" +
-                    "<td class='product-barcode' style='display:none;'>" + itemBarcode + "</td>" +
+                    "<td>" + lineNo + "</td>" +
+                    "<td class='product-barcode'>" + itemBarcode + "</td>" +
                     "<td class='product-name'>" + itemName + "</td>" +
                     "<td class='price'>" + itemPrice + "</td>" +
                     "<td class='qty'>" + purchaseItemQty + "</td>" +
                     "<td class='purchase_total'>" + purchaseItemTotal + "</td>" +
                     "<td>" +
-                    "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                    "<i class='la la-edit'></i>" +
-                    "</span>" +
-                    "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                    "<i class='la la-trash'></i>" +
-                    "</span>" +
+                    "<button type='button' onclick='updateItem(this)' class='btn btn-info' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;" +
+                    "<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;" +
                     "</td>" +
                     "</tr>";
-                var tableBody = $("#item_table tbody");
+                var tableBody = $("table tbody");
                 tableBody.append(row);
                 lineNo++;
             }
             $('#grand_total').text(grandTotal);
-            $('#sub-total').text(grandTotal);
         }
     });
 }
@@ -134,28 +128,23 @@ var getInvoiceSaleItem = function() {
                     $('#item_table').find("#" + idRow + " .purchase_total").text(newPurchaseTotal);
                 } else {
                     var row = "<tr id='" + item.barcode + "'>" +
-                        // "<td>" + lineNo + "</td>" +
-                        "<td class='product-barcode' style='display:none;'>" + item.barcode + "</td>" +
+                        "<td>" + lineNo + "</td>" +
+                        "<td class='product-barcode'>" + item.barcode + "</td>" +
                         "<td class='product-name'>" + item.product + "</td>" +
                         "<td class='price' data-price='" + item.price + "'>" + item.price + "</td>" +
                         "<td class='qty'>" + item.qty + "</td>" +
                         "<td class='purchase_total'>" + item.total + "</td>" +
                         "<td>" +
-                        "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                        "<i class='la la-edit'></i>" +
-                        "</span>" +
-                        "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                        "<i class='la la-trash'></i>" +
-                        "</span>" +
+                        "<button type='button' onclick='updateItem(this)' id='btn-update' class='btn btn-info btn-update' data-toggle='modal' data-target='#modal-default'>Update</button>&nbsp;" +
+                        "<button type='button' onclick='deleteItem(this)' class='btn btn-danger' id='btn-delete'>Delete</button>&nbsp;" +
                         "</td>" +
                         "</tr>";
-                    var tableBody = $("#item_table tbody");
+                    var tableBody = $("table tbody");
                     tableBody.append(row)
                     lineNo++;
                 }
             })
-            $('#grand_total').text("Rp. " + grandTotal);
-            $('#sub-total').text("Rp. " + grandTotal);
+            $('#grand_total').text(grandTotal);
         }
     });
 }
@@ -164,7 +153,6 @@ getInvoiceSaleItem();
 
 $("#search-product").click(function(e) {
     getProductByBarcode();
-    // drawPurchaseRow();
 })
 
 $('#barcode').on({
@@ -237,6 +225,7 @@ var deleteItem = function(e) {
 
 var updateItem = function(e) {
     row = $(e).closest('tr')
+    var row_barcode = row.attr('id');
     var itemName = row.find(".product-name").html();
     var itemQty = row.find(".qty").html();
     var itemBarcode = row.find(".product-barcode").html();

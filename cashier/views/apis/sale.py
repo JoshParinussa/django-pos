@@ -19,7 +19,7 @@ class SaleViewSet(viewsets.ModelViewSet):
         barcode = request.POST.get('barcode')
         qty = request.POST.get('qty')
         total = request.POST.get('total')
-
+        print("#barcode", barcode)
         invoice = Invoice.objects.get(invoice=invoice_number)
         product = Product.objects.get(barcode=barcode)
 

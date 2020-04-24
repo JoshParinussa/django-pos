@@ -23,219 +23,171 @@
   
 {% block content %}
 {% csrf_token %}
+    
     <div class="row">
-        <div class="col">
-            <div class="card mx-auto">
-                <form class="form-horizontal">
-                    <div class="card-body">
+        <div class="col-8">
+            <div class="kt-portlet">
+                <form class="kt-form kt-form--label-right">
+                    <div class="kt-portlet__body">
                         <div class="form-group row">
-                            <label class="col-form-label col-3">Date</label>
-                            <div class="col-9">
+                            <div class="col-lg-3 col-xl-3">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Kasir</label>
-                            <div class="col-9">
-                                <input type="text" id="cashier" class="form-control" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Customer</label>
-                            <div class="col-9">
-                                <input type="text" class="form-control">    
+                            <div class="col-lg-9 col-xl-9">
+                                <div class="input-group">
+                                    <input class="form-control" id="barcode" type="text" placeholder="Scan or search item barcode.." >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" type="button" id="search-product">
+                                            <i class="flaticon-search" ></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <div class="table-wrap">
+                        <table id="item_table" class="table table-hover custom-table">
+                            <thead>
+                                <tr>
+                                    <th style="display:none;">Barcode</th>
+                                    <th>Nama Item</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <div class="card mx-auto">
-                <form class="form-horizontal">
-                {% csrf_token %}
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Barcode</label>
-                            <div class="col-9">
-                                <div class="input-group">
-                                    <input class="form-control" id="barcode" type="text" placeholder="Barcode" >
-                                    <div class="input-group-append">
-                                        <button type="button" id="search-product" class="btn btn-info input-group-text">
-                                        <i class="fas fa-search" ></i></button>
-                                    </div>
-                                </div>
+        <div class="col-4">
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <div class="col-12">
+                        <div class="row">
+                            <table class="table borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Invoice</th>
+                                        <th class="text-right" id="invoice_number">{{ invoice_number }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-left">Subtotal</th>
+                                        <th class="text-right" id="sub-total">Rp. 50.000</th>
+                                    </tr>
+                                    {% comment %} <tr>
+                                        <th class="text-left">Discount</th>
+                                        <th class="text-right" id="disc-total">- Rp. 0</th>
+                                    </tr> {% endcomment %}
+                                    <tr>
+                                        <th class="text-left"><h3>TOTAL</h3></th>
+                                        <th class="text-right">
+                                            <h3 id="grand_total">30.000</h3>
+                                        </th>
+                                    </tr>
+                                <thead>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Cash</th>
+                                        <th class="text-right">Change</th>
+                                    </tr>
+                                <thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="text-left">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    Rp. 
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="number" min="0"  class="form-control" id="cash">
+                                                </div>
+                                                
+                                            </div>
+                                        </th>
+                                        <th class="text-right">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    Rp. 
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="number" min="0" class="form-control" id="change" disabled>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-6 col-xl-6">
+                                <button type="button" class="btn btn-danger btn-block m-1" id="btn-cancel-payment" onclick="printResult()">
+                                    <i class="flaticon-cancel"></i>&nbsp;Batal
+                                </button>
+                            </div>
+                            <div class="col-lg-6 col-xl-6">
+                                <button type="submit" class="btn btn-primary btn-block m-1" id="process_payment">
+                                    <i class="fas fa-shopping-cart"></i>&nbsp;Process
+                                </button>&nbsp;
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.modal -->
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
+                    <form class="form-horizontal">
                         <div class="form-group row">
                             <label class="col-form-label col-3">Nama Item</label>
                             <div class="col-9">
-                                <input type="text" id="item-name" class="form-control" disabled>
+                                <input type="text" id="modal-item-name" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-form-label col-3">Qty</label>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="number" id="qty-item-cart" min="1" value='1' class="form-control">
-                                    <div class="input-group-append">
-                                        <button type="button" id="add-item-cart" class="btn btn-info input-group-text">
-                                        <i class="fas fa-cart-plus" ></i></button>
-                                    </div>
+                                    <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card mx-auto">
-                <div class="card-body">
-                    <div class="row">
-                        <h4><label class="col-form-label text-muted">Invoice</label>&nbsp;</h4>
-                        <h4><label class="col-form-label" id="invoice_number">{{ invoice_number }}</label></h4>
-                    </div>
-                    <div class="row">
-                        <label class="col-form-label" >
-                            <h3 class='col'>Rp.</h3>
-                        </label>
-                        <label class="col-form-label" >
-                            <h1 class='col' style="font-size: 70px;" id="grand_total">0</h1>
-                        </label>
-                    </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card mx-auto">
-                <div class="card-body">
-                    <table id="item_table" class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Barcode</th>
-                                <th>Nama Item</th>
-                                <th>Price</th>
-                                <th>Qty</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card mx-auto">
-                <form class="form-horizontal">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Sub Total</label>
-                            <div class="col-9">
-                                <input type="text" class="form-control" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Grand Total</label>
-                            <div class="col-9">
-                                <input type="text" class="form-control" disabled>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card mx-auto">
-                <form class="form-horizontal">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Cash</label>
-                            <div class="col-9">
-                                <input type="number" min="0"  class="form-control" id="cash">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-3">Change</label>
-                            <div class="col-9">
-                                <input type="number" min="0" class="form-control" id="change" disabled>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card mx-auto">
-                <form class="form-horizontal">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-form-label col-2">Note</label>
-                            <div class="col">
-                                <textarea class="col" rows="4">
-                                </textarea>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group row">
-                <button type="button" class="btn btn-success" id="process_payment">
-                    <i class="fas fa-shopping-cart"></i>&nbsp;Process Payment
-                </button>
-            </div>
-            <div class="form-group row">
-                <button type="button" class="btn btn-danger" id="btn-cancel-payment" onclick="printResult()">Cancel</button>&nbsp;
-            </div>
-        </div>
-    </div>
-    <!-- /.row -->
-
-    <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Update Item</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
-                <form class="form-horizontal">
-                    <div class="form-group row">
-                        <label class="col-form-label col-3">Nama Item</label>
-                        <div class="col-9">
-                            <input type="text" id="modal-item-name" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3">Qty</label>
-                        <div class="col-9">
-                            <div class="input-group">
-                                <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
 {% endblock %}

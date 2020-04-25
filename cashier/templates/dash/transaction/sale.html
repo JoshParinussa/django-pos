@@ -8,12 +8,15 @@
 
 {% block js %}
 <script type="text/javascript">
-    let currentUser = '{{ request.user.username }}';
+    let currentUser = '{{ request.user.first_name }}';
 </script>
 <!-- page script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+{% comment %} <script src="{% static 'vendors/js/pages/moment-with-locales.min' %}"></script> {% endcomment %}
 <script src="{% static 'common.js' %}"></script>
 <script src="{% static 'admin/sale.js' %}"></script>
+<script>
+    var css_url = "{% static 'admin/css/sale.css' %}";
+</script>
 {% endblock %}
 
 
@@ -31,9 +34,12 @@
                     <div class="kt-portlet__body">
                         <div class="form-group row">
                             <div class="col-lg-3 col-xl-3">
+                                <input type="text" id="cashier" class="form-control" disabled>
+                            </div>
+                            <div class="col-lg-2 col-xl-2">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>
-                            <div class="col-lg-9 col-xl-9">
+                            <div class="col-lg-7 col-xl-7">
                                 <div class="input-group">
                                     <input class="form-control" id="barcode" type="text" placeholder="Scan or search item barcode.." >
                                     <div class="input-group-append">
@@ -112,7 +118,7 @@
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="number" min="0"  class="form-control" id="cash">
+                                                    <input type="number" min="0"  class="form-control" id="cash" required>
                                                 </div>
                                                 
                                             </div>
@@ -137,13 +143,13 @@
                     <div class="kt-form__actions">
                         <div class="row">
                             <div class="col-lg-6 col-xl-6">
-                                <button type="button" class="btn btn-danger btn-block m-1" id="btn-cancel-payment" onclick="printResult()">
-                                    <i class="flaticon-cancel"></i>&nbsp;Batal
+                                <button type="button" class="btn btn-info btn-block m-1" id="btn-print-payment" disabled>
+                                    <i class="flaticon2-print"></i>&nbsp;Cetak nota
                                 </button>
                             </div>
                             <div class="col-lg-6 col-xl-6">
-                                <button type="submit" class="btn btn-primary btn-block m-1" id="process_payment">
-                                    <i class="fas fa-shopping-cart"></i>&nbsp;Process
+                                <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
+                                    <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
                                 </button>&nbsp;
                             </div>
                         </div>

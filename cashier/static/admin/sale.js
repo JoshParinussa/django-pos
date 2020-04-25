@@ -201,6 +201,10 @@ $('#process_payment').click(function(e) {
             "cash": cash,
             "change": change,
             "total": grandTotal,
+        },
+        success: function(result) {
+            window.location.reload();
+            console.log("BERHASIL")
         }
     });
 })
@@ -209,11 +213,14 @@ $('#cash').keyup((e) => {
     cash = e.currentTarget.value;
     change = cash - grandTotal;
     $('#change').val(change);
+    if (e.currentTarget.value == 0)
+        $("#btn-print-payment").prop('disabled', true);
+    else
+        $("#btn-print-payment").prop('disabled', false);
 });
 
-$('#btn-cancel-payment').click(function() {
-    $('#btn-delete').text();
-    console.log($('#btn-delete').text())
+$('#btn-print-payment').click(function() {
+    printResult()
 })
 
 var deleteItem = function(e) {
@@ -269,57 +276,113 @@ $('#modal-btn-update').click(function(e) {
 });
 
 var printResult = function() {
+    var total = $('#grand_total').html()
+    var receipt_body = ''
+    $("#item_table tbody").find("tr").each(function() {
+        var item = $(this).find('.product-name').html()
+        var qty = $(this).find('.qty').html()
+        var price = $(this).find('.price').html()
+        var subtotal = $(this).find('.purchase_total').html()
+        var subtotal = $(this).find('.purchase_total').html()
+        receipt_body +=
+            `<tr>
+                <td class="item">${item}</td>
+                <td class="quantity">${qty}</td>
+                <td class="price">${price}</td>
+                <td class="subtotal">${subtotal}</td>
+            </tr>`;
+    });
 
-    var htmlReceiptHead =
+    var receipt =
+        `<div class="print-receipt">
+            <div class="col-12">
+                <div class="row center">
+                    <h3>Minimarketku</div>
+                </div>
+                <div class="row">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${date}</td>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" colspan="2">${invoice_number}</td>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${currentUser}</td>
+                            </tr>
+                            <tr>
+                            </tr>
+                            ${receipt_body}
+                            <tr>
+                                <td></td>
+                                <td style="border-top:1px dashed black;" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">HARGA JUAL</td>
+                                <td>: ${grandTotal}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">TUNAI </td>
+                                <td>: ${cash}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">KEMBALIAN </td>
+                                <td>: ${change}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row center">
+                <br><br><br>
+                    <p>===== TERIMA KASIH =====</p>
+                    <p>SELAMAT BERBELANJA KEMBALI</p>
+                </div>
+            </div>
+        </div>`;
+    // '<div id="print-receipt">' +
+    // '<div class="receipt" id="receipt">' +
+    // '<p class="centered" id="ticket-title">Minimarketku' +
+    // '<table>' +
+    // '<thead>' +
+    // '<tr>' +
+    // '<th class="quantity">Qty.</th>' +
+    // '<th class="description">Item</th>' +
+    // '<th class="price">Total</th>' +
+    // '</tr>' +
+    // '</thead>' +
+    // '<tbody>' +
+    // receipt_body +
+    // '</tbody>' +
+    // '</table>' +
+    // '<p class="centered">Terimakasih, datang kembali' +
+    // '</div>' +
+    // '</div>';
 
-        $("#item_table tbody").find("tr").each(function() {
-            console.log($(this).find('.product-name').html());
-        });
-    var html =
-        '<div id="print-receipt">' +
-        '<div class="receipt" id="receipt">' +
-        '<p class="centered" id="ticket-title">Django Cashier Receipt' +
-        '<br>Address line 1' +
-        '<br>Address line 2</p>' +
-        '<table>' +
-        '<thead>' +
-        '<tr>' +
-        '<th class="quantity">Qty.</th>' +
-        '<th class="description">Item</th>' +
-        '<th class="price">Total</th>' +
-        '</tr>' +
-        '</thead>' +
-        '<tbody>' +
-        '<tr>' +
-        '<td class="quantity">1.00</td>' +
-        '<td class="description">ARDUINO UNO R3</td>' +
-        '<td class="price">$25.00</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td class="quantity">2.00</td>' +
-        '<td class="description">JAVASCRIPT BOOK</td>' +
-        '<td class="price">$10.00</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td class="quantity">1.00</td>' +
-        '<td class="description">STICKER PACK</td>' +
-        '<td class="price">$10.00</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td class="quantity"></td>' +
-        '<td class="description">TOTAL</td>' +
-        '<td class="price">$55.00</td>' +
-        '</tr>' +
-        '</tbody>' +
-        '</table>' +
-        '<p class="centered">Thanks for your purchase!' +
-        '<br>parzibyte.me/blog</p>' +
-        '</div>' +
-        '</div>';
-    // var myPrintContent = document.getElementById('print-receipt');
-    var myPrintWindow = window.open('', 'Print', '');
-    myPrintWindow.document.write(html);
-    // myPrintWindow.document.getElementById('receipt').style.display='block'
+    var receipt_css =
+        `<style type="text/css">
+            @page {margin: 0;}
+            .print-receipt {
+                width: 58mm;
+            }
+            .center {
+                text-align: center;
+                font-size: 8px;
+              }
+            table, th, td {
+            font-size: 8px;
+            }
+            table {width:100%;}
+            td .item {width:50%;}
+            td .quantity {width:10%;}
+            td .price {width:20%;}
+            td .subtotal {width:20%;}
+            
+        </style>`;
+
+
+    var myPrintWindow = window.open('', 'Cetak Receipt', '');
+    myPrintWindow.document.write(receipt_css);
+    myPrintWindow.document.write(receipt);
     myPrintWindow.document.close();
     myPrintWindow.focus();
     myPrintWindow.print();

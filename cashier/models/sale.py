@@ -10,7 +10,7 @@ class InvoiceStatus(models.IntegerChoices):
     """StoreTier choice."""
     EMPTY = 0
     SUCCESS = 1
-    CANCEL = 2
+    PENDING = 2
 
 
 class Invoice(BaseModel):

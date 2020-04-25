@@ -19,7 +19,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         barcode = request.POST.get('barcode')
         qty = request.POST.get('qty')
         total = request.POST.get('total')
-
         invoice = Invoice.objects.get(invoice=invoice_number)
         product = Product.objects.get(barcode=barcode)
 
@@ -64,9 +63,10 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice.change = change
         invoice.total = total
         invoice.status = 1
-        invoice.save(update_fields=["cash", "change", "total", "status"])
+        invoice.cashier = self.request.user
+        invoice.save(update_fields=["cash", "cashier", "change", "total", "status"])
 
-        return Response(invoice)
+        return HttpResponse(status=202)
 
     @action(detail=False, methods=['POST'])
     def delete_item(self, request):

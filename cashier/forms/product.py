@@ -1,15 +1,24 @@
 """Product forms module."""
 
+from django import forms
+from django.forms import modelformset_factory
 from cashier.forms.base import CustomModelForm
 from cashier.models import Product, HargaBertingkat, ConvertBarang
 
 
-class DashProductCreationForm(CustomModelForm):
-    """Custom product creation form."""
+class DashProductForm(forms.ModelForm):
+    """Custom product form."""
 
     class Meta:  # noqa D106
         model = Product
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('supplier', )
+
+HargaBertingkatFormset = modelformset_factory(
+    HargaBertingkat,
+    fields=('min_quantity', 'max_quantity', 'price', ),
+    extra=1,
+)
 
 
 class DashProductUpdateForm(CustomModelForm):
@@ -20,7 +29,7 @@ class DashProductUpdateForm(CustomModelForm):
         fields = '__all__'
 
 
-class DashHargaBertingkatCreationForm(CustomModelForm):
+class DashHargaBertingkatCreationForm(forms.ModelForm):
     """DashHargaBertingkatCreationForm."""
 
     class Meta:  # noqa D106

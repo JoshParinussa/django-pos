@@ -8,7 +8,7 @@ class SaleSerializer(serializers.ModelSerializer):
     """Sale Serializer."""
     barcode = serializers.CharField(source='product.barcode', read_only=True)
     product = serializers.CharField(source='product.name', read_only=True)
-    price = serializers.CharField(source='product.selling_price', read_only=True)
+    price   = serializers.CharField(source='product.selling_price', read_only=True)
     invoice = serializers.CharField(source='invoice.invoice', read_only=True)
 
     class Meta:  # noqa D106

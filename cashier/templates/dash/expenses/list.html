@@ -1,0 +1,57 @@
+{% extends 'dash/layout/base.html' %}
+{% load static i18n %}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+<script src="{% static 'admin/expenses.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Pengeluaran</span>
+{% comment %} <a href="{% url 'dash_view' %}" class="kt-subheader__breadcrumbs-link">Dashboard</a> {% endcomment %}
+{% endblock %}
+
+
+{% block content %}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-soft-icons"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                List Pengeluaran
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <a href="{% url 'dash_expenses_create' %}" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        Tambah Pengeluaran
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <table class="table table-striped- table-hover table-checkable data-table">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Kasir</th>
+                    <th>Keterangan</th>
+                    <th>Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

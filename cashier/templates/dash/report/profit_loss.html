@@ -1,0 +1,57 @@
+{% extends 'dash/layout/base.html' %}
+{% load static widget_tweaks%}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% comment %} <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'admin/css/sale.css' %}">
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    let currentUser = '{{ request.user.first_name }}';
+</script>
+<!-- page script -->
+{% comment %} <script src="{% static 'vendors/js/pages/moment-with-locales.min' %}"></script> {% endcomment %}
+<script src="{% static 'common.js' %}"></script>
+<script src="{% static 'admin/report_profit_loss.js' %}"></script>
+<script>
+    var css_url = "{% static 'admin/css/sale.css' %}";
+</script>
+{% endblock %}
+
+
+{% block breadcrumb %}
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Laporan</span>
+{% endblock %}
+  
+{% block content %}
+{% csrf_token %}
+<div class="row">
+    <div class="col-12">
+        <div class="kt-portlet">
+            <label class="col-form-label col-lg-3 col-sm-12">
+                Tanggal
+            </label>
+            <div class="col-lg-4 col-md-9 col-sm-12">
+                <input type="text" class="form-control" id="daterangepicker" readonly="" placeholder="Select time">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="kt-portlet">
+            Omset
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="kt-portlet">
+            Keuntungan
+        </div>
+    </div>
+</div>
+{% endblock %}

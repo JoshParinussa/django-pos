@@ -9,6 +9,7 @@ from cashier.views.apis import unit as api_unit
 from cashier.views.apis import user as api_user
 from cashier.views.apis import supplier as api_supplier
 from cashier.views.apis import sale as api_sale
+from cashier.views.apis import expenses as api_expenses
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
@@ -16,6 +17,7 @@ from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
 from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
+from cashier.views.dash import expenses as dash_expenses_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'sales', api_sale.SaleViewSet)
@@ -25,8 +27,10 @@ router.register(r'products', api_product.ProductViewSet)
 router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
 router.register(r'supplier', api_supplier.SupplierViewSet)
+router.register(r'expenses', api_expenses.ExpensesViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
+
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
 
@@ -71,8 +75,15 @@ urlpatterns = [
     # TRANSACTION
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
     path('dash/transaction/sale/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
+    
+    #EXPENSES
+    path('dash/transaction/expenses', dash_expenses_view.ExpensesListView.as_view(), name='dash_expenses_list'),
+    path('dash/transaction/expenses/create', dash_expenses_view.ExpensesCreateView.as_view(), name='dash_expenses_create'),
+    path('dash/transaction/expenses/<str:pk>', dash_expenses_view.ExpensesUpdateView.as_view(), name='dash_expenses_update'),
+    path('dash/transaction/expenses/<str:pk>/delete', dash_expenses_view.ExpensesDeleteView.as_view(), name='dash_expenses_delete'),
 
     #REPORTS
     path('dash/report/transaction', dash_transaction_view.ReportTransactionView.as_view(), name='dash_report_transaction'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
+    path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
 ]   

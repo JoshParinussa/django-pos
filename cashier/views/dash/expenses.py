@@ -25,6 +25,10 @@ class ExpensesCreateView(DashExpensesMixin, DashCreateView):
     form_class = expenses_forms.DashExpensesCreationForm
     template_name = 'dash/expenses/create.html'
 
+    def form_valid(self, form):
+        form.instance.cashier = self.request.user
+        return super().form_valid(form)
+
 
 class ExpensesUpdateView(DashExpensesMixin, DashUpdateView):
     """ExpensesUpdateView."""

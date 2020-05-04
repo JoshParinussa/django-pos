@@ -28,7 +28,7 @@ class ProductCreateView(DashProductMixin, DashCreateView):
     """ProductCreateView."""
     model = Product
     form_class = product_forms.DashProductForm
-    template_name = 'dash/product/create copy.html'
+    template_name = 'dash/product/create.html'
 
     def get_context_data(self, **kwargs):
         """Override get context."""

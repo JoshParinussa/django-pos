@@ -56,7 +56,7 @@ var drawDetailTransactionRow = function() {
 
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
-    purchaseItemTotal = itemPrice * purchaseItemQty;
+        // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
         type: "POST",
@@ -65,20 +65,24 @@ var drawPurchaseRow = function() {
             "invoice_number": invoice_number,
             "barcode": itemBarcode,
             "qty": purchaseItemQty,
-            "total": purchaseItemTotal
         },
         success: function(result) {
-            grandTotal += Number(purchaseItemTotal);
             var idRow = itemBarcode;
+            var purchaseItemTotal = result.sale.total;
+            var purchaseItemPrice = result.price;
+            // console.log("BEFORE " + grandTotal)
+            // grandTotal += Number(purchaseItemPrice);
+            // console.log("AFTER " + grandTotal)
             if ($('#item_table').find("#" + idRow).length > 0) {
                 var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
-                var currentPurchaseTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
-
+                var currentTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
+                grandTotal -= Number(currentTotal);
+                grandTotal += Number(purchaseItemTotal);
                 var newQty = Number(currentQty) + Number(purchaseItemQty);
-                var newPurchaseTotal = Number(currentPurchaseTotal) + Number(purchaseItemTotal);
 
                 $('#item_table').find("#" + idRow + " .qty").text(newQty);
-                $('#item_table').find("#" + idRow + " .purchase_total").text(newPurchaseTotal);
+                $('#item_table').find("#" + idRow + " .purchase_total").text(purchaseItemTotal);
+                $('#item_table').find("#" + idRow + " .price").text(purchaseItemPrice);
 
 
 
@@ -87,7 +91,7 @@ var drawPurchaseRow = function() {
                     // "<td>" + lineNo + "</td>" +
                     "<td class='product-barcode' style='display:none;'>" + itemBarcode + "</td>" +
                     "<td class='product-name'>" + itemName + "</td>" +
-                    "<td class='price'>" + itemPrice + "</td>" +
+                    "<td class='price'>" + purchaseItemPrice + "</td>" +
                     "<td class='qty'>" + purchaseItemQty + "</td>" +
                     "<td class='purchase_total'>" + purchaseItemTotal + "</td>" +
                     "<td>" +
@@ -101,6 +105,7 @@ var drawPurchaseRow = function() {
                     "</tr>";
                 var tableBody = $("#item_table tbody");
                 tableBody.append(row);
+                grandTotal += Number(purchaseItemTotal);
                 lineNo++;
             }
             $('#grand_total').text(grandTotal);
@@ -117,6 +122,7 @@ var getInvoiceSaleItem = function() {
             "invoice_number": invoice_number,
         },
         success: function(result) {
+            console.log(result)
             result.data.forEach(function(item) {
                 grandTotal += Number(item.total);
                 var idRow = item.barcode;

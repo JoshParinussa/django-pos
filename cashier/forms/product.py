@@ -2,6 +2,7 @@
 
 from django import forms
 from django.forms import modelformset_factory
+from django.forms.models import inlineformset_factory
 from cashier.forms.base import CustomModelForm
 from cashier.models import Product, HargaBertingkat, ConvertBarang
 
@@ -20,6 +21,20 @@ HargaBertingkatFormset = modelformset_factory(
     extra=1,
 )
 
+class DashProductHargaBertingkatForm(forms.ModelForm):
+    """Product Harga Bertingkat Form."""
+    class Meta:
+        model = HargaBertingkat
+        exclude = ()
+
+HargaBertingkatInlineFormset = inlineformset_factory(
+    Product,
+    HargaBertingkat,
+    form=DashProductHargaBertingkatForm,
+    fields=['max_quantity', 'min_quantity', 'price'],
+    extra=1,
+    can_delete=True
+)
 
 class DashProductUpdateForm(CustomModelForm):
     """CmsProductUpdateForm."""

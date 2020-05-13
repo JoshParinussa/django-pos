@@ -1,6 +1,6 @@
 """Product views."""
 from cashier.forms import product as product_forms
-from cashier.forms.product import HargaBertingkatFormset
+from cashier.forms.product import HargaBertingkatFormset, HargaBertingkatInlineFormset
 from cashier.models import Product, ConvertBarang, HargaBertingkat
 from cashier.views.dash.base import DashCreateView, DashListView, DashCustomCreateView, DashUpdateView, DashDeleteView
 from django.shortcuts import render
@@ -28,43 +28,31 @@ class ProductCreateView(DashProductMixin, DashCreateView):
     """ProductCreateView."""
     model = Product
     form_class = product_forms.DashProductForm
-    template_name = 'dash/product/create copy.html'
+    template_name = 'dash/product/create.html'
 
     def get_context_data(self, **kwargs):
         """Override get context."""
-        model = self.get_model()
         context = super().get_context_data(**kwargs)
-        context['model_name'] = model._meta.verbose_name.title()
-        context['model_name_plural'] = model._meta.verbose_name_plural.title()
-        context['icon'] = self.get_icon()
-        context['action'] = self.get_current_action()
-
-        for action in self.get_actions():
-            url_name = self._get_url_name(action)
-            context[f'{action}_url_name'] = url_name
-
+    
         if self.request.POST:
-            context['harga_bertingkat_formset'] = HargaBertingkatFormset(self.request.POST)
+            context['harga_bertingkat_formset'] = HargaBertingkatInlineFormset(self.request.POST)
         else:
-            context['harga_bertingkat_formset'] = HargaBertingkatFormset(queryset=HargaBertingkat.objects.none())
+            context['harga_bertingkat_formset'] = HargaBertingkatInlineFormset()
             
 
         return context
-
+    
     def form_valid(self, form):
         """Override form valid."""
         context = self.get_context_data()
         harga_bertingkat_formset = context['harga_bertingkat_formset']
-        product = form.save()
-
-        if harga_bertingkat_formset.is_valid():
-            for frm in harga_bertingkat_formset:
-                if frm.has_changed():
-                    harga_bertingkat = frm.save(commit=False)
-                    harga_bertingkat.product = product
-                    harga_bertingkat.save()
-
-        return HttpResponseRedirect(self.get_success_url())
+    
+        with transaction.atomic():
+            self.object = form.save()
+            if harga_bertingkat_formset.is_valid():
+                harga_bertingkat_formset.instance = self.object
+                harga_bertingkat_formset.save()
+        return super(ProductCreateView, self).form_valid(form)
 
 
 class ProductUpdateView(DashProductMixin, DashUpdateView):
@@ -75,104 +63,33 @@ class ProductUpdateView(DashProductMixin, DashUpdateView):
 
     def get_context_data(self, **kwargs):
         """Override get context."""
-        model = self.get_model()
-        harga_bertingkat_queryset = self.object.hargabertingkat.order_by('created_at')
-        context = super().get_context_data(**kwargs)
-        context['model_name'] = model._meta.verbose_name.title()
-        context['model_name_plural'] = model._meta.verbose_name_plural.title()
-        context['icon'] = self.get_icon()
-        context['action'] = self.get_current_action()
-
-        for action in self.get_actions():
-            url_name = self._get_url_name(action)
-            context[f'{action}_url_name'] = url_name
-
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        hargabertingkat_queryset = self.object.hargabertingkat.order_by('min_quantity')
+        context['actions'] = 'update'
         if self.request.POST:
-            context['harga_bertingkat_formset'] = HargaBertingkatFormset(self.request.POST)
+            context['harga_bertingkat_formset'] = HargaBertingkatInlineFormset(self.request.POST, instance=self.object)
         else:
-            context['harga_bertingkat_formset'] = HargaBertingkatFormset(queryset=harga_bertingkat_queryset)
-
+            context['harga_bertingkat_formset'] = HargaBertingkatInlineFormset(instance=self.object, queryset=hargabertingkat_queryset)
+        
         return context
 
     def form_valid(self, form):
         """Override form valid."""
         context = self.get_context_data()
         harga_bertingkat_formset = context['harga_bertingkat_formset']
-        product = form.save()
 
-        if harga_bertingkat_formset.is_valid():
-            for frm in harga_bertingkat_formset:
-                print("#HRg", frm)
-                if frm.has_changed():
-                    harga_bertingkat = frm.save(commit=False)
-                    harga_bertingkat.product = product
-                    harga_bertingkat.save()
-
-        return HttpResponseRedirect(self.get_success_url())
+        with transaction.atomic():
+            self.object = form.save()
+            if harga_bertingkat_formset.is_valid():
+                harga_bertingkat_formset.instance = self.object
+                harga_bertingkat_formset.save()
+        return super(ProductUpdateView, self).form_valid(form)
 
 
 class ProductDeleteView(DashProductMixin, DashDeleteView):
     """ProductDeleteView."""
     model = Product
     template_name = 'dash/product/delete.html'
-
-
-class NewProductCreateView(DashProductMixin, DashCustomCreateView, View):
-    """ProductCreateView."""
-    template_name = 'dash/product/create.html'
-    model = Product
-
-    def get(self, request):
-        """Get."""
-        if request.method == "POST":
-            product_form = product_forms.DashProductCreationForm(request.POST)
-            harga_bertingkat_form = [product_forms.DashHargaBertingkatCreationForm(prefix=str(x)) for x in range(3)]
-            # harga_bertingkat_form = product_forms.DashHargaBertingkatCreationForm(request.POST)
-
-            if product_form.is_valid() and harga_bertingkat_form.is_valid():
-                product = product_form.save()
-                harga_bertingkat = harga_bertingkat_form.save(False)
-
-                harga_bertingkat.product = product
-                harga_bertingkat.save()
-        else:
-            product_form = product_forms.DashProductCreationForm
-            harga_bertingkat_form = product_forms.DashHargaBertingkatCreationForm
-
-        context = {
-            'product_form': product_form,
-            'harga_bertingkat_form': harga_bertingkat_form,
-            'tes': "TES"
-        }
-
-        return render(request, self.template_name, context)
-
-
-def product_create(request):
-    """Product_create."""
-    template_name = 'dash/product/create.html'
-    if request.method == "POST":
-        product_form = product_forms.DashProductCreationForm(request.POST)
-        harga_bertingkat_form = [product_forms.DashHargaBertingkatCreationForm(prefix=str(x)) for x in range(3)]
-        # harga_bertingkat_form = product_forms.DashHargaBertingkatCreationForm(request.POST)
-
-        if product_form.is_valid() and harga_bertingkat_form.is_valid():
-            product = product_form.save()
-            harga_bertingkat = harga_bertingkat_form.save(False)
-
-            harga_bertingkat.product = product
-            harga_bertingkat.save()
-    else:
-        product_form = product_forms.DashProductCreationForm
-        harga_bertingkat_form = product_forms.DashHargaBertingkatCreationForm
-
-    context = {
-        'product_form': product_form,
-        'harga_bertingkat_form': harga_bertingkat_form,
-        'tes': "TES"
-    }
-
-    return render(request, template_name, context)
 
 
 class ConvertBarangListView(DashProductMixin, DashListView):

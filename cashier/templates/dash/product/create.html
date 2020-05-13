@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'admin/products_form.js' %}"></script>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -16,34 +17,24 @@
 {% endblock %}
 
 {% block content %}
-<div class="kt-portlet">
-    <div class="kt-portlet__head">
-        <div class="kt-portlet__head-label">
-            <h3 class="kt-portlet__head-title">Produk <small>Tambah Produk</small></h3>
-        </div>
-        <div class="kt-portlet__head-toolbar">
-            <div class="kt-portlet__head-wrapper">
-            </div>
-        </div>
-    </div>
-
-    <form class="kt-form kt-form--label-right form-main" id="kt_form" method="post">
-        {% csrf_token %}
-
-        <div class="kt-portlet__body">
-            <div class="kt-section kt-section--first">
-                <div class="kt-section__body">
-                    <div class="form-group row pt-4">
-                        {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.name.help_text %}<span class="form-text text-muted">{{ form.name.help_text }}</span>{% endif %}
+<form class="kt-form kt-form--label-right form-main" id="kt_form" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-6">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Produk <small>Tambah Produk</small></h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-wrapper">
                         </div>
                     </div>
+                </div>
+                <div class="kt-portlet__body">
                     <div class="form-group row pt-4">
                         {{ form.barcode|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.barcode|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.barcodecategorystock.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.barcode.help_text %}
@@ -51,8 +42,17 @@
                         </div>
                     </div>
                     <div class="form-group row pt-4">
+                        {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-6 col-xl-6">
+                            
+                            {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.name.help_text %}<span class="form-text text-muted">{{ form.name.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row pt-4">
                         {{ form.category|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.category|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.category.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.category.help_text %}<span class="form-text text-muted">{{ form.category.help_text }}</span>{% endif %}
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group row pt-4">
                         {{ form.stock|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.stock|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.stock.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.stock.help_text %}<span class="form-text text-muted">{{ form.stock.help_text }}</span>{% endif %}
@@ -68,7 +68,7 @@
                     </div>
                     <div class="form-group row pt-4">
                         {{ form.unit|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.unit|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.unit.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.unit.help_text %}<span class="form-text text-muted">{{ form.unit.help_text }}</span>{% endif %}
@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group row pt-4">
                         {{ form.purchase_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.purchase_price|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.purchase_price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.purchase_price.help_text %}<span class="form-text text-muted">{{ form.purchase_price.help_text }}</span>{% endif %}
@@ -84,81 +84,96 @@
                     </div>
                     <div class="form-group row pt-4">
                         {{ form.selling_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
+                        <div class="col-lg-6 col-xl-6">
                             {% render_field form.selling_price|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.selling_price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.selling_price.help_text %}<span class="form-text text-muted">{{ form.selling_price.help_text }}</span>{% endif %}
                         </div>
                     </div>
-                    <!-- Harga Bertingkat -->
                     <div class="form-group row pt-4">
-                        {{ form.quantity_grosir_1|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.quantity_grosir_1|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.quantity_grosir_1.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.quantity_grosir_1.help_text %}<span class="form-text text-muted">{{ form.quantity_grosir_1.help_text }}</span>{% endif %}
+                        {{ form.status|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-6 col-xl-6">
+                            {% render_field form.status|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.status.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.status.help_text %}<span class="form-text text-muted">{{ form.status.help_text }}</span>{% endif %}
                         </div>
                     </div>
-                    <div class="form-group row pt-4">
-                        {{ form.grosir_1_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.grosir_1_price|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.grosir_1_price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.grosir_1_price.help_text %}<span class="form-text text-muted">{{ form.grosir_1_price.help_text }}</span>{% endif %}
-                        </div>
-                    </div>
-
-                    <div class="form-group row pt-4">
-                        {{ form.quantity_grosir_2|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.quantity_grosir_2|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.quantity_grosir_2.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.quantity_grosir_2.help_text %}<span class="form-text text-muted">{{ form.quantity_grosir_2.help_text }}</span>{% endif %}
-                        </div>
-                    </div>
-                    <div class="form-group row pt-4">
-                        {{ form.grosir_1_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.grosir_2_price|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.grosir_2_price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.grosir_2_price.help_text %}<span class="form-text text-muted">{{ form.grosir_2_price.help_text }}</span>{% endif %}
-                        </div>
-                    </div>
-
-                    <div class="form-group row pt-4">
-                        {{ form.quantity_grosir_3|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.quantity_grosir_3|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.quantity_grosir_3.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.quantity_grosir_3.help_text %}<span class="form-text text-muted">{{ form.quantity_grosir_3.help_text }}</span>{% endif %}
-                        </div>
-                    </div>
-                    <div class="form-group row pt-4">
-                        {{ form.grosir_3_price|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
-                        <div class="col-lg-9 col-xl-6">
-                            {% render_field form.grosir_3_price|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.grosir_3_price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                            {% if form.grosir_3_price.help_text %}<span class="form-text text-muted">{{ form.grosir_3_price.help_text }}</span>{% endif %}
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-3 col-xl-3">
+                            </div>
+                            <div class="col-lg-9 col-xl-9">
+                                <button type="submit" class="btn btn-primary">Tambah</button>&nbsp;
+                                <a href="{% url 'dash_product_list'%}">
+                                    <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="kt-portlet__foot">
-            <div class="kt-form__actions">
-                <div class="row">
-                    <div class="col-lg-3 col-xl-3">
+        <div class="col-6">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Produk <small>Harga Bertingkat</small></h3>
                     </div>
-                    <div class="col-lg-9 col-xl-9">
-                        <button type="submit" class="btn btn-primary">Tambah</button>&nbsp;
-                        <a href="{% url 'dash_product_list'%}">
-                            <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
-                        </a>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-wrapper">
+                        </div>
+                    </div>
+                </div>
+                <!--Form harga bertingkat product-->
+                <div class="kt-portlet__body">
+                    <div class="kt-section kt-section--first">
+                        <div class="kt-section__body">
+                            <table id="item_table" class="table table-hover custom-table">
+                            {{ harga_bertingkat_formset.management_form }}
+                            {% for frm in harga_bertingkat_formset %}
+                                <thead>
+                                    <tr>
+                                        <th>{{ frm.min_quantity|add_label_class:"col-form-label" }}</th>
+                                        <th>{{ frm.max_quantity|add_label_class:"col-form-label" }}</th>
+                                        <th>{{ frm.price|add_label_class:"col-form-label" }}</th>
+                                        <th>Tambah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="current-form-row">
+                                        <td>
+                                            {% render_field frm.min_quantity|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.min_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.min_quantity.help_text %}<span class="form-text text-muted">{{ frm.min_quantity.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            {% render_field frm.max_quantity|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.max_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.max_quantity.help_text %}<span class="form-text text-muted">{{ frm.max_quantity.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            {% render_field frm.price|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.price.help_text %}<span class="form-text text-muted">{{ frm.price.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            <span class='btn btn-sm btn-clean btn-icon btn-icon-lg btn-add-row' title='Tambah harga bertingkat baru'>
+                                                <i class='flaticon2-plus-1'></i>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            {% endfor %}
+                            </table>
+
+                            
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-</div>
-
+    </div>
+</form>
 {% endblock %}

@@ -23,7 +23,11 @@ class SaleViewSet(viewsets.ModelViewSet):
                     found = True
                     break
             if found is False:
-                harga = harga_bertingkats.last().price
+                if newqty > harga_bertingkats.last().max_quantity:
+                    harga = harga_bertingkats.last().price
+                else:
+                    harga = product.selling_price
+                print("#MASUK", harga)
         else:
             harga = product.selling_price
         print("#HARGA", harga)
@@ -71,7 +75,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice_number = request.POST.get('invoice_number')
         invoice = Invoice.objects.get(invoice=invoice_number)
         queryset = self.get_queryset().filter(invoice=invoice)
-        print("#SALE", queryset)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -111,15 +114,17 @@ class SaleViewSet(viewsets.ModelViewSet):
         """update_item."""
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
-        new_qty = request.POST.get('qty')
+        new_qty = int(request.POST.get('qty'))
         new_total = request.POST.get('total')
 
         invoice = Invoice.objects.get(invoice=invoice_number)
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
+        harga = self.get_price(product, new_qty)
         item.qty = new_qty
-        item.total = new_total
+        item.price = harga
+        item.total = new_qty * harga
         item.save()
         return Response(model_to_dict(item))
 

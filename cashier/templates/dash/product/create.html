@@ -130,44 +130,45 @@
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
+                            <table id="item_table" class="table table-hover custom-table">
                             {{ harga_bertingkat_formset.management_form }}
                             {% for frm in harga_bertingkat_formset %}
-                                <table id="item_table" class="table table-hover custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th>{{ frm.min_quantity|add_label_class:"col-form-label" }}</th>
-                                            <th>{{ frm.max_quantity|add_label_class:"col-form-label" }}</th>
-                                            <th>{{ frm.price|add_label_class:"col-form-label" }}</th>
-                                            <th>Tambah</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="current-form-row">
-                                            <td>
-                                                {% render_field frm.min_quantity|add_error_class:"is-invalid" class="form-control" %}
-                                                {% for error in frm.min_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                                                {% if frm.min_quantity.help_text %}<span class="form-text text-muted">{{ frm.min_quantity.help_text }}</span>{% endif %}
-                                            </td>
-                                            <td>
-                                                {% render_field frm.max_quantity|add_error_class:"is-invalid" class="form-control" %}
-                                                {% for error in frm.max_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                                                {% if frm.max_quantity.help_text %}<span class="form-text text-muted">{{ frm.max_quantity.help_text }}</span>{% endif %}
-                                            </td>
-                                            <td>
-                                                {% render_field frm.price|add_error_class:"is-invalid" class="form-control" %}
-                                                {% for error in frm.price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                                                {% if frm.price.help_text %}<span class="form-text text-muted">{{ frm.price.help_text }}</span>{% endif %}
-                                            </td>
-                                            <td>
-                                                <span class='btn btn-sm btn-clean btn-icon btn-icon-lg btn-add-row' title='Tambah harga bertingkat baru'>
-                                                    <i class='flaticon2-plus-1'></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
+                                <thead>
+                                    <tr>
+                                        <th>{{ frm.min_quantity|add_label_class:"col-form-label" }}</th>
+                                        <th>{{ frm.max_quantity|add_label_class:"col-form-label" }}</th>
+                                        <th>{{ frm.price|add_label_class:"col-form-label" }}</th>
+                                        <th>Tambah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="current-form-row">
+                                        <td>
+                                            {% render_field frm.min_quantity|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.min_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.min_quantity.help_text %}<span class="form-text text-muted">{{ frm.min_quantity.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            {% render_field frm.max_quantity|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.max_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.max_quantity.help_text %}<span class="form-text text-muted">{{ frm.max_quantity.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            {% render_field frm.price|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in frm.price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if frm.price.help_text %}<span class="form-text text-muted">{{ frm.price.help_text }}</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            <span class='btn btn-sm btn-clean btn-icon btn-icon-lg btn-add-row' title='Tambah harga bertingkat baru'>
+                                                <i class='flaticon2-plus-1'></i>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             {% endfor %}
+                            </table>
+
+                            
                         </div>
                     </div>
                 </div>

@@ -30,7 +30,6 @@ class SaleViewSet(viewsets.ModelViewSet):
                 print("#MASUK", harga)
         else:
             harga = product.selling_price
-        print("#HARGA", harga)
         return harga
 
     @action(detail=False, methods=['POST'])

@@ -22,6 +22,11 @@ var date = moment().format('LLL');
 $('#sale-date').val(date);
 $('#cashier').val(currentUser);
 
+var emptyingCashChange = function() {
+    $('#change').val('');
+    $('#cash').val('');
+}
+
 var getProductByBarcode = function() {
     var barcode = $('#barcode').val();
 
@@ -87,9 +92,9 @@ var drawPurchaseRow = function() {
                 var row = "<tr id='" + idRow + "'" + itemBarcode + "'>" +
                     "<td class='product-barcode' style='display:none;'>" + itemBarcode + "</td>" +
                     "<td class='product-name'>" + itemName + "</td>" +
-                    "<td class='price'>" + purchaseItemPrice.toLocaleString('id-ID') + "</td>" +
+                    "<td class='price' data-price='" + purchaseItemPrice + "'>" + purchaseItemPrice.toLocaleString('id-ID') + "</td>" +
                     "<td class='qty'>" + purchaseItemQty + "</td>" +
-                    "<td class='purchase_total'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
+                    "<td class='purchase_total' data-purchase-total='" + purchaseItemTotal + "'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
                     "<td>" +
                     "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
                     "<i class='la la-edit'></i>" +
@@ -140,7 +145,7 @@ var getInvoiceSaleItem = function() {
                         "<td class='product-name'>" + item.product + "</td>" +
                         "<td class='price' data-price='" + item.price + "'>" + Number(item.price).toLocaleString('id-ID') + "</td>" +
                         "<td class='qty'>" + item.qty + "</td>" +
-                        "<td class='purchase_total'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
+                        "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
                         "<td>" +
                         "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
                         "<i class='la la-edit'></i>" +
@@ -235,7 +240,7 @@ var deleteItem = function(e) {
         },
         success: function(result) {
             grandTotal -= result.total;
-            $('#grand_total').text(grandTotal);
+            $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
             row.remove();
         }
     });
@@ -253,7 +258,7 @@ var updateItem = function(e) {
 
 $('#modal-btn-update').click(function(e) {
     var newQty = $('#modal-qty-item-cart').val();
-    grandTotal -= Number(row.find(".purchase_total").html());
+    grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
     var newTotal = Number(newQty) * Number(row.find(".price").html());
     $.ajax({
         type: "POST",
@@ -267,10 +272,13 @@ $('#modal-btn-update').click(function(e) {
         success: function(result) {
             row.find(".qty").html(newQty);
             row.find(".price").html(result.price);
-            row.find(".purchase_total").html(result.total)
+            row.find(".purchase_total").html(Number(result.total).toLocaleString('id-ID'));
+            row.find(".purchase_total").attr('data-purchase-total', result.total);
             $('#modal-default').modal('toggle');
+
             grandTotal += result.total;
-            $('#grand_total').text(grandTotal);
+            $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
+            emptyingCashChange();
         }
     });
 });
@@ -281,8 +289,8 @@ var printResult = function() {
     $("#item_table tbody").find("tr").each(function() {
         var item = $(this).find('.product-name').html()
         var qty = $(this).find('.qty').html()
-        var price = Number($(this).find('.price').html()).toLocaleString('id-ID')
-        var subtotal = Number($(this).find('.purchase_total').html()).toLocaleString('id-ID')
+        var price = Number($(this).find('.price').attr('data-price')).toLocaleString('id-ID')
+        var subtotal = Number($(this).find('.purchase_total').attr('data-purchase-total')).toLocaleString('id-ID')
         receipt_body +=
             `<tr>
                 <td class="item">${item}</td>

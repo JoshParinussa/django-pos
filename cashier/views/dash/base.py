@@ -1,5 +1,7 @@
 """Base view module."""
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.text import camel_case_to_spaces, slugify
@@ -41,7 +43,19 @@ class CustomView(SuccessMessageMixin, View):
     """CustomFormView."""
 
 
-class CmsCrudMixin:
+class ManageBaseView(AccessMixin):
+    """ManageViewMixin."""
+    login_url = settings.LOGIN_URL
+
+    def dispatch(self, request, *args, **kwargs):
+        """Override dispatch."""
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CmsCrudMixin(ManageBaseView):
     """CmsCrudMixin."""
 
     def get_icon(self):

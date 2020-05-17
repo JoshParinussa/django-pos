@@ -1,11 +1,21 @@
 "use strict";
-var KTDatatablesDataSourceAjaxServer = function() {
+window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+var table;
+var condition;
+var url_ajax;
 
+var getCondition = function (){
+    return $('#date_list_transaction').val();
+}
+
+var KTDatatablesDataSourceAjaxServer = function() {
+    // condition = $('#date_list_transaction').val();
+    // console.log("#"+condition)
     var initTable1 = function() {
-        var table = $('.data-table');
+        table = $('.data-table');
         console.log("A");
         // begin first table
-        table.DataTable({
+        table.dataTable({
             autoWidth: false,
             processing: true,
             serverSide: true,
@@ -18,8 +28,12 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 [0, "asc"]
             ],
             ajax: {
-                'type': 'GET',
-                'url': '/v1/report_transaction?format=datatables',
+                'type': 'POST',
+                'url': '/v1/report_transaction/set_datatable?format=datatables',
+                'data' : function(data){
+                    console.log($('#date_list_transaction').val())
+                    data.date = $('#date_list_transaction').val();
+                }
             },
             columnDefs: [{
                     targets: 0,
@@ -72,7 +86,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
         });
         $("#sidebar").on('click', function(e) {
-            var table = $('#example1').DataTable();
+            table = $('#example1').DataTable();
             table.columns.adjust().draw();
             // $($.fn.dataTable.tables(true)).DataTable()
             //   .columns.adjust();
@@ -94,6 +108,35 @@ var KTDatatablesDataSourceAjaxServer = function() {
     };
 
 }();
+
+$('#date_list_transaction').change(function(){
+    condition = this.value;
+    console.log(condition)
+    $.ajax({
+        type: "POST",
+        url: "/v1/report_transaction/set_income",
+        data: {
+            'date': condition
+        },
+        success: function(result) {
+            $('#income').html('Rp. '+result.income);
+            // console.log(table);
+            $('.data-table').dataTable().ajax.reload();
+        }
+    });
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/v1/report_transaction/set_datatable?format=datatables",
+    //     data: {
+    //         'date': condition
+    //     },
+    //     success: function(result) {
+    //         // $('.data-table').dataTable().api().ajax.reload();
+    //         console.log("MASUK");
+    //     }
+    // });
+});
+    
 
 var printResult = function() {
     var total = $('#grand_total').html()
@@ -245,5 +288,5 @@ var printResult = function() {
 
 
 jQuery(document).ready(function() {
-    KTDatatablesDataSourceAjaxServer.init();
+    
 });

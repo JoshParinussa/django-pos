@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from datetime import datetime
 
 class SaleViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
@@ -102,6 +103,56 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
     """ReportTransactionViewSet."""
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.order_by('created_at')
+
+    @action(detail=False, methods=['POST'])
+    def set_datatable(self, request):
+        """set_datatable."""
+        condition = request.POST.get('date')
+        print("Condition :",condition)
+        if condition == '1':
+            date_condition = datetime.now().date()
+            queryset = self.get_queryset().filter(date__gte=date_condition)
+        elif condition == '2':
+            date_condition = datetime.now().month
+            queryset = self.get_queryset().filter(date__month=date_condition)
+        elif condition == '3':
+            date_condition = datetime.now().year
+            queryset = self.get_queryset().filter(date__year=date_condition)
+        else :
+            queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        print("******",serializer.data)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['POST'])
+    def set_income(self, request):
+        """set_income."""
+        condition = request.POST.get('date')
+        print("-------------"+str(condition))
+        if condition == '1':
+            date_condition = datetime.now().date()
+            data = Invoice.objects.all().filter(date__gte=date_condition)
+        elif condition == '2':
+            date_condition = datetime.now().month
+            data = Invoice.objects.all().filter(date__month=date_condition)
+        elif condition == '3':
+            date_condition = datetime.now().year
+            data = Invoice.objects.all().filter(date__year=date_condition)
+        else :
+            data = Invoice.objects.all()
+        
+        income = 0
+        for e in data:
+            if  e.total == None :
+                e.total = 0
+            income += e.total
+        
+        context={}
+        context['income'] = income
+
+        return Response(context)
+    
+
 
 class ReportSaleViewSet(viewsets.ModelViewSet):
     """ReportSaleViewSet."""

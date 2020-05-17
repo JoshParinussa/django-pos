@@ -77,12 +77,13 @@ var drawPurchaseRow = function() {
             var purchaseItemPrice = Number(result.price);
             if ($('#item_table').find("#" + idRow).length > 0) {
                 var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
-                var currentTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
+                var currentTotal = $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total');
                 grandTotal -= Number(currentTotal);
                 grandTotal += purchaseItemTotal;
                 var newQty = Number(currentQty) + Number(purchaseItemQty);
 
                 $('#item_table').find("#" + idRow + " .qty").text(newQty);
+                $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total', purchaseItemTotal);
                 $('#item_table').find("#" + idRow + " .purchase_total").text(purchaseItemTotal.toLocaleString('id-ID'));
                 $('#item_table').find("#" + idRow + " .price").text(purchaseItemPrice.toLocaleString('id-ID'));
 

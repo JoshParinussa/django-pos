@@ -118,8 +118,10 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         elif condition == '3':
             date_condition = datetime.now().year
             queryset = self.get_queryset().filter(date__year=date_condition)
-        else :
+        elif condition == '4' :
             queryset = self.get_queryset()
+        else :
+            queryset = ''
         serializer = self.get_serializer(queryset, many=True)
         print("******",serializer.data)
         return Response(serializer.data)

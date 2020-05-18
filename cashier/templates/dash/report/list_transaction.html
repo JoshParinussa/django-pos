@@ -24,7 +24,8 @@
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <select name="date_list_transaction" id="date_list_transaction" >
-                    <option selected="selected" value="1">Hari ini</option>
+                    <option selected="selected" disabled>Pilih Waktu</option>
+                    <option  value="1">Hari ini</option>
                     <option value="2">Bulan ini</option>
                     <option value="3">Tahun ini</option>
                     <option value="4">Semua</option>
@@ -32,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-4">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
@@ -40,13 +41,13 @@
                         <h3 class="text-left">Omset</h3>
                     </div>
                     <div class="col-6">
-                        <h3 class="text-right" id="income">Rp. {{income}}</h3>
+                        <h3 class="text-right" id="income">Rp. 0</h3>
                     </div>                                    
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col-4">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
@@ -57,6 +58,15 @@
                         <h3 class="text-right" id="profit">Rp. 0</h3>
                     </div>                                    
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                        <button type="button" class="btn btn-info btn-block m-1" id="btn-print-payment" title="Cetak Laporan">
+                            <i class="flaticon2-print"></i>&nbsp;Cetak
+                        </button>
             </div>
         </div>
     </div>

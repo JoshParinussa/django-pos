@@ -31,8 +31,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 'type': 'POST',
                 'url': '/v1/report_transaction/set_datatable?format=datatables',
                 'data' : function(data){
-                    console.log($('#date_list_transaction').val())
-                    data.date = $('#date_list_transaction').val();
+                    data.date=condition;
                 }
             },
             columnDefs: [{
@@ -86,7 +85,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
         });
         $("#sidebar").on('click', function(e) {
-            table = $('#example1').DataTable();
+            table = $('#example1').dataTable();
             table.columns.adjust().draw();
             // $($.fn.dataTable.tables(true)).DataTable()
             //   .columns.adjust();
@@ -121,7 +120,17 @@ $('#date_list_transaction').change(function(){
         success: function(result) {
             $('#income').html('Rp. '+result.income);
             // console.log(table);
-            $('.data-table').dataTable().ajax.reload();
+        }
+    });
+    $.ajax({
+        type: "POST",
+        url: "/v1/report_transaction/set_datatable?format=datatables",
+        data: function(data){
+            data.date=condition;
+        },
+        success: function(result) {
+            // console.log(table);
+            table.api().ajax.reload();
         }
     });
     // $.ajax({
@@ -288,5 +297,5 @@ var printResult = function() {
 
 
 jQuery(document).ready(function() {
-    
+    KTDatatablesDataSourceAjaxServer.init();
 });

@@ -2,11 +2,8 @@
 window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 var table;
 var condition;
-var url_ajax;
-
-var getCondition = function (){
-    return $('#date_list_transaction').val();
-}
+var row;
+var income;
 
 var KTDatatablesDataSourceAjaxServer = function() {
     // condition = $('#date_list_transaction').val();
@@ -119,6 +116,7 @@ $('#date_list_transaction').change(function(){
         },
         success: function(result) {
             $('#income').html('Rp. '+result.income);
+            income = result.income;
             // console.log(table);
         }
     });
@@ -129,42 +127,38 @@ $('#date_list_transaction').change(function(){
             data.date=condition;
         },
         success: function(result) {
-            // console.log(table);
             table.api().ajax.reload();
         }
     });
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/v1/report_transaction/set_datatable?format=datatables",
-    //     data: {
-    //         'date': condition
-    //     },
-    //     success: function(result) {
-    //         // $('.data-table').dataTable().api().ajax.reload();
-    //         console.log("MASUK");
-    //     }
-    // });
 });
     
 
 var printResult = function() {
-    var total = $('#grand_total').html()
-    var receipt_body = ''
-    $("#item_table tbody").find("tr").each(function() {
-        var item = $(this).find('.product-name').html()
-        var qty = $(this).find('.qty').html()
-        var price = $(this).find('.price').html()
-        var subtotal = $(this).find('.purchase_total').html()
-        var subtotal = $(this).find('.purchase_total').html()
+    // console.log(table.api().data());
+    var receipt_body = '';
+    table.api().data().each(function(row_data){
+        row = row_data;
+        var invoice = row_data.invoice;
+        var date = row_data.date;
+        var cashier = row_data.cashier;
+        var total = 0;
+        if (row_data.total != null){
+            total = row_data.total;
+        }
+        var status = "PENDING";
+        if (row_data.status != 0){
+            status = "SUCCESS";
+        }
         receipt_body +=
             `<tr>
-                <td class="item">${item}</td>
-                <td class="quantity">${qty}</td>
-                <td class="price">${price}</td>
-                <td class="subtotal">${subtotal}</td>
+                <td class="invoice">${invoice}</td>
+                <td class="date">${date}</td>
+                <td class="cashier">${cashier}</td>
+                <td class="total">${total}</td>
+                <td class="status">${status}</td>
             </tr>`;
-    });
-
+    })
+    
     var receipt =
         `<div class="print-receipt">
             <div class="col-12">
@@ -175,9 +169,9 @@ var printResult = function() {
                     <table>
                         <tbody>
                             <tr>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${date}</td>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" colspan="2">${invoice_number}</td>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${currentUser}</td>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${currentDate}</td>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" colspan="2"></td>
+                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" ></td>
                             </tr>
                             <tr>
                             </tr>
@@ -188,18 +182,8 @@ var printResult = function() {
                             </tr>
                             <tr>
                                 <td>
-                                <td colspan="2">HARGA JUAL</td>
-                                <td>: ${grandTotal}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <td colspan="2">TUNAI </td>
-                                <td>: ${cash}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <td colspan="2">KEMBALIAN </td>
-                                <td>: ${change}</td>
+                                <td colspan="2">OMSET</td>
+                                <td>: Rp. ${income}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -294,6 +278,9 @@ var printResult = function() {
 //     };
 // }();
 
+$('#btn-print-report').click(function() {
+    printResult()
+})
 
 
 jQuery(document).ready(function() {

@@ -108,7 +108,6 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
     def set_datatable(self, request):
         """set_datatable."""
         condition = request.POST.get('date')
-        print("Condition :",condition)
         if condition == '1':
             date_condition = datetime.now().date()
             queryset = self.get_queryset().filter(date__gte=date_condition)
@@ -123,14 +122,12 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         else :
             queryset = ''
         serializer = self.get_serializer(queryset, many=True)
-        print("******",serializer.data)
         return Response(serializer.data)
 
     @action(detail=False, methods=['POST'])
     def set_income(self, request):
         """set_income."""
         condition = request.POST.get('date')
-        print("-------------"+str(condition))
         if condition == '1':
             date_condition = datetime.now().date()
             data = Invoice.objects.all().filter(date__gte=date_condition)
@@ -151,6 +148,7 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         
         context={}
         context['income'] = income
+        context['date'] = datetime.now().date()
 
         return Response(context)
     

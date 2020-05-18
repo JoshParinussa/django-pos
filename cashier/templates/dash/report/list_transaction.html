@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript">
+    let currentDate = '{{ date }}';
+</script>
 <script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
 <script src="{% static 'common.js' %}"></script>
 <script src="{% static 'admin/report_transaction.js' %}"></script>
@@ -64,7 +67,7 @@
     <div class="col-2">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
-                        <button type="button" class="btn btn-info btn-block m-1" id="btn-print-payment" title="Cetak Laporan">
+                        <button type="button" class="btn btn-info btn-block m-1" id="btn-print-report" title="Cetak Laporan">
                             <i class="flaticon2-print"></i>&nbsp;Cetak
                         </button>
             </div>

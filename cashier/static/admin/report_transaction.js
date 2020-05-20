@@ -4,6 +4,11 @@ var table;
 var condition;
 var row;
 var income;
+var profit;
+var currentDate;
+var data;
+var data_2;
+var product_all;
 
 var KTDatatablesDataSourceAjaxServer = function() {
     // condition = $('#date_list_transaction').val();
@@ -110,14 +115,19 @@ $('#date_list_transaction').change(function(){
     console.log(condition)
     $.ajax({
         type: "POST",
-        url: "/v1/report_transaction/set_income",
+        url: "/v1/report_transaction/set_income_profit",
         data: {
             'date': condition
         },
         success: function(result) {
             $('#income').html('Rp. '+result.income);
+            $('#profit').html('Rp. '+result.profit);
             income = result.income;
-            // console.log(table);
+            profit = result.profit;
+            currentDate = result.date;
+            data_2 = result.data_2;
+            console.log(data_2);
+            product_all = result.product;
         }
     });
     $.ajax({
@@ -135,28 +145,82 @@ $('#date_list_transaction').change(function(){
 
 var printResult = function() {
     // console.log(table.api().data());
+    var receipt_header = '';
     var receipt_body = '';
+    var receipt_all = '';
+    var invoice_sale;
+    var product_name;
+    var barcode;
+    var selling_price;
+    var qty;
+    var total;
     table.api().data().each(function(row_data){
         row = row_data;
         var invoice = row_data.invoice;
-        var date = row_data.date;
         var cashier = row_data.cashier;
-        var total = 0;
-        if (row_data.total != null){
-            total = row_data.total;
-        }
-        var status = "PENDING";
-        if (row_data.status != 0){
-            status = "SUCCESS";
-        }
-        receipt_body +=
-            `<tr>
-                <td class="invoice">${invoice}</td>
-                <td class="date">${date}</td>
-                <td class="cashier">${cashier}</td>
-                <td class="total">${total}</td>
-                <td class="status">${status}</td>
-            </tr>`;
+        
+        receipt_header =    `<tr>
+                                <td class="invoice">${invoice}</td>
+                                <td class="cashier">${cashier}</td>
+                            </tr>`;
+        // console.log(data_2)
+        $.each(data_2, function(key, value){
+            // console.log(key+" "+value)
+            // invoice_sale = a.invoice;
+            // product_name = a.product_id;
+            // // console.log(product_name);
+            // qty = a.qty; 
+            // total = 0;
+            // if (a.total != null){
+            // total = a.total;
+            // }
+            // //console.log("========="+product_name);
+            // for (var b in product_all){
+            //     if(b.name == product_name){
+            //         barcode == b.barcode
+            //         selling_price == b.selling_price
+            //     }
+            // }
+            // // if (invoice_sale == invoice){
+            //     receipt_body +=
+            //         `<tr>
+            //             <td class="barcode">${barcode}</td>
+            //             <td class="product_name">${product_name}</td>
+            //             <td class="selling_price">${selling_price}</td>
+            //             <td class="qty">${qty}</td>
+            //             <td class="total">${total}</td>
+            //         </tr>`;
+        })
+        // for (var a in data_2){
+        //     //console.log(a);
+        //     invoice_sale = a.invoice;
+        //     product_name = a.product_id;
+        //     // console.log(product_name);
+        //     qty = a.qty; 
+        //     total = 0;
+        //     if (a.total != null){
+        //     total = a.total;
+        //     }
+        //     //console.log("========="+product_name);
+        //     for (var b in product_all){
+        //         if(b.name == product_name){
+        //             barcode == b.barcode
+        //             selling_price == b.selling_price
+        //         }
+        //     }
+        //     // if (invoice_sale == invoice){
+        //         receipt_body +=
+        //             `<tr>
+        //                 <td class="barcode">${barcode}</td>
+        //                 <td class="product_name">${product_name}</td>
+        //                 <td class="selling_price">${selling_price}</td>
+        //                 <td class="qty">${qty}</td>
+        //                 <td class="total">${total}</td>
+        //             </tr>`;
+        //     // }
+        // }
+        //receipt_all += receipt_header + receipt_body 
+        
     })
     
     var receipt =
@@ -175,15 +239,20 @@ var printResult = function() {
                             </tr>
                             <tr>
                             </tr>
-                            ${receipt_body}
+                            ${receipt_all}
                             <tr>
                                 <td></td>
                                 <td style="border-top:1px dashed black;" colspan="3"></td>
                             </tr>
                             <tr>
                                 <td>
-                                <td colspan="2">OMSET</td>
+                                <td>OMSET</td>
                                 <td>: Rp. ${income}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td>KEUNTUNGAN</td>
+                                <td>: Rp. ${profit}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -236,14 +305,14 @@ var printResult = function() {
         </style>`;
 
 
-    var myPrintWindow = window.open('', 'Cetak Receipt', '');
-    myPrintWindow.document.write(receipt_css);
-    myPrintWindow.document.write(receipt);
-    myPrintWindow.document.close();
-    myPrintWindow.focus();
-    myPrintWindow.print();
-    myPrintWindow.close();
-    return false;
+    // var myPrintWindow = window.open('', 'Cetak Receipt', '');
+    // myPrintWindow.document.write(receipt_css);
+    // myPrintWindow.document.write(receipt);
+    // myPrintWindow.document.close();
+    // myPrintWindow.focus();
+    // myPrintWindow.print();
+    // myPrintWindow.close();
+    // return false;
 }
 
 // Class definition

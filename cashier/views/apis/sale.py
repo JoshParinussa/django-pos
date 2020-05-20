@@ -125,20 +125,26 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=['POST'])
-    def set_income(self, request):
+    def set_income_profit(self, request):
         """set_income."""
         condition = request.POST.get('date')
         if condition == '1':
             date_condition = datetime.now().date()
-            data = Invoice.objects.all().filter(date__gte=date_condition)
+            data = Invoice.objects.filter(date__gte=date_condition)
+            data_2 = Sale.objects.filter(created_at__gte=date_condition)
         elif condition == '2':
             date_condition = datetime.now().month
-            data = Invoice.objects.all().filter(date__month=date_condition)
+            data = Invoice.objects.filter(date__month=date_condition)
+            data_2 = Sale.objects.filter(created_at__month=date_condition)
         elif condition == '3':
             date_condition = datetime.now().year
-            data = Invoice.objects.all().filter(date__year=date_condition)
-        else :
+            data = Invoice.objects.filter(date__year=date_condition)
+            data_2 = Sale.objects.filter(created_at__year=date_condition)
+        elif condition == '4' :
             data = Invoice.objects.all()
+            data_2 = Sale.objects.all()
+        else :
+            data = data_2 = ''
         
         income = 0
         for e in data:
@@ -146,10 +152,20 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
                 e.total = 0
             income += e.total
         
+        profit = 0
+        for a in data_2:
+            product = Product.objects.get(name = a.product)
+            profit += (product.selling_price - product.purchase_price)
+
+        products = Product.objects.all()
+
         context={}
         context['income'] = income
+        context['profit'] = profit
         context['date'] = datetime.now().date()
-
+        # context['data'] = data
+        context['data_2'] = data_2.values()
+        context['product'] = products.values()
         return Response(context)
     
 

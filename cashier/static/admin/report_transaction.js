@@ -165,7 +165,7 @@ var printResult = function() {
                             </tr>`;
         // console.log(data_2)
         $.each(data_2, function(key, value){
-            // console.log(key+" "+value)
+            console.log(key+" "+value)
             // invoice_sale = a.invoice;
             // product_name = a.product_id;
             // // console.log(product_name);

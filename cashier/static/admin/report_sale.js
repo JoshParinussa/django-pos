@@ -8,6 +8,11 @@ var grandTotal = 0;
 var row;
 var table;
 
+$(document.body).addClass('kt-aside--minimize');
+
+var sale_date = moment(SaleDate,'LLL').format('LLL');
+$('#sale-date').val(sale_date);
+
 var KTDatatablesDataSourceAjaxServer = function() {
 
     var initTable1 = function() {
@@ -104,7 +109,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 }();
 
 var updateItem = function(e){
-    row = table.api().row($(e).closest('tr')).data();
+	row = table.api().row($(e).closest('tr')).data();
     $('#modal-item-name').val(row.product);
     $('#modal-qty-item-cart').val(row.qty);
 	$('#modal-barcode').val(row.barcode);
@@ -119,6 +124,7 @@ $('#modal-btn-update').click(function(e){
 	var Cash = Number(InvoiceCash);
 	var Total = Number(InvoiceGrandTotal) - diffTotal;
 	var diffChange, newChange = 0;
+	var diffQty = Number(row.qty - newQty);
 
 	if(Total>Cash){
 		Cash = Total;
@@ -142,7 +148,8 @@ $('#modal-btn-update').click(function(e){
 			'total': newTotal,
 			'grand_total':InvoiceGrandTotal,
 			'cash':InvoiceCash,
-			'change':InvoiceChange
+			'change':InvoiceChange,
+			'diffQty':diffQty
         },
         success: function(result){
             if(Total > Cash){
@@ -155,8 +162,8 @@ $('#modal-btn-update').click(function(e){
 
             $('#modal-default').modal('toggle');
 			$('#grand_total').text(InvoiceGrandTotal);
-			$('#change').text(InvoiceChange);
-			$('#cash').text(InvoiceCash);
+			$('#change').val(InvoiceChange);
+			$('#cash').val(InvoiceCash);
 			table.api().ajax.reload();
 			// location.reload();
         }
@@ -182,7 +189,8 @@ $('#modal-btn-delete').click(function(e){
            	"invoice_number": currentInvoiceID,
 			"barcode": row_barcode,
 			"total":InvoiceGrandTotal,
-			"change":InvoiceChange
+			"change":InvoiceChange,
+			"qty":row.qty
        	},
        	success: function(e){
 			alert("Kembalian tambah Rp. "+diffChange);
@@ -195,6 +203,133 @@ $('#modal-btn-delete').click(function(e){
    	});
 });
 
+$('#process_payment').click(function(e) {
+    window.location.replace("/dash/report/transaction");
+});
+
+$('#btn-print-payment').click(function() {
+    printResult()
+});
+
+var printResult = function() {
+    var total = $('#grand_total').html()
+    var receipt_body = ''
+    $("#item_table tbody").find("tr").each(function() {
+        var item = $(this).find('.product-name').html()
+        var qty = $(this).find('.qty').html()
+        var price = Number($(this).find('.price').attr('data-price')).toLocaleString('id-ID')
+        var subtotal = Number($(this).find('.purchase_total').attr('data-purchase-total')).toLocaleString('id-ID')
+        receipt_body +=
+            `<tr>
+                <td class="item">${item}</td>
+                <td class="quantity">${qty}</td>
+                <td class="price">${price}</td>
+                <td class="subtotal">${subtotal}</td>
+            </tr>`;
+    });
+
+    var receipt =
+        `<div class="print-receipt">
+            <div class="col-12">
+                <div class="row center">
+                    <h3>Minimarketku</div>
+                </div>
+                <div class="information">
+                    ${date}<br>
+                    ${invoice_number}<br>
+                    ${currentUser}, siap melayani!<br><br>
+                </div>
+                <div class="row">
+                    <table style="border-top:1px dashed black;">
+                        <tbody>
+                            
+                            <tr>
+                            </tr>
+                            ${receipt_body}
+                            <tr>
+                                <td></td>
+                                <td style="border-top:1px dashed black;" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">HARGA JUAL</td>
+                                <td>: ${grandTotal.toLocaleString('id-ID')}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">TUNAI </td>
+                                <td>: ${Number(cash).toLocaleString('id-ID')}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td colspan="2">KEMBALIAN </td>
+                                <td>: ${change.toLocaleString('id-ID')}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row center">
+                <br><br><br>
+                    <p>===== TERIMA KASIH =====</p>
+                    <p>SELAMAT BERBELANJA KEMBALI</p>
+                </div>
+            </div>
+        </div>`;
+    // '<div id="print-receipt">' +
+    // '<div class="receipt" id="receipt">' +
+    // '<p class="centered" id="ticket-title">Minimarketku' +
+    // '<table>' +
+    // '<thead>' +
+    // '<tr>' +
+    // '<th class="quantity">Qty.</th>' +
+    // '<th class="description">Item</th>' +
+    // '<th class="price">Total</th>' +
+    // '</tr>' +
+    // '</thead>' +
+    // '<tbody>' +
+    // receipt_body +
+    // '</tbody>' +
+    // '</table>' +
+    // '<p class="centered">Terimakasih, datang kembali' +
+    // '</div>' +
+    // '</div>';
+
+    var receipt_css =
+        `<style type="text/css">
+            @page {margin: 10;}
+            .print-receipt {
+                width: 58mm;
+            }
+            .center {
+                text-align: center;
+                font-size: 12px;
+              }
+            .information {
+                text-align: center;
+                line-height: normal;
+                font-size: 8px;
+            }
+            table, th, td {
+            font-size: 12px;
+            }
+            table {width:100%;}
+            td .item {width:50%;}
+            td .quantity {width:10%;}
+            td .price {width:20%;}
+            td .subtotal {width:20%;}
+            
+        </style>`;
+
+
+    var myPrintWindow = window.open('', 'Cetak Receipt', '');
+    myPrintWindow.document.write(receipt_css);
+    myPrintWindow.document.write(receipt);
+    myPrintWindow.document.close();
+    myPrintWindow.focus();
+    myPrintWindow.print();
+    myPrintWindow.close();
+    return false;
+}
 // Class definition
 // var ProductsForm = function () {
 //     // Base elements

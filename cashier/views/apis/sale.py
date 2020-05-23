@@ -152,9 +152,12 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         barcode = request.POST.get('barcode')
         total = request.POST.get('total')
         change = request.POST.get('change')
+        qty = request.POST.get('qty')
 
         invoice = Invoice.objects.get(id=invoice_number)
         product = Product.objects.get(barcode=barcode)
+        product.stock += int(qty)
+        product.save()
 
         item = Sale.objects.get(invoice=invoice, product=product)
         item.delete()
@@ -175,9 +178,12 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         grand_total = request.POST.get('grand_total')
         cash = request.POST.get('cash')
         change = request.POST.get('change')
+        diff_qty = request.POST.get('diffQty')
 
         invoice = Invoice.objects.get(id=invoice_number)
         product = Product.objects.get(barcode=barcode)
+        product.stock += int(diff_qty)
+        product.save()
         
         item = Sale.objects.get(invoice=invoice, product=product)
         item.qty = new_qty

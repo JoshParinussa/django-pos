@@ -4,6 +4,12 @@ from datetime import datetime, date
 from cashier.views.dash.base import DashListView
 
 
+class SaleTransactionListView(DashListView):
+    """BrandListView."""
+    template_name = 'dash/transaction/list.html'
+    model = Invoice
+
+
 class SaleTransactionView(TemplateView):
     """SaleTransactionView."""
     template_name = 'dash/transaction/sale.html'
@@ -16,16 +22,15 @@ class SaleTransactionView(TemplateView):
         last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
         if not last_invoice:
             count = 1
-            invoice_number = 'K' + user.username.upper()[0] + today_invoice + str(count)
-            Invoice.objects.create(invoice=invoice_number, cashier=user)
+            invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
         else:
-            if last_invoice.status == 1 or last_invoice.status == 2:
-                count = int((last_invoice.invoice)[10:]) + 1
-                invoice_number = 'K' + user.username.upper()[0] + today_invoice + str(count)
-                Invoice.objects.create(invoice=invoice_number, cashier=user)
-            else:
-                invoice_number = last_invoice.invoice
-
+            count = int((last_invoice.invoice)[14:]) + 1
+            invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
+            # if last_invoice.status == 1 or last_invoice.status == 2:
+            #     count = int((last_invoice.invoice)[10:]) + 1
+            #     invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
+            # else:
+            #     invoice_number = last_invoice.invoice
         context['invoice_number'] = invoice_number
 
         return context

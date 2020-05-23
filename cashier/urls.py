@@ -10,6 +10,7 @@ from cashier.views.apis import user as api_user
 from cashier.views.apis import supplier as api_supplier
 from cashier.views.apis import sale as api_sale
 from cashier.views.apis import expenses as api_expenses
+from cashier.views.apis import invoice as api_invoice
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
@@ -30,6 +31,7 @@ router.register(r'supplier', api_supplier.SupplierViewSet)
 router.register(r'expenses', api_expenses.ExpensesViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
+router.register(r'invoice', api_invoice.InvoiceViewSet)
 
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
@@ -73,8 +75,9 @@ urlpatterns = [
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
 
     # TRANSACTION
-    path('dash/transaction/sale', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
-    path('dash/transaction/sale/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
+    path('dash/transaction/sale', dash_transaction_view.SaleTransactionListView.as_view(), name='dash_transaction_list'),
+    path('dash/transaction/sale/new', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
+    path('dash/transaction/sale/new/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
     
     #EXPENSES
     path('dash/transaction/expenses', dash_expenses_view.ExpensesListView.as_view(), name='dash_expenses_list'),

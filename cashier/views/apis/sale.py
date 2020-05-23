@@ -7,6 +7,10 @@ from rest_framework.response import Response
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from datetime import datetime
+# import datetime
+from django.utils import timezone
+import pytz
+
 
 class SaleViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
@@ -20,7 +24,10 @@ class SaleViewSet(viewsets.ModelViewSet):
         barcode = request.POST.get('barcode')
         qty = request.POST.get('qty')
         total = request.POST.get('total')
-        invoice = Invoice.objects.get(invoice=invoice_number)
+        try:
+            invoice = Invoice.objects.get(invoice=invoice_number)
+        except Exception as e:
+            invoice = Invoice.objects.create(invoice=invoice_number, cashier=self.request.user)
         product = Product.objects.get(barcode=barcode)
 
         try:
@@ -46,10 +53,14 @@ class SaleViewSet(viewsets.ModelViewSet):
     def get_by_invoice(self, request):
         """get_by_invoice."""
         invoice_number = request.POST.get('invoice_number')
-        invoice = Invoice.objects.get(invoice=invoice_number)
-        queryset = self.get_queryset().filter(invoice=invoice)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        try:
+            invoice = Invoice.objects.get(invoice=invoice_number)
+            queryset = self.get_queryset().filter(invoice=invoice)
+            serializer = self.get_serializer(queryset, many=True)
+            result = serializer.data
+        except Exception as e:
+            result = None
+        return Response(result)
 
     @action(detail=False, methods=['POST'])
     def process_payment(self, request):
@@ -108,20 +119,32 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
     def set_datatable(self, request):
         """set_datatable."""
         condition = request.POST.get('date')
-        if condition == '1':
-            date_condition = datetime.now().date()
-            queryset = self.get_queryset().filter(date__gte=date_condition)
-        elif condition == '2':
-            date_condition = datetime.now().month
-            queryset = self.get_queryset().filter(date__month=date_condition)
-        elif condition == '3':
-            date_condition = datetime.now().year
-            queryset = self.get_queryset().filter(date__year=date_condition)
-        elif condition == '4' :
-            queryset = self.get_queryset()
-        else :
-            queryset = ''
-        serializer = self.get_serializer(queryset, many=True)
+        date_range = request.POST.getlist('date_range[]')
+        dates=[]
+        # print("#date", condition)
+        for d in date_range:
+            datetime.strptime(d, "%Y-%m-%d").date()
+            dates.append(d)
+        print("#date", dates)
+        fake_datetime = timezone.make_aware(timezone.datetime(2020, 5, 22))
+        # time_zone = pytz.timezone('Asia/Jakarta')
+        if date_range:
+            self.queryset = self.get_queryset().filter(date=fake_datetime)
+        # if condition == '1':
+        #     date_condition = datetime.now().date()
+        #     queryset = self.get_queryset().filter(date__gte=date_condition)
+        # elif condition == '2':
+        #     date_condition = datetime.now().month
+        #     queryset = self.get_queryset().filter(date__month=date_condition)
+        # elif condition == '3':
+        #     date_condition = datetime.now().year
+        #     queryset = self.get_queryset().filter(date__year=date_condition)
+        # elif condition == '4' :
+        #     queryset = self.get_queryset()
+        # else :
+        #     queryset = ''
+        serializer = self.get_serializer(self.queryset, many=True)
+        print("#query", self.queryset)
         return Response(serializer.data)
 
     @action(detail=False, methods=['POST'])

@@ -339,24 +339,6 @@ var printResult = function() {
                 </div>
             </div>
         </div>`;
-    // '<div id="print-receipt">' +
-    // '<div class="receipt" id="receipt">' +
-    // '<p class="centered" id="ticket-title">Minimarketku' +
-    // '<table>' +
-    // '<thead>' +
-    // '<tr>' +
-    // '<th class="quantity">Qty.</th>' +
-    // '<th class="description">Item</th>' +
-    // '<th class="price">Total</th>' +
-    // '</tr>' +
-    // '</thead>' +
-    // '<tbody>' +
-    // receipt_body +
-    // '</tbody>' +
-    // '</table>' +
-    // '<p class="centered">Terimakasih, datang kembali' +
-    // '</div>' +
-    // '</div>';
 
     var receipt_css =
         `<style type="text/css">

@@ -9,6 +9,7 @@
 <script src="{% static 'common.js' %}"></script>
 <script src="{% static 'admin/report_transaction.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+{% comment %} <script src="{% static 'vendors/metronic/js/pages/crud/forms/widgets/bootstrap-daterangepicker.js' %}" type="text/javascript"></script> {% endcomment %}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -19,54 +20,59 @@
 
 {% block content %}
 {% csrf_token %}
+<div class="kt-portlet">
+    <div class="kt-portlet__body">
+        <div class="row">
+            <div class="col-5">
+                <div class='input-group pull-left' id='kt_daterangepicker_6'>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                    </div>
+                    <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
+                </div>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-primary btn-block" id="btn-filter-date" title="Filter">
+                    <i class="flaticon-search"></i>&nbsp;Filter
+                </button>
+            </div>
+            <div class="col-5">
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-warning btn-block " id="btn-print-report" title="Cetak Laporan">
+                    <i class="flaticon2-print"></i>&nbsp;Cetak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    
 <div class="row">
-    <div class="col-2">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                <select name="date_list_transaction" id="date_list_transaction" >
-                    <option selected="selected" disabled>Pilih Waktu</option>
-                    <option  value="1">Hari ini</option>
-                    <option value="2">Bulan ini</option>
-                    <option value="3">Tahun ini</option>
-                    <option value="4">Semua</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
+    <div class="col-6">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
                     <div class="col-6">
-                        <h3 class="text-left">Omset</h3>
+                        <h4 class="text-left">Omset</h4>
                     </div>
                     <div class="col-6">
-                        <h3 class="text-right" id="income">Rp. 0</h3>
+                        <h4 class="text-right" id="income">Rp. 0</h4>
                     </div>                                    
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-6">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
                     <div class="col-6">
-                        <h3 class="text-left">Keuntungan</h3>
+                        <h4 class="text-left">Keuntungan</h4>
                     </div>
                     <div class="col-6">
-                        <h3 class="text-right" id="profit">Rp. 0</h3>
+                        <h4 class="text-right" id="profit">Rp. 0</h4>
                     </div>                                    
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-2">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                        <button type="button" class="btn btn-info btn-block m-1" id="btn-print-report" title="Cetak Laporan">
-                            <i class="flaticon2-print"></i>&nbsp;Cetak
-                        </button>
             </div>
         </div>
     </div>

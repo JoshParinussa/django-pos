@@ -1,9 +1,8 @@
 "use strict";
 var KTDatatablesDataSourceAjaxServer = function() {
 
-    var initTable1 = function() {
+    var initTable = function() {
         var table = $('.data-table');
-        console.log("A");
         // begin first table
         table.DataTable({
             autoWidth: false,
@@ -19,14 +18,13 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/products?format=datatables',
+                'url': '/v1/invoice?format=datatables',
             },
             columnDefs: [{
                     targets: 0,
                     render: function(data, type, row) {
-                        return `<a href="products/${row.id}/converts/get_by_product" title="Convert">
-                          ` + (!$.trim(data) ? '' : data) + `
-                    </a>`;
+                        // console.log(data.invoice)
+                        return !$.trim(data) ? '' : data;
                     },
                 },
                 {
@@ -50,19 +48,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
-                    }
-                },
-                {
-                    targets: 5,
-                    render: function(data) {
-                        return !$.trim(data) ? '' : data;
-                    }
-                },
-                {
-                    targets: 6,
-                    render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : data == 1 ? 'SUCCESS' : 'ONPROCESS';
                     }
                 },
                 {
@@ -77,38 +63,21 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 },
             ],
             columns: [
-                { data: 'name', orderable: true, searchable: true, name: 'name' },
-                { data: 'barcode', orderable: true, searchable: true, name: 'barcode' },
-                { data: 'stock', orderable: true, searchable: true, name: 'stock' },
-                { data: 'category', orderable: true, searchable: true, name: 'category.name' },
-                { data: 'unit', orderable: true, searchable: true, name: 'unit' },
-                { data: 'purchase_price', orderable: true, searchable: true, name: 'purchase_price' },
-                { data: 'selling_price', orderable: true, searchable: true, name: 'selling_price' },
+                { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
+                { data: 'date', orderable: true, searchable: true, name: 'date' },
+                { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
+                { data: 'total', orderable: true, searchable: true, name: 'total' },
+                { data: 'status', orderable: true, searchable: true, name: 'status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
-        });
-        $("#sidebar").on('click', function(e) {
-            var table = $('#example1').DataTable();
-            table.columns.adjust().draw();
-            // $($.fn.dataTable.tables(true)).DataTable()
-            //   .columns.adjust();
-            $(".dataTables_scrollHeadInner .dataTables_scrollHead .table").css("width", "100%");
-            console.log("APA")
         });
 
     };
     return {
-
-        //main function to initiate the module
         init: function() {
-            initTable1();
-            // if ($.fn.dataTable){
-            // 	initTable1();
-            // }
+            initTable();
         },
-
     };
-
 }();
 
 jQuery(document).ready(function() {

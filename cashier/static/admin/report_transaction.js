@@ -9,14 +9,40 @@ var currentDate;
 var data;
 var data_2;
 var product_all;
+var dates;
+
 
 var KTDatatablesDataSourceAjaxServer = function() {
-    // condition = $('#date_list_transaction').val();
-    // console.log("#"+condition)
+    var initDateRangePicker = function() {
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+        $('#kt_daterangepicker_6 .form-control').val(moment().format('YYYY-MM-DD') + ' to ' + moment().format('YYYY-MM-DD'));
+        $('#kt_daterangepicker_6').daterangepicker({
+            buttonClasses: ' btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            $('#kt_daterangepicker_6 .form-control').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    };
+    var getDaterange = function() {
+        var date_range = $('#date-picker-range').val();
+        dates = date_range.split(' to ');
+        return dates
+    }
     var initTable1 = function() {
         table = $('.data-table');
-        console.log("A");
-        // begin first table
         table.dataTable({
             autoWidth: false,
             processing: true,
@@ -32,8 +58,8 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ajax: {
                 'type': 'POST',
                 'url': '/v1/report_transaction/set_datatable?format=datatables',
-                'data' : function(data){
-                    data.date=condition;
+                'data': function(d) {
+                    d.date_range = getDaterange();
                 }
             },
             columnDefs: [{
@@ -86,31 +112,25 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
-        $("#sidebar").on('click', function(e) {
-            table = $('#example1').dataTable();
-            table.columns.adjust().draw();
-            // $($.fn.dataTable.tables(true)).DataTable()
-            //   .columns.adjust();
-            $(".dataTables_scrollHeadInner .dataTables_scrollHead .table").css("width", "100%");
-            console.log("APA")
+    };
+
+    var initEvents = function() {
+        $('#btn-filter-date').on('click', function(e) {
+            table.api().ajax.reload();
         });
 
     };
+
     return {
-
-        //main function to initiate the module
         init: function() {
+            initDateRangePicker();
             initTable1();
-            // if ($.fn.dataTable){
-            // 	initTable1();
-            // }
+            initEvents();
         },
-
     };
-
 }();
 
-$('#date_list_transaction').change(function(){
+$('#date_list_transaction').change(function() {
     condition = this.value;
     console.log(condition)
     $.ajax({
@@ -120,8 +140,8 @@ $('#date_list_transaction').change(function(){
             'date': condition
         },
         success: function(result) {
-            $('#income').html('Rp. '+result.income);
-            $('#profit').html('Rp. '+result.profit);
+            $('#income').html('Rp. ' + result.income);
+            $('#profit').html('Rp. ' + result.profit);
             income = result.income;
             profit = result.profit;
             currentDate = result.date;
@@ -133,15 +153,15 @@ $('#date_list_transaction').change(function(){
     $.ajax({
         type: "POST",
         url: "/v1/report_transaction/set_datatable?format=datatables",
-        data: function(data){
-            data.date=condition;
+        data: function(data) {
+            data.date = condition;
         },
         success: function(result) {
             table.api().ajax.reload();
         }
     });
 });
-    
+
 
 var printResult = function() {
     // console.log(table.api().data());
@@ -154,75 +174,75 @@ var printResult = function() {
     var selling_price;
     var qty;
     var total;
-    table.api().data().each(function(row_data){
+    table.api().data().each(function(row_data) {
         row = row_data;
         var invoice = row_data.invoice;
         var cashier = row_data.cashier;
-        
-        receipt_header =    `<tr>
+
+        receipt_header = `<tr>
                                 <td class="invoice">${invoice}</td>
                                 <td class="cashier">${cashier}</td>
                             </tr>`;
         // console.log(data_2)
-        $.each(data_2, function(key, value){
-            console.log(key+" "+value)
-            // invoice_sale = a.invoice;
-            // product_name = a.product_id;
-            // // console.log(product_name);
-            // qty = a.qty; 
-            // total = 0;
-            // if (a.total != null){
-            // total = a.total;
-            // }
-            // //console.log("========="+product_name);
-            // for (var b in product_all){
-            //     if(b.name == product_name){
-            //         barcode == b.barcode
-            //         selling_price == b.selling_price
+        $.each(data_2, function(key, value) {
+                console.log(key + " " + value)
+                    // invoice_sale = a.invoice;
+                    // product_name = a.product_id;
+                    // // console.log(product_name);
+                    // qty = a.qty; 
+                    // total = 0;
+                    // if (a.total != null){
+                    // total = a.total;
+                    // }
+                    // //console.log("========="+product_name);
+                    // for (var b in product_all){
+                    //     if(b.name == product_name){
+                    //         barcode == b.barcode
+                    //         selling_price == b.selling_price
+                    //     }
+                    // }
+                    // // if (invoice_sale == invoice){
+                    //     receipt_body +=
+                    //         `<tr>
+                    //             <td class="barcode">${barcode}</td>
+                    //             <td class="product_name">${product_name}</td>
+                    //             <td class="selling_price">${selling_price}</td>
+                    //             <td class="qty">${qty}</td>
+                    //             <td class="total">${total}</td>
+                    //         </tr>`;
+            })
+            // for (var a in data_2){
+            //     //console.log(a);
+            //     invoice_sale = a.invoice;
+            //     product_name = a.product_id;
+            //     // console.log(product_name);
+            //     qty = a.qty; 
+            //     total = 0;
+            //     if (a.total != null){
+            //     total = a.total;
             //     }
+            //     //console.log("========="+product_name);
+            //     for (var b in product_all){
+            //         if(b.name == product_name){
+            //             barcode == b.barcode
+            //             selling_price == b.selling_price
+            //         }
+            //     }
+            //     // if (invoice_sale == invoice){
+            //         receipt_body +=
+            //             `<tr>
+            //                 <td class="barcode">${barcode}</td>
+            //                 <td class="product_name">${product_name}</td>
+            //                 <td class="selling_price">${selling_price}</td>
+            //                 <td class="qty">${qty}</td>
+            //                 <td class="total">${total}</td>
+            //             </tr>`;
+            //     // }
             // }
-            // // if (invoice_sale == invoice){
-            //     receipt_body +=
-            //         `<tr>
-            //             <td class="barcode">${barcode}</td>
-            //             <td class="product_name">${product_name}</td>
-            //             <td class="selling_price">${selling_price}</td>
-            //             <td class="qty">${qty}</td>
-            //             <td class="total">${total}</td>
-            //         </tr>`;
-        })
-        // for (var a in data_2){
-        //     //console.log(a);
-        //     invoice_sale = a.invoice;
-        //     product_name = a.product_id;
-        //     // console.log(product_name);
-        //     qty = a.qty; 
-        //     total = 0;
-        //     if (a.total != null){
-        //     total = a.total;
-        //     }
-        //     //console.log("========="+product_name);
-        //     for (var b in product_all){
-        //         if(b.name == product_name){
-        //             barcode == b.barcode
-        //             selling_price == b.selling_price
-        //         }
-        //     }
-        //     // if (invoice_sale == invoice){
-        //         receipt_body +=
-        //             `<tr>
-        //                 <td class="barcode">${barcode}</td>
-        //                 <td class="product_name">${product_name}</td>
-        //                 <td class="selling_price">${selling_price}</td>
-        //                 <td class="qty">${qty}</td>
-        //                 <td class="total">${total}</td>
-        //             </tr>`;
-        //     // }
-        // }
-        //receipt_all += receipt_header + receipt_body 
-        
+            //receipt_all += receipt_header + receipt_body 
+
     })
-    
+
     var receipt =
         `<div class="print-receipt">
             <div class="col-12">
@@ -349,6 +369,7 @@ var printResult = function() {
 
 $('#btn-print-report').click(function() {
     printResult()
+    console.log($('#date-picker-range').val());
 })
 
 

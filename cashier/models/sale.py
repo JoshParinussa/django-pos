@@ -31,6 +31,7 @@ class Sale(BaseModel):
     """Sales."""
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_sale')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_sale')
+    price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     qty = models.IntegerField(blank=False, null=False)
     total = models.DecimalField(max_digits=9, decimal_places=0)
 

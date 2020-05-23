@@ -17,6 +17,26 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer
     queryset = Sale.objects.order_by('created_at')
 
+    def get_price(self, product, newqty):
+        """get_price."""
+        harga_bertingkats = product.hargabertingkat.all().order_by('max_quantity')
+        found = False
+        if harga_bertingkats:
+            for harga_bertingkat in harga_bertingkats:
+                if harga_bertingkat.min_quantity <= newqty <= harga_bertingkat.max_quantity:
+                    harga = harga_bertingkat.price
+                    found = True
+                    break
+            if found is False:
+                if newqty > harga_bertingkats.last().max_quantity:
+                    harga = harga_bertingkats.last().price
+                else:
+                    harga = product.selling_price
+                print("#MASUK", harga)
+        else:
+            harga = product.selling_price
+        return harga
+
     @action(detail=False, methods=['POST'])
     def add_item(self, request):
         """add_item."""
@@ -29,7 +49,8 @@ class SaleViewSet(viewsets.ModelViewSet):
         except Exception as e:
             invoice = Invoice.objects.create(invoice=invoice_number, cashier=self.request.user)
         product = Product.objects.get(barcode=barcode)
-
+        harga_bertingkats = product.hargabertingkat.all() 
+        
         try:
             product.stock = product.stock - int(qty)
             product.save(update_fields=["stock"])
@@ -39,15 +60,22 @@ class SaleViewSet(viewsets.ModelViewSet):
         try:
             sale_item = Sale.objects.get(invoice=invoice, product=product)
             new_qty = int(sale_item.qty) + int(qty)
-            new_total = int(sale_item.total) + int(total)
+            harga = self.get_price(product, new_qty)
+            new_total = new_qty * harga
             sale_item.qty = new_qty
+            sale_item.price = harga
             sale_item.total = new_total
-            sale_item.save(update_fields=['qty', 'total'])
+            sale_item.save(update_fields=['qty', 'price', 'total'])
         except Exception as e:
             print(e)
-            sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, total=total)
+            harga = self.get_price(product, int(qty))
+            total = int(qty) * harga
+            sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
+        
+        context = {'sale': model_to_dict(sale_item),
+                   'price': harga}
 
-        return Response(model_to_dict(sale_item))
+        return Response(context)
 
     @action(detail=False, methods=['POST'])
     def get_by_invoice(self, request):
@@ -98,15 +126,17 @@ class SaleViewSet(viewsets.ModelViewSet):
         """update_item."""
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
-        new_qty = request.POST.get('qty')
+        new_qty = int(request.POST.get('qty'))
         new_total = request.POST.get('total')
 
         invoice = Invoice.objects.get(invoice=invoice_number)
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
+        harga = self.get_price(product, new_qty)
         item.qty = new_qty
-        item.total = new_total
+        item.price = harga
+        item.total = new_qty * harga
         item.save()
         return Response(model_to_dict(item))
 

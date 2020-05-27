@@ -1,8 +1,12 @@
+import logging
+from datetime import date, datetime
+
 from django.views.generic import TemplateView
+
 from cashier.models import Invoice, Sale, User
-from datetime import datetime, date
 from cashier.views.dash.base import DashListView
 
+logger = logging.getLogger(__name__)
 
 class SaleTransactionListView(DashListView):
     """BrandListView."""
@@ -35,6 +39,34 @@ class SaleTransactionView(TemplateView):
 
         return context
 
+
+class SaleTransactionView(TemplateView):
+    """SaleTransactionView."""
+    template_name = 'dash/transaction/sale.html'
+
+    def get_context_data(self, **kwargs):
+        """Override get context."""
+        context = super().get_context_data(**kwargs)
+        try:
+            invoice_id = self.kwargs['pk']
+            invoice = Invoice.objects.get(id=invoice_id)
+            context['invoice_number'] = invoice.invoice
+        except Exception as e:
+            logger.error(e)
+            user = self.request.user
+            today_invoice = datetime.now().date().strftime("%d%m%Y")
+            last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
+            if not last_invoice:
+                count = 1
+                invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
+            else:
+                count = int((last_invoice.invoice)[14:]) + 1
+                invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
+        
+            context['invoice_number'] = invoice_number
+
+        return context
+
 class ReportTransactionView(DashListView):
     """ReportTransactionView"""
     template_name = "dash/report/list_transaction.html"
@@ -63,6 +95,25 @@ class ReportSaleView(DashListView):
         context['cashier'] = object_cashier.username
         context['invoice_id'] = self.kwargs.get('pk')
 
+        for action in self.get_actions():
+            url_name = self._get_url_name(action)
+            context[f'{action}_url_name'] = url_name
+
+        return context
+
+class ReportSalebyProductView(DashListView):
+    """ReportSaleView"""
+    template_name = "dash/report/list_sale_by_product.html"
+    model = Sale
+
+    def get_context_data(self, **kwargs):
+        """Override get context."""
+        model = self.get_model()
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = model._meta.verbose_name.title()
+        context['model_name_plural'] = model._meta.verbose_name_plural.title()
+        context['icon'] = self.get_icon()
+        context['action'] = self.get_current_action()
         for action in self.get_actions():
             url_name = self._get_url_name(action)
             context[f'{action}_url_name'] = url_name

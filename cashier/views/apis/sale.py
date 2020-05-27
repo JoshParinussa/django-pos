@@ -1,15 +1,18 @@
 """Product Api view."""
-from cashier.models import Invoice, Product, Sale
-from cashier.serializers.sale import SaleSerializer, InvoiceSerializer
+# from datetime import datetime
+import datetime
+
+import pytz
+from django.db.models import Sum, Count, F, DecimalField, Value, FloatField, ExpressionWrapper
+from django.forms.models import model_to_dict
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.forms.models import model_to_dict
-from django.http import HttpResponse
-from datetime import datetime
-# import datetime
-from django.utils import timezone
-import pytz
+
+from cashier.models import Invoice, Product, Sale
+from cashier.serializers.sale import InvoiceSerializer, SaleSerializer
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -32,7 +35,6 @@ class SaleViewSet(viewsets.ModelViewSet):
                     harga = harga_bertingkats.last().price
                 else:
                     harga = product.selling_price
-                print("#MASUK", harga)
         else:
             harga = product.selling_price
         return harga
@@ -82,13 +84,20 @@ class SaleViewSet(viewsets.ModelViewSet):
         """get_by_invoice."""
         invoice_number = request.POST.get('invoice_number')
         try:
-            invoice = Invoice.objects.get(invoice=invoice_number)
-            queryset = self.get_queryset().filter(invoice=invoice)
+            invoice = Invoice.objects.filter(invoice=invoice_number)
+            invoice_serializer = InvoiceSerializer(invoice, many=True)
+            invoice_result = invoice_serializer.data
+            
+            queryset = self.get_queryset().filter(invoice=invoice.first())
             serializer = self.get_serializer(queryset, many=True)
             result = serializer.data
+            context = {
+                'sale_items':result,
+                'invoice': invoice_result
+                }
         except Exception as e:
-            result = None
-        return Response(result)
+            context = None
+        return Response(context)
 
     @action(detail=False, methods=['POST'])
     def process_payment(self, request):
@@ -140,6 +149,28 @@ class SaleViewSet(viewsets.ModelViewSet):
         item.save()
         return Response(model_to_dict(item))
 
+    @action(detail=False, methods=['POST'])
+    def sale_report_by_product(self, request):
+        date_range = request.POST.getlist('date_range[]')
+        date_format = '%Y-%m-%d'
+
+        unaware_start_date = datetime.datetime.strptime(date_range[0], date_format)
+        aware_start_date = pytz.utc.localize(unaware_start_date)
+
+        unaware_end_date = datetime.datetime.strptime(date_range[1], date_format)
+        aware_end_date = pytz.utc.localize(unaware_end_date)
+
+        product_sales_date_filter = Sale.objects.filter(invoice__status=1, invoice__date__range=(aware_start_date, datetime.datetime.combine(aware_end_date, datetime.time.max)))
+        product_sales = product_sales_date_filter.values('product').annotate(Count("product")).values('product')
+
+        products = product_sales_date_filter.filter(product__in=product_sales)\
+            .values('product__barcode', 'product__selling_price', 'product__name',)\
+            .annotate(qty_total=Sum("qty"))\
+            .annotate(total_penjualan=ExpressionWrapper(F('qty_total')*F('product__selling_price'),   
+                    output_field=FloatField()))
+
+        return Response(products)
+
 class ReportTransactionViewSet(viewsets.ModelViewSet):
     """ReportTransactionViewSet."""
     serializer_class = InvoiceSerializer
@@ -148,34 +179,20 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def set_datatable(self, request):
         """set_datatable."""
-        condition = request.POST.get('date')
         date_range = request.POST.getlist('date_range[]')
-        dates=[]
-        # print("#date", condition)
-        for d in date_range:
-            datetime.strptime(d, "%Y-%m-%d").date()
-            dates.append(d)
-        print("#date", dates)
-        fake_datetime = timezone.make_aware(timezone.datetime(2020, 5, 22))
-        # time_zone = pytz.timezone('Asia/Jakarta')
+        date_format = '%Y-%m-%d'
+
+        unaware_start_date = datetime.datetime.strptime(date_range[0], date_format)
+        aware_start_date = pytz.utc.localize(unaware_start_date)
+
+        unaware_end_date = datetime.datetime.strptime(date_range[1], date_format)
+        aware_end_date = pytz.utc.localize(unaware_end_date)
+
         if date_range:
-            self.queryset = self.get_queryset().filter(date=fake_datetime)
-        # if condition == '1':
-        #     date_condition = datetime.now().date()
-        #     queryset = self.get_queryset().filter(date__gte=date_condition)
-        # elif condition == '2':
-        #     date_condition = datetime.now().month
-        #     queryset = self.get_queryset().filter(date__month=date_condition)
-        # elif condition == '3':
-        #     date_condition = datetime.now().year
-        #     queryset = self.get_queryset().filter(date__year=date_condition)
-        # elif condition == '4' :
-        #     queryset = self.get_queryset()
-        # else :
-        #     queryset = ''
+            self.queryset = self.get_queryset().filter(date__range=(aware_start_date, datetime.datetime.combine(aware_end_date, datetime.time.max)))
         serializer = self.get_serializer(self.queryset, many=True)
-        print("#query", self.queryset)
         return Response(serializer.data)
+
 
     @action(detail=False, methods=['POST'])
     def set_income_profit(self, request):

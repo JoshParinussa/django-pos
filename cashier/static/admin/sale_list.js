@@ -48,7 +48,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data == 1 ? 'SUCCESS' : 'ONPROCESS';
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
+                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
                     }
                 },
                 {
@@ -56,7 +58,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="products/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="sale/update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },

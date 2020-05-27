@@ -113,6 +113,12 @@
                     </a>
                 </li>
                 <li class="kt-menu__item {% if url_name == 'dash_report_transaction' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_report_sale_by_product' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Penjualan Produk</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item {% if url_name == 'dash_report_transaction' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_report_profit_loss' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Laba Rugi</span>

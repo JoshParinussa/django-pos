@@ -20,9 +20,9 @@ class SaleSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     """Invoice Serialaizer."""
     cashier = serializers.CharField(source='cashier.username', read_only=True)
+    date = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
     
     class Meta:  # noqa D106
         model = Invoice
         name = 'invoice'
         fields = '__all__'
-        #datatables_always_serialize = ('invoice', 'date', 'cashier', 'cash', 'change', 'total', 'status')

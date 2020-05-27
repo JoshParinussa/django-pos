@@ -63,14 +63,18 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             ajax: {
                 'type': 'POST',
-                'url': '/v1/report_transaction/set_datatable?format=datatables',
+                'url': '/v1/sales/sale_report_by_product?format=datatables',
                 'data': function(d) {
                     d.date_range = getDaterange();
-                }
+                },
+                // 'success': function(result) {
+                //     console.log(result.data)
+                // }
             },
             columnDefs: [{
                     targets: 0,
                     render: function(data, type, row) {
+                        // console.log(data.data)
                         return !$.trim(data) ? '' : data;
                     },
                 },
@@ -95,27 +99,16 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data == 1 ? 'SUCCESS' : 'PENDING';
+                        return !$.trim(data) ? '' : data;
                     }
-                },
-                {
-                    targets: -1,
-                    title: 'Actions',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return `<a href="../report/sale/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detail">
-                          <i class="nav-icon fas fa-edit"></i>
-                    </a>`;
-                    },
                 },
             ],
             columns: [
-                { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
-                { data: 'date', orderable: true, searchable: true, name: 'date' },
-                { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
-                { data: 'total', orderable: true, searchable: true, name: 'total' },
-                { data: 'status', orderable: true, searchable: true, name: 'status' },
-                { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
+                { data: 'product__barcode', orderable: true, searchable: true, name: 'product__barcode' },
+                { data: 'product__name', orderable: true, searchable: true, name: 'product__name' },
+                { data: 'product__selling_price', orderable: true, searchable: true, name: 'product__selling_price' },
+                { data: 'qty_total', orderable: true, searchable: true, name: 'qty_total' },
+                { data: 'total_penjualan', orderable: true, searchable: true, name: 'total_penjualan' },
             ],
         });
     };
@@ -129,89 +122,56 @@ var KTDatatablesDataSourceAjaxServer = function() {
             var date_range = getDaterange();
             $.ajax({
                 type: "POST",
-                url: "/v1/invoice/print_report",
+                url: "/v1/sales/sale_report_by_product",
                 data: {
                     'date_range': date_range
                 },
                 success: function(result) {
+                    var sum_total_penjualan = 0;
                     table_body +=
-                        `<tr>
-                            <th>Tgl</th>
-                            <th>Invoice</th>
-                            <th>Cashier</th>
+                        `<tr style="border-bottom:1px dashed black;">
                             <th>Barcode</th>
                             <th>Produk</th>
                             <th>Harga Satuan</th>
-                            <th>Qty</th>
-                            <th>Total Harga</th>
+                            <th>Qty Terjual</th>
+                            <th>Total Penjualan</th>
                         </tr>`
                     $.each(result, function(key, value) {
-                        var date = value['date'];
-                        var invoice = value['invoice'];
-                        var cashier = value['cashier'];
-                        var sales = value['invoice_sale'];
-                        var total_harga = value['total']
-                            // table_body +=
-                            //     `<tr class="table-row" style="border-bottom:1px dashed black;">
-                            //         <td>${date}</td>
-                            //         <td>${invoice}</td>
-                            //         <td>${cashier}</td>
-                            //     </tr>`
-                        $.each(sales, function(key, value) {
-                            var barcode = value['barcode']
-                            var product = value['product']
-                            var price = value['price']
-                            var qty = value['qty']
-                            var total = value['total']
-                            if (key == 0) {
-                                table_body +=
-                                    `<tr>
-                                        <td>${date}</td>
-                                        <td>${invoice}</td>
-                                        <td>${cashier}</td>
-                                        <td class="barcode">${barcode}</td>
-                                        <td class="product">${product}</td>
-                                        <td class="price">${price}</td>
-                                        <td class="qty">${qty}</td>
-                                        <td class="total">${total}</td>
-                                    </tr>`;
-                            } else {
-                                table_body +=
-                                    `<tr class="bottom">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="barcode">${barcode}</td>
-                                        <td class="product">${product}</td>
-                                        <td class="price">${price}</td>
-                                        <td class="qty">${qty}</td>
-                                        <td class="total">${total}</td>
-                                    </tr>`;
-                            }
-                        });
+                        var barcode = value['product__barcode']
+                        var product = value['product__name']
+                        var price = value['product__selling_price']
+                        var qty = value['qty_total']
+                        var total = value['total_penjualan']
+                        sum_total_penjualan += Number(total);
                         table_body +=
-                            `<tr class="bottom">
+                            `<tr class="table-row" style="border-bottom:1px dashed black;">
+                                <td class="barcode">${barcode}</td>
+                                <td class="product">${product}</td>
+                                <td class="price">${price.toLocaleString('id-ID')}</td>
+                                <td class="qty">${qty}</td>
+                                <td class="total">${total.toLocaleString('id-ID')}</td>
+                            </tr>`;
+
+                    });
+                    table_body +=
+                        `<tr class="table-row" style="border-bottom:1px dashed black;">
                                 <th>Total</th>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>${total_harga}</td>
+                                <td>${sum_total_penjualan.toLocaleString('id-ID')}</td>
                             </tr>
                             <tr></tr>
                             <tr></tr>`;
-                    });
                     var report =
                         `<div class="print-receipt">
                             <div class="col-12">
                                 <div class="row center">
-                                    <h3>Laporan Penjualan</h3>
+                                    <h3>Laporan Penjualan Produk</h3>
                                     <h4>Periode: ${date_range[0]} - ${date_range[1]}</h4>
                                 </div>
                                 <div class="row">
-                                    <table class="table top">
+                                    <table class="table" style="border-top:1px dashed black;">
                                         <tbody>
                                             ${table_body}
                                         </tbody>
@@ -223,16 +183,10 @@ var KTDatatablesDataSourceAjaxServer = function() {
                         `<style type="text/css">
                             @page {margin: 20;}
                             
-                            table.top{
-                                border-top:1px dashed black;
-                            }
                             .center {
                                 text-align: center;
                                 font-size: 12px;
                               }
-                            td .bottom{
-                                border-bottom:1px solid black;
-                            }
                             table, th, td {
                                 font-size: 12px;
                                 text-align: left;

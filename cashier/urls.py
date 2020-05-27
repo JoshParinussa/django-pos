@@ -77,7 +77,7 @@ urlpatterns = [
     # TRANSACTION
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionListView.as_view(), name='dash_transaction_list'),
     path('dash/transaction/sale/new', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
-    path('dash/transaction/sale/new/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
+    path('dash/transaction/sale/update/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
     
     #EXPENSES
     path('dash/transaction/expenses', dash_expenses_view.ExpensesListView.as_view(), name='dash_expenses_list'),
@@ -87,6 +87,7 @@ urlpatterns = [
 
     #REPORTS
     path('dash/report/transaction', dash_transaction_view.ReportTransactionView.as_view(), name='dash_report_transaction'),
+    path('dash/report/sale-product', dash_transaction_view.ReportSalebyProductView.as_view(), name='dash_report_sale_by_product'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
     path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
 ]   

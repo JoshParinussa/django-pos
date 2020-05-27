@@ -1,0 +1,232 @@
+{% extends 'dash/layout/base.html' %}
+{% load static widget_tweaks%}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% comment %} <link rel="stylesheet" href="{% static 'vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'admin/css/sale.css' %}">
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    let currentInvoiceID = '{{ invoice_id }}';
+    let InvoiceCash = '{{ invoice_cash }}';
+    let InvoiceChange = '{{ invoice_change }}';
+    let InvoiceGrandTotal = '{{ invoice_total }}';
+    let SaleDate = '{{date}}';
+  </script>
+  <!-- DataTables -->
+<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+<!-- page script -->
+{% comment %} <script src="{% static 'vendors/js/pages/moment-with-locales.min' %}"></script> {% endcomment %}
+<script src="{% static 'common.js' %}"></script>
+<script src="{% static 'admin/report_sale.js' %}"></script>
+<script>
+    var css_url = "{% static 'admin/css/sale.css' %}";
+</script>
+{% endblock %}
+
+
+{% block breadcrumb %}
+<a href="{% url 'dash_report_transaction' %}" class="kt-subheader__breadcrumbs-link">Laporan</a>
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active ">Invoice {{invoice_number}}</span>
+{% endblock %}
+  
+{% block content %}
+{% csrf_token %}
+    
+    <div class="row">
+        <div class="col-8">
+            <div class="kt-portlet">
+                <form class="kt-form kt-form--label-right">
+                    <div class="kt-portlet__body">
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-xl-3">
+                                <input type="text" id="cashier" class="form-control" value = "{{cashier}}" disabled>
+                            </div>
+                            <div class="col-lg-2 col-xl-2">
+                                <input type="text" id="sale-date" class="form-control" disabled>
+                            </div>
+                            <div class="col-lg-7 col-xl-7">
+                                <div class="input-group">
+                                    <input class="form-control" id="barcode" type="text" placeholder="Scan or search item barcode.." >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" type="button" id="search-product">
+                                            <i class="flaticon-search" ></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    
+                        <table id="example1" class="table responsive table-hover data-table" style="width:100%">
+                            <thead style="width:100%">
+                                <tr >
+                                    <th>Barcode</th>
+                                    <th>Nama Item</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <div class="col-12">
+                        <div class="row">
+                            <table class="table borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Invoice</th>
+                                        <th class="text-right" id="invoice_number">{{ invoice_number }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-left">Subtotal</th>
+                                        <th class="text-right" id="sub-total">Rp. 50.000</th>
+                                    </tr>
+                                    {% comment %} <tr>
+                                        <th class="text-left">Discount</th>
+                                        <th class="text-right" id="disc-total">- Rp. 0</th>
+                                    </tr> {% endcomment %}
+                                    <tr>
+                                        <th class="text-left"><h3>TOTAL</h3></th>
+                                        <th class="text-right">
+                                            <h3 id="grand_total">{{invoice_total}}</h3>
+                                        </th>
+                                    </tr>
+                                <thead>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Cash</th>
+                                        <th class="text-right">Change</th>
+                                    </tr>
+                                <thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="text-left">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    Rp. 
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="number" min="0"  class="form-control" id="cash" value = "{{invoice_cash}}" required>
+                                                </div>
+                                                
+                                            </div>
+                                        </th>
+                                        <th class="text-right">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    Rp. 
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="number" min="0" class="form-control" id="change" value = "{{invoice_change}}" disabled>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-6 col-xl-6">
+                                <button type="button" class="btn btn-info btn-block m-1" id="btn-print-payment" disabled>
+                                    <i class="flaticon2-print"></i>&nbsp;Cetak nota
+                                </button>
+                            </div>
+                            <div class="col-lg-6 col-xl-6">
+                                <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
+                                    <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
+                                </button>&nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.modal -->
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" id="modal-barcode" type="hidden" placeholder="Barcode" >
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Nama Item</label>
+                            <div class="col-9">
+                                <input type="text" id="modal-item-name" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Qty</label>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <input type="number" id="modal-qty-item-cart" min="1" value='1' class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-btn-update" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-box">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-form-label col-12">Apakah anda yakin menghapus <span id="modal-item-name-delete"></span> ?</label>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                        <button type="button" id="modal-btn-delete" class="btn btn-primary">Ya</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- /.modal -->
+{% endblock %}
+<!-- /.content -->

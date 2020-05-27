@@ -15,7 +15,7 @@ class SaleSerializer(serializers.ModelSerializer):
         model = Sale
         name = 'sale'
         fields = ['id', 'barcode', 'invoice', 'product', 'price', 'qty', 'total']
-        datatables_always_serialize = ('id', 'invoice', 'product', 'qty', 'total')
+        datatables_always_serialize = ('id', 'invoice', 'product', 'price', 'qty', 'total')
 
 class InvoiceSerializer(serializers.ModelSerializer):
     """Invoice Serialaizer."""

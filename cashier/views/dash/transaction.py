@@ -74,7 +74,7 @@ class ReportTransactionView(DashListView):
 
 class ReportSaleView(DashListView):
     """ReportSaleView"""
-    template_name = "dash/report/list_sale.html"
+    template_name = "dash/report/list_sale_2.html"
     model = Sale
 
     def get_context_data(self, **kwargs):
@@ -86,6 +86,15 @@ class ReportSaleView(DashListView):
         context['icon'] = self.get_icon()
         context['action'] = self.get_current_action()
         object_invoice = Invoice.objects.filter(id=self.kwargs.get('pk')).first()
+        if(object_invoice.total == None):
+            object_invoice.total = 0
+
+        if(object_invoice.cash == None):
+            object_invoice.cash = 0
+
+        if(object_invoice.change == None):
+            object_invoice.change = 0
+        
         object_cashier = User.objects.filter(id=object_invoice.cashier_id).first()
         context['date'] = object_invoice.date
         context['invoice_number'] = object_invoice.invoice

@@ -129,7 +129,7 @@ $('#modal-btn-update').click(function(e){
 	if(Total>Cash){
 		Cash = Total;
 		newChange = 0;
-	}else{
+	}else if((Cash - Total)!=0){
 		newChange = Cash - Total;
 		diffChange = newChange - oldChange;
 	}
@@ -154,9 +154,9 @@ $('#modal-btn-update').click(function(e){
         success: function(result){
             if(Total > Cash){
 				alert("Uang kurang Rp. "+newChange);
-			}else if (diffChange>0){
+			}else if (diffChange<0){
 				alert("Kembalian tambah Rp. "+diffChange);
-			}else{
+			}else if(diffChange>0){
 				alert("Kembalian kurang Rp. "+Math.abs(diffChange));
 			}
 

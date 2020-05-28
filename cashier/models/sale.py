@@ -8,9 +8,8 @@ from .base import BaseModel
 
 class InvoiceStatus(models.IntegerChoices):
     """StoreTier choice."""
-    EMPTY = 0
+    ONPROCESS = 0
     SUCCESS = 1
-    PENDING = 2
 
 
 class Invoice(BaseModel):
@@ -21,7 +20,7 @@ class Invoice(BaseModel):
     cash = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     change = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     total = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
-    status = models.PositiveSmallIntegerField(choices=InvoiceStatus.choices, default=InvoiceStatus.EMPTY, db_index=True)
+    status = models.PositiveSmallIntegerField(choices=InvoiceStatus.choices, default=InvoiceStatus.ONPROCESS, db_index=True)
 
     def __str__(self):
         """String representation."""

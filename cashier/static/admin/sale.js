@@ -124,45 +124,71 @@ var getInvoiceSaleItem = function() {
             "invoice_number": invoice_number,
         },
         success: function(result) {
-            result.data.forEach(function(item) {
-                grandTotal += Number(item.total);
-                var idRow = item.barcode;
-                var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
-                var currentPurchaseTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
+            try {
+                var invoice_data = result.data['invoice'][0];
+                date = moment.utc(invoice_data['date']).local().format('LLL');
+                $('#sale-date').val(date);
+                var sale_items = result.data['sale_items'];
 
-                if ($('#item_table').find("#" + idRow).length > 0) {
+                $('#change').val(Number(invoice_data['change']).toLocaleString('id-ID'));
+                $('#cash').val(Number(invoice_data['cash']));
+
+                sale_items.forEach(function(item) {
+                    grandTotal += Number(item.total);
+                    var idRow = item.barcode;
                     var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
                     var currentPurchaseTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
 
-                    var newQty = Number(currentQty) + Number(item.qty);
-                    var newPurchaseTotal = Number(currentPurchaseTotal) + Number(item.total);
+                    if ($('#item_table').find("#" + idRow).length > 0) {
+                        var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
+                        var currentPurchaseTotal = $('#item_table').find("#" + idRow + " .purchase_total").html();
 
-                    $('#item_table').find("#" + idRow + " .qty").text(newQty);
-                    $('#item_table').find("#" + idRow + " .purchase_total").text(newPurchaseTotal.toLocaleString('id-ID'));
+                        var newQty = Number(currentQty) + Number(item.qty);
+                        var newPurchaseTotal = Number(currentPurchaseTotal) + Number(item.total);
+
+                        $('#item_table').find("#" + idRow + " .qty").text(newQty);
+                        $('#item_table').find("#" + idRow + " .purchase_total").text(newPurchaseTotal.toLocaleString('id-ID'));
+                    } else {
+                        var row = "<tr id='" + item.barcode + "'>" +
+                            // "<td>" + lineNo + "</td>" +
+                            "<td class='product-barcode' style='display:none;'>" + item.barcode + "</td>" +
+                            "<td class='product-name'>" + item.product + "</td>" +
+                            "<td class='price' data-price='" + item.price + "'>" + Number(item.price).toLocaleString('id-ID') + "</td>" +
+                            "<td class='qty'>" + item.qty + "</td>" +
+                            "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
+                            "<td class='col-actions'>" +
+                            "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
+                            "<i class='la la-edit'></i>" +
+                            "</span>" +
+                            "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md btn-delete' title='Hapus item'>" +
+                            "<i class='la la-trash'></i>" +
+                            "</span>" +
+                            "</td>" +
+                            "</tr>";
+                        var tableBody = $("#item_table tbody");
+                        tableBody.append(row)
+                        lineNo++;
+                    }
+                })
+                $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
+                $('#sub-total').text(Number(grandTotal).toLocaleString('id-ID'));
+
+                if (invoice_data['status'] == 1) {
+                    $('.alert-status').attr("hidden", false);
+                    $('#process_payment').attr("disabled", true);
+                    $('#cash').attr("disabled", true);
+                    var item_table = $('#item_table')
+                    $("#item_table tr").each(function() {
+                        $(this).find("th.col-actions").remove();
+                        $(this).find("td.col-actions").remove();
+                    });
                 } else {
-                    var row = "<tr id='" + item.barcode + "'>" +
-                        // "<td>" + lineNo + "</td>" +
-                        "<td class='product-barcode' style='display:none;'>" + item.barcode + "</td>" +
-                        "<td class='product-name'>" + item.product + "</td>" +
-                        "<td class='price' data-price='" + item.price + "'>" + Number(item.price).toLocaleString('id-ID') + "</td>" +
-                        "<td class='qty'>" + item.qty + "</td>" +
-                        "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
-                        "<td>" +
-                        "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                        "<i class='la la-edit'></i>" +
-                        "</span>" +
-                        "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                        "<i class='la la-trash'></i>" +
-                        "</span>" +
-                        "</td>" +
-                        "</tr>";
-                    var tableBody = $("#item_table tbody");
-                    tableBody.append(row)
-                    lineNo++;
+                    var alert_status = $('.alert-status').attr("hidden", false);
+                    alert_status.find('.alert').removeClass('alert-success').addClass('alert-warning');
+                    alert_status.find('.alert-text').text('Transaksi belum diproses, segera selesaikan transaksi !');
                 }
-            })
-            $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
-            $('#sub-total').text(Number(grandTotal).toLocaleString('id-ID'));
+
+            } catch (err) {}
         }
     });
 }
@@ -209,7 +235,7 @@ $('#process_payment').click(function(e) {
             "total": grandTotal,
         },
         success: function(result) {
-            window.location.reload();
+            window.location.href = '/dash/transaction/sale';
         }
     });
 })
@@ -348,24 +374,6 @@ var printResult = function() {
                 </div>
             </div>
         </div>`;
-    // '<div id="print-receipt">' +
-    // '<div class="receipt" id="receipt">' +
-    // '<p class="centered" id="ticket-title">Minimarketku' +
-    // '<table>' +
-    // '<thead>' +
-    // '<tr>' +
-    // '<th class="quantity">Qty.</th>' +
-    // '<th class="description">Item</th>' +
-    // '<th class="price">Total</th>' +
-    // '</tr>' +
-    // '</thead>' +
-    // '<tbody>' +
-    // receipt_body +
-    // '</tbody>' +
-    // '</table>' +
-    // '<p class="centered">Terimakasih, datang kembali' +
-    // '</div>' +
-    // '</div>';
 
     var receipt_css =
         `<style type="text/css">
@@ -403,9 +411,3 @@ var printResult = function() {
     myPrintWindow.close();
     return false;
 }
-
-$('#btn-check').click(function() {
-    $("#item_table tbody").find("tr").each(function() {
-        console.log($(this).find('.product-name').html());
-    });
-})

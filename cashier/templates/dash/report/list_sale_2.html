@@ -8,12 +8,19 @@
 
 {% block js %}
 <script type="text/javascript">
-    let currentUser = '{{ request.user.first_name }}';
-</script>
+    let currentInvoiceID = '{{ invoice_id }}';
+    let InvoiceCash = '{{ invoice_cash }}';
+    let InvoiceChange = '{{ invoice_change }}';
+    let InvoiceGrandTotal = '{{ invoice_total }}';
+    let SaleDate = '{{date}}';
+    let tanggal = '{{tanggal}}';
+  </script>
+  <!-- DataTables -->
+<script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
 <!-- page script -->
-{% comment %} <script src="{% static 'vendors/js/pages/moment-with-locales.min' %}"></script> {% endcomment %}
 <script src="{% static 'common.js' %}"></script>
-<script src="{% static 'admin/sale.js' %}"></script>
+<script src="{% static 'admin/report_sale.js' %}"></script>
 <script>
     var css_url = "{% static 'admin/css/sale.css' %}";
 </script>
@@ -21,27 +28,24 @@
 
 
 {% block breadcrumb %}
-<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Penjualan</span>
+<a href="{% url 'dash_report_transaction' %}" class="kt-subheader__breadcrumbs-link">Laporan</a>
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active ">Invoice {{invoice_number}}</span>
 {% endblock %}
   
 {% block content %}
 {% csrf_token %}
-    <div class="col-12 alert-status" hidden>
-        <div class="alert alert-custom alert-success" role="alert">
-            <div class="alert-icon"><i class="flaticon-warning"></i></div>
-            <div class="alert-text">Transaksi sukses, tidak dapat diedit !</div>
-        </div>
-    </div>
+    
     <div class="row">
         <div class="col-8">
             <div class="kt-portlet">
                 <form class="kt-form kt-form--label-right">
                     <div class="kt-portlet__body">
                         <div class="form-group row">
-                            <div class="col-lg-3 col-xl-3">
-                                <input type="text" id="cashier" class="form-control" disabled>
+                            <div class="col-lg-3">
+                                <input type="text" id="cashier" class="form-control" value = "{{cashier}}" disabled>
                             </div>
-                            <div class="col-lg-4 col-xl-2">
+                            <div class="col-lg-4">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>
                         </div>
@@ -62,22 +66,22 @@
             </div>
             <div class="kt-portlet">
                 <div class="kt-portlet__body">
-                    <div class="table-wrap">
-                        <table id="item_table" class="table table-hover custom-table">
-                            <thead>
-                                <tr>
-                                    <th style="display:none;">Barcode</th>
+                    
+                        <table id="example1" class="table responsive table-hover data-table" style="width:100%">
+                            <thead style="width:100%">
+                                <tr >
+                                    <th>Barcode</th>
                                     <th>Nama Item</th>
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
-                                    <th class="col-actions">Actions</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -92,10 +96,10 @@
                                         <th class="text-left">Invoice</th>
                                         <th class="text-right" id="invoice_number">{{ invoice_number }}</th>
                                     </tr>
-                                    <tr hidden>
+                                    {% comment %} <tr>
                                         <th class="text-left">Subtotal</th>
-                                        <th class="text-right" id="sub-total">Rp. 0</th>
-                                    </tr>
+                                        <th class="text-right" id="sub-total">Rp. 50.000</th>
+                                    </tr> {% endcomment %}
                                     {% comment %} <tr>
                                         <th class="text-left">Discount</th>
                                         <th class="text-right" id="disc-total">- Rp. 0</th>
@@ -103,7 +107,7 @@
                                     <tr>
                                         <th class="text-left"><h3>TOTAL</h3></th>
                                         <th class="text-right">
-                                            <h3 id="grand_total">0</h3>
+                                            <h3 id="grand_total">{{invoice_total}}</h3>
                                         </th>
                                     </tr>
                                 <thead>
@@ -125,7 +129,7 @@
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="number" min="0"  class="form-control" id="cash" required>
+                                                    <input type="number" min="0"  class="form-control" id="cash" value = "{{invoice_cash}}" required disabled>
                                                 </div>
                                                 
                                             </div>
@@ -136,7 +140,7 @@
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="number" min="0" class="form-control" id="change" disabled>
+                                                    <input type="number" min="0" class="form-control" id="change" value = "{{invoice_change}}" disabled>
                                                 </div>
                                             </div>
                                         </th>
@@ -155,8 +159,8 @@
                                 </button>
                             </div>
                             <div class="col-lg-6 col-xl-6">
-                                <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
-                                    <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
+                                <button type="submit" class="btn btn-warning btn-block m-1" id="process_payment">
+                                    <i class="flaticon2-shopping-cart-1"></i>Update Transaksi
                                 </button>&nbsp;
                             </div>
                         </div>
@@ -201,6 +205,29 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="modal-box">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-form-label col-12">Apakah anda yakin menghapus <span id="modal-item-name-delete"></span> ?</label>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                        <button type="button" id="modal-btn-delete" class="btn btn-primary">Ya</button>
+                    </div>
+                </div>
+            </div>
     </div>
     <!-- /.modal -->
 {% endblock %}

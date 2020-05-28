@@ -29,7 +29,6 @@ var HargaBertingkatTable = function() {
         var addRow = function(selector, prefix) {
             var newElement = $(selector).clone(true)
             var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
-            console.log(total)
             newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
                 var name = $(this).attr('name')
                 if (name) {

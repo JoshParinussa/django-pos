@@ -1,36 +1,35 @@
 "use strict";
 var KTDatatablesDataSourceAjaxServer = function() {
 
-    var initTable1 = function() {
+    var initTable = function() {
         var table = $('.data-table');
         // begin first table
         table.DataTable({
-            responsive: true,
-            searchDelay: 500,
+            autoWidth: false,
             processing: true,
             serverSide: true,
-            autoWidth: false,
-            serverSide: true,
+            serverSide: false,
             pageLength: 10,
             ordering: true,
             paging: true,
+            scrollX: true,
             order: [
-                [0, "asc"]
+                [1, "dsc"]
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/supplier?format=datatables',
+                'url': '/v1/invoice?format=datatables',
             },
             columnDefs: [{
                     targets: 0,
-                    render: function(data) {
+                    render: function(data, type, row) {
                         return !$.trim(data) ? '' : data;
-                    }
+                    },
                 },
                 {
                     targets: 1,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : moment.utc(data).local().format('LLL');
                     }
                 },
                 {
@@ -42,13 +41,15 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
+                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
                     }
                 },
                 {
@@ -56,29 +57,28 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="supplier/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="sale/update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },
                 },
             ],
             columns: [
-                { data: 'company_name', orderable: true, searchable: true, name: 'company_name' },
-                { data: 'address', orderable: true, searchable: true, name: 'address' },
-                { data: 'contact_person', orderable: true, searchable: true, name: 'contact_person' },
-                { data: 'office_phone', orderable: true, searchable: true, name: 'office_phone' },
-                { data: 'phone', orderable: true, searchable: true, name: 'phone' },
+                { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
+                { data: 'date', orderable: true, searchable: true, name: 'date' },
+                { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
+                { data: 'total', orderable: true, searchable: true, name: 'total' },
+                { data: 'status', orderable: true, searchable: true, name: 'status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
+
     };
     return {
         init: function() {
-            initTable1();
+            initTable();
         },
-
     };
-
 }();
 
 jQuery(document).ready(function() {

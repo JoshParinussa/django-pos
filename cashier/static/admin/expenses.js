@@ -19,10 +19,28 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/units?format=datatables',
+                'url': '/v1/expenses?format=datatables',
             },
             columnDefs: [{
                     targets: 0,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : moment.utc(data).local().format('LLL');
+                    }
+                },
+                {
+                    targets: 1,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data;
+                    }
+                },
+                {
+                    targets: 2,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data;
+                    }
+                },
+                {
+                    targets: 3,
                     render: function(data) {
                         return !$.trim(data) ? '' : data;
                     }
@@ -32,14 +50,17 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="units/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="expenses/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },
                 },
             ],
             columns: [
-                { data: 'name', orderable: true, searchable: true, name: 'name' },
+                { data: 'date', orderable: true, searchable: true, name: 'date' },
+                { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
+                { data: 'information', orderable: true, searchable: true, name: 'information' },
+                { data: 'cost', orderable: true, searchable: true, name: 'cost' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
@@ -58,40 +79,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 }();
 
-
-// Class definition
-// var ProductsForm = function () {
-//     // Base elements
-//     var formEl;
-//     var validator;
-
-//     var initValidation = function() {
-//         validator = formEl.validate({
-//             // Validate only visible fields
-//             ignore: ":hidden",
-
-//             // Validation rules
-//             rules: {
-//             },
-
-//             // Display error
-//             invalidHandler: function(event, validator) {
-//                 KTUtil.scrollTop();
-//             },
-//         });
-//     }
-
-//     return {
-//         // public functions
-//         init: function() {
-//             formEl = $('#kt_form');
-// 			initValidation();
-// 			$('.select2').select2();
-//         }
-//     };
-// }();
-
 jQuery(document).ready(function() {
     KTDatatablesDataSourceAjaxServer.init();
-    // ProductsForm.init();
 });

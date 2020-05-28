@@ -21,6 +21,26 @@
 {% endblock %}
   
 {% block content %}
+
+<div class="kt-portlet">
+    <div class="kt-portlet__body">
+        <div class="row">
+            <div class="col-5">
+                <div class='input-group pull-left' id='kt_daterangepicker_6'>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                    </div>
+                    <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-primary btn-block btn-icon-sm" id="btn-filter-date" title="Filter">
+                    <i class="flaticon-search"></i>Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% csrf_token %}
 <div class="kt-portlet kt-portlet--mobile">
     <div class="kt-portlet__head kt-portlet__head--lg">

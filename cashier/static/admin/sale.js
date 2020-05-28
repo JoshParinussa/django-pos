@@ -53,12 +53,6 @@ var getProductByBarcode = function() {
     }
 }
 
-var drawDetailTransactionRow = function() {
-    $.ajax({
-
-    });
-}
-
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
         // purchaseItemTotal = itemPrice * purchaseItemQty;
@@ -177,7 +171,8 @@ var getInvoiceSaleItem = function() {
                     $('.alert-status').attr("hidden", false);
                     $('#process_payment').attr("disabled", true);
                     $('#cash').attr("disabled", true);
-                    var item_table = $('#item_table')
+                    var item_table = $('#item_table');
+                    $("#btn-print-payment").prop('disabled', false);
                     $("#item_table tr").each(function() {
                         $(this).find("th.col-actions").remove();
                         $(this).find("td.col-actions").remove();
@@ -312,6 +307,8 @@ $('#modal-btn-update').click(function(e) {
 
 var printResult = function() {
     var total = $('#grand_total').html()
+    change = $('#change').val();
+    cash = $('#cash').val();
     var receipt_body = ''
     $("#item_table tbody").find("tr").each(function() {
         var item = $(this).find('.product-name').html()

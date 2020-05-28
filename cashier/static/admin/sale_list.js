@@ -1,10 +1,42 @@
 "use strict";
+var table;
+var dates;
+window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
 var KTDatatablesDataSourceAjaxServer = function() {
 
+    var initDateRangePicker = function() {
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+        $('#kt_daterangepicker_6 .form-control').val(moment().format('YYYY-MM-DD') + ' to ' + moment().format('YYYY-MM-DD'));
+        $('#kt_daterangepicker_6').daterangepicker({
+            buttonClasses: ' btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            $('#kt_daterangepicker_6 .form-control').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    };
+    var getDaterange = function() {
+        var date_range = $('#date-picker-range').val();
+        dates = date_range.split(' to ');
+        return dates
+    }
+
     var initTable = function() {
-        var table = $('.data-table');
-        // begin first table
-        table.DataTable({
+        table = $('.data-table');
+        table.dataTable({
             autoWidth: false,
             processing: true,
             serverSide: true,
@@ -19,6 +51,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ajax: {
                 'type': 'GET',
                 'url': '/v1/invoice?format=datatables',
+                'data': function(d) {
+                    d.date_range = getDaterange();
+                }
             },
             columnDefs: [{
                     targets: 0,
@@ -74,9 +109,18 @@ var KTDatatablesDataSourceAjaxServer = function() {
         });
 
     };
+
+    var initEvents = function() {
+        $('#btn-filter-date').on('click', function(e) {
+            console.log("TES")
+            table.api().ajax.reload();
+        });
+    };
     return {
         init: function() {
+            initDateRangePicker();
             initTable();
+            initEvents();
         },
     };
 }();

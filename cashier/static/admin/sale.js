@@ -126,6 +126,8 @@ var getInvoiceSaleItem = function() {
         success: function(result) {
             try {
                 var invoice_data = result.data['invoice'][0];
+                date = moment.utc(invoice_data['date']).local().format('LLL');
+                $('#sale-date').val(date);
                 var sale_items = result.data['sale_items'];
 
                 $('#change').val(Number(invoice_data['change']).toLocaleString('id-ID'));

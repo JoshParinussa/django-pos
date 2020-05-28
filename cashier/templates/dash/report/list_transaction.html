@@ -8,7 +8,7 @@
 <script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
 <script src="{% static 'common.js' %}"></script>
 <script src="{% static 'admin/report_transaction.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -29,16 +29,16 @@
                     <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
                 </div>
             </div>
-            <div class="col-1">
-                <button type="button" class="btn btn-primary btn-block" id="btn-filter-date" title="Filter">
-                    <i class="flaticon-search"></i>&nbsp;Filter
+            <div class="col-2">
+                <button type="button" class="btn btn-primary btn-block btn-icon-sm" id="btn-filter-date" title="Filter">
+                    <i class="flaticon-search"></i>Filter
                 </button>
             </div>
-            <div class="col-5">
-            </div>
-            <div class="col-1">
-                <button type="button" class="btn btn-warning btn-block " id="btn-print-report" title="Cetak Laporan">
-                    <i class="flaticon2-print"></i>&nbsp;Cetak
+            {% comment %} <div class="col-5">
+            </div> {% endcomment %}
+            <div class="col-2">
+                <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
+                    <i class="flaticon2-print"></i>Cetak
                 </button>
             </div>
         </div>
@@ -46,7 +46,7 @@
 </div>
     
 <div class="row">
-    <div class="col-6">
+    {% comment %} <div class="col-6">
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 </div>
 <div class="kt-portlet kt-portlet--mobile">
     <div class="kt-portlet__head kt-portlet__head--lg">

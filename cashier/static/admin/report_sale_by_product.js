@@ -87,7 +87,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 2,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {
@@ -99,7 +99,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
             ],

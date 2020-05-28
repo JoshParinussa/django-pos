@@ -1,6 +1,8 @@
 import logging
 from datetime import date, datetime
 
+import pytz
+from pytz import timezone
 from django.views.generic import TemplateView
 
 from cashier.models import Invoice, Sale, User
@@ -13,31 +15,6 @@ class SaleTransactionListView(DashListView):
     template_name = 'dash/transaction/list.html'
     model = Invoice
 
-
-class SaleTransactionView(TemplateView):
-    """SaleTransactionView."""
-    template_name = 'dash/transaction/sale.html'
-
-    def get_context_data(self, **kwargs):
-        """Override get context."""
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        today_invoice = datetime.now().date().strftime("%d%m%Y")
-        last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
-        if not last_invoice:
-            count = 1
-            invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
-        else:
-            count = int((last_invoice.invoice)[14:]) + 1
-            invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
-            # if last_invoice.status == 1 or last_invoice.status == 2:
-            #     count = int((last_invoice.invoice)[10:]) + 1
-            #     invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
-            # else:
-            #     invoice_number = last_invoice.invoice
-        context['invoice_number'] = invoice_number
-
-        return context
 
 
 class SaleTransactionView(TemplateView):
@@ -54,7 +31,7 @@ class SaleTransactionView(TemplateView):
         except Exception as e:
             logger.error(e)
             user = self.request.user
-            today_invoice = datetime.now().date().strftime("%d%m%Y")
+            today_invoice = datetime.now(timezone('Asia/Jakarta')).strftime("%d%m%Y")
             last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
             if not last_invoice:
                 count = 1
@@ -97,6 +74,7 @@ class ReportSaleView(DashListView):
         
         object_cashier = User.objects.filter(id=object_invoice.cashier_id).first()
         context['date'] = object_invoice.date
+        context['tanggal'] = object_invoice.date
         context['invoice_number'] = object_invoice.invoice
         context['invoice_total'] = object_invoice.total
         context['invoice_cash'] = object_invoice.cash

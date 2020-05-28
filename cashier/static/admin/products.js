@@ -3,8 +3,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
     var initTable1 = function() {
         var table = $('.data-table');
-        console.log("A");
-        // begin first table
         table.DataTable({
             autoWidth: false,
             processing: true,
@@ -90,21 +88,13 @@ var KTDatatablesDataSourceAjaxServer = function() {
         $("#sidebar").on('click', function(e) {
             var table = $('#example1').DataTable();
             table.columns.adjust().draw();
-            // $($.fn.dataTable.tables(true)).DataTable()
-            //   .columns.adjust();
             $(".dataTables_scrollHeadInner .dataTables_scrollHead .table").css("width", "100%");
-            console.log("APA")
         });
 
     };
     return {
-
-        //main function to initiate the module
         init: function() {
             initTable1();
-            // if ($.fn.dataTable){
-            // 	initTable1();
-            // }
         },
 
     };

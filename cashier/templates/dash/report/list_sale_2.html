@@ -13,12 +13,12 @@
     let InvoiceChange = '{{ invoice_change }}';
     let InvoiceGrandTotal = '{{ invoice_total }}';
     let SaleDate = '{{date}}';
+    let tanggal = '{{tanggal}}';
   </script>
   <!-- DataTables -->
 <script src="{% static 'vendors/plugins/datatables/jquery.dataTables.js' %}"></script>
 <script src="{% static 'vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
 <!-- page script -->
-{% comment %} <script src="{% static 'vendors/js/pages/moment-with-locales.min' %}"></script> {% endcomment %}
 <script src="{% static 'common.js' %}"></script>
 <script src="{% static 'admin/report_sale.js' %}"></script>
 <script>
@@ -42,13 +42,15 @@
                 <form class="kt-form kt-form--label-right">
                     <div class="kt-portlet__body">
                         <div class="form-group row">
-                            <div class="col-lg-3 col-xl-3">
+                            <div class="col-lg-3">
                                 <input type="text" id="cashier" class="form-control" value = "{{cashier}}" disabled>
                             </div>
-                            <div class="col-lg-2 col-xl-2">
+                            <div class="col-lg-4">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>
-                            <div class="col-lg-7 col-xl-7">
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
                                 <div class="input-group">
                                     <input class="form-control" id="barcode" type="text" placeholder="Scan or search item barcode.." >
                                     <div class="input-group-append">
@@ -94,10 +96,10 @@
                                         <th class="text-left">Invoice</th>
                                         <th class="text-right" id="invoice_number">{{ invoice_number }}</th>
                                     </tr>
-                                    <tr>
+                                    {% comment %} <tr>
                                         <th class="text-left">Subtotal</th>
                                         <th class="text-right" id="sub-total">Rp. 50.000</th>
-                                    </tr>
+                                    </tr> {% endcomment %}
                                     {% comment %} <tr>
                                         <th class="text-left">Discount</th>
                                         <th class="text-right" id="disc-total">- Rp. 0</th>
@@ -127,7 +129,7 @@
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
-                                                    <input type="number" min="0"  class="form-control" id="cash" value = "{{invoice_cash}}" required>
+                                                    <input type="number" min="0"  class="form-control" id="cash" value = "{{invoice_cash}}" required disabled>
                                                 </div>
                                                 
                                             </div>
@@ -157,8 +159,8 @@
                                 </button>
                             </div>
                             <div class="col-lg-6 col-xl-6">
-                                <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
-                                    <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
+                                <button type="submit" class="btn btn-warning btn-block m-1" id="process_payment">
+                                    <i class="flaticon2-shopping-cart-1"></i>Update Transaksi
                                 </button>&nbsp;
                             </div>
                         </div>

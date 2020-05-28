@@ -14,7 +14,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             paging: true,
             scrollX: true,
             order: [
-                [0, "asc"]
+                [1, "dsc"]
             ],
             ajax: {
                 'type': 'GET',
@@ -23,14 +23,13 @@ var KTDatatablesDataSourceAjaxServer = function() {
             columnDefs: [{
                     targets: 0,
                     render: function(data, type, row) {
-                        // console.log(data.invoice)
                         return !$.trim(data) ? '' : data;
                     },
                 },
                 {
                     targets: 1,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : moment.utc(data).local().format('LLL');
                     }
                 },
                 {
@@ -42,7 +41,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {

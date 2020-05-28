@@ -20,10 +20,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         date_format = '%Y-%m-%d'
         
         unaware_start_date = datetime.datetime.strptime(date_range[0], date_format)
-        aware_start_date = pytz.utc.localize(unaware_start_date)
+        unaware_start_date = pytz.timezone('Asia/Jakarta').localize(unaware_start_date)
+        aware_start_date = unaware_start_date.astimezone(pytz.timezone('UTC'))
 
         unaware_end_date = datetime.datetime.strptime(date_range[1], date_format)
-        aware_end_date = pytz.utc.localize(unaware_end_date)
+        unaware_end_date = pytz.timezone('Asia/Jakarta').localize(unaware_end_date)
+        aware_end_date = unaware_end_date.astimezone(pytz.timezone('UTC'))
         print_result = []
 
         if date_range:

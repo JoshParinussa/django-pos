@@ -3,7 +3,8 @@
 import datetime
 
 import pytz
-from django.db.models import Sum, Count, F, DecimalField, Value, FloatField, ExpressionWrapper
+from django.db.models import (Count, DecimalField, ExpressionWrapper, F,
+                              FloatField, Sum, Value)
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.utils import timezone
@@ -12,7 +13,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from cashier.models import Invoice, Product, Sale
-from cashier.serializers.sale import InvoiceSerializer, SaleSerializer
+from cashier.serializers.sale import SaleSerializer
+from cashier.serializers.invoice import InvoiceSerializer
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -155,10 +157,12 @@ class SaleViewSet(viewsets.ModelViewSet):
         date_format = '%Y-%m-%d'
 
         unaware_start_date = datetime.datetime.strptime(date_range[0], date_format)
-        aware_start_date = pytz.utc.localize(unaware_start_date)
+        unaware_start_date = pytz.timezone('Asia/Jakarta').localize(unaware_start_date)
+        aware_start_date = unaware_start_date.astimezone(pytz.timezone('UTC'))
 
         unaware_end_date = datetime.datetime.strptime(date_range[1], date_format)
-        aware_end_date = pytz.utc.localize(unaware_end_date)
+        unaware_end_date = pytz.timezone('Asia/Jakarta').localize(unaware_end_date)
+        aware_end_date = unaware_end_date.astimezone(pytz.timezone('UTC'))
 
         product_sales_date_filter = Sale.objects.filter(invoice__status=1, invoice__date__range=(aware_start_date, datetime.datetime.combine(aware_end_date, datetime.time.max)))
         product_sales = product_sales_date_filter.values('product').annotate(Count("product")).values('product')
@@ -183,10 +187,12 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         date_format = '%Y-%m-%d'
 
         unaware_start_date = datetime.datetime.strptime(date_range[0], date_format)
-        aware_start_date = pytz.utc.localize(unaware_start_date)
+        unaware_start_date = pytz.timezone('Asia/Jakarta').localize(unaware_start_date)
+        aware_start_date = unaware_start_date.astimezone(pytz.timezone('UTC'))
 
         unaware_end_date = datetime.datetime.strptime(date_range[1], date_format)
-        aware_end_date = pytz.utc.localize(unaware_end_date)
+        unaware_end_date = pytz.timezone('Asia/Jakarta').localize(unaware_end_date)
+        aware_end_date = unaware_end_date.astimezone(pytz.timezone('UTC'))
 
         if date_range:
             self.queryset = self.get_queryset().filter(date__range=(aware_start_date, datetime.datetime.combine(aware_end_date, datetime.time.max)))
@@ -250,6 +256,7 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         """get_by_invoice."""
         invoice_id = request.POST.get('invoice')
         queryset = self.get_queryset().filter(invoice_id=invoice_id)
+        # queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -281,7 +288,7 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         """update_item."""
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
-        new_qty = request.POST.get('qty')
+        new_qty = int(request.POST.get('qty'))
         new_total = request.POST.get('total')
         grand_total = request.POST.get('grand_total')
         cash = request.POST.get('cash')
@@ -294,13 +301,19 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         product.save()
         
         item = Sale.objects.get(invoice=invoice, product=product)
+        old_item_total = item.total
+        item.price = SaleViewSet.get_price(self,product, new_qty)
         item.qty = new_qty
-        item.total = new_total
+        item.total = new_qty * item.price
         item.save()
 
-        invoice.total = grand_total
+        invoice.total = (invoice.total - old_item_total) + item.total
         invoice.cash = cash
         invoice.change = change
         invoice.save()
 
-        return HttpResponse(status=201)
+        context = {
+            'grand_total': invoice.total
+        }
+
+        return Response(context)

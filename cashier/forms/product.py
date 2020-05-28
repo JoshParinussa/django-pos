@@ -12,8 +12,8 @@ class DashProductForm(forms.ModelForm):
 
     class Meta:  # noqa D106
         model = Product
-        # fields = '__all__'
-        exclude = ('supplier', )
+        fields = '__all__'
+        # exclude = ('supplier', )
 
 HargaBertingkatFormset = modelformset_factory(
     HargaBertingkat,

@@ -77,7 +77,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 1,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : moment.utc(data).local().format('LLL');
                     }
                 },
                 {
@@ -89,13 +89,15 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {
                     targets: 4,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data == 1 ? 'SUCCESS' : 'PENDING';
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
+                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
                     }
                 },
                 {
@@ -151,12 +153,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
                         var cashier = value['cashier'];
                         var sales = value['invoice_sale'];
                         var total_harga = value['total']
-                            // table_body +=
-                            //     `<tr class="table-row" style="border-bottom:1px dashed black;">
-                            //         <td>${date}</td>
-                            //         <td>${invoice}</td>
-                            //         <td>${cashier}</td>
-                            //     </tr>`
                         $.each(sales, function(key, value) {
                             var barcode = value['barcode']
                             var product = value['product']
@@ -299,216 +295,6 @@ $('#date_list_transaction').change(function() {
         }
     });
 });
-
-
-var printResult = function() {
-    // console.log(table.api().data());
-    var receipt_header = '';
-    var receipt_body = '';
-    var receipt_all = '';
-    var invoice_sale;
-    var product_name;
-    var barcode;
-    var selling_price;
-    var qty;
-    var total;
-    table.api().data().each(function(row_data) {
-        row = row_data;
-        var invoice = row_data.invoice;
-        var cashier = row_data.cashier;
-
-        receipt_header = `<tr>
-                                <td class="invoice">${invoice}</td>
-                                <td class="cashier">${cashier}</td>
-                            </tr>`;
-        // console.log(data_2)
-        $.each(data_2, function(key, value) {
-                console.log(key + " " + value)
-                    // invoice_sale = a.invoice;
-                    // product_name = a.product_id;
-                    // // console.log(product_name);
-                    // qty = a.qty; 
-                    // total = 0;
-                    // if (a.total != null){
-                    // total = a.total;
-                    // }
-                    // //console.log("========="+product_name);
-                    // for (var b in product_all){
-                    //     if(b.name == product_name){
-                    //         barcode == b.barcode
-                    //         selling_price == b.selling_price
-                    //     }
-                    // }
-                    // // if (invoice_sale == invoice){
-                    //     receipt_body +=
-                    //         `<tr>
-                    //             <td class="barcode">${barcode}</td>
-                    //             <td class="product_name">${product_name}</td>
-                    //             <td class="selling_price">${selling_price}</td>
-                    //             <td class="qty">${qty}</td>
-                    //             <td class="total">${total}</td>
-                    //         </tr>`;
-            })
-            // for (var a in data_2){
-            //     //console.log(a);
-            //     invoice_sale = a.invoice;
-            //     product_name = a.product_id;
-            //     // console.log(product_name);
-            //     qty = a.qty; 
-            //     total = 0;
-            //     if (a.total != null){
-            //     total = a.total;
-            //     }
-            //     //console.log("========="+product_name);
-            //     for (var b in product_all){
-            //         if(b.name == product_name){
-            //             barcode == b.barcode
-            //             selling_price == b.selling_price
-            //         }
-            //     }
-            //     // if (invoice_sale == invoice){
-            //         receipt_body +=
-            //             `<tr>
-            //                 <td class="barcode">${barcode}</td>
-            //                 <td class="product_name">${product_name}</td>
-            //                 <td class="selling_price">${selling_price}</td>
-            //                 <td class="qty">${qty}</td>
-            //                 <td class="total">${total}</td>
-            //             </tr>`;
-            //     // }
-            // }
-            //receipt_all += receipt_header + receipt_body 
-
-    })
-
-    var receipt =
-        `<div class="print-receipt">
-            <div class="col-12">
-                <div class="row center">
-                    <h3>Minimarketku</div>
-                </div>
-                <div class="row">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" >${currentDate}</td>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" colspan="2"></td>
-                                <td style="border-top:1px dashed black; border-bottom:1px dashed black;" ></td>
-                            </tr>
-                            <tr>
-                            </tr>
-                            ${receipt_all}
-                            <tr>
-                                <td></td>
-                                <td style="border-top:1px dashed black;" colspan="3"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <td>OMSET</td>
-                                <td>: Rp. ${income}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <td>KEUNTUNGAN</td>
-                                <td>: Rp. ${profit}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row center">
-                <br><br><br>
-                    <p>===== TERIMA KASIH =====</p>
-                    <p>SELAMAT BERBELANJA KEMBALI</p>
-                </div>
-            </div>
-        </div>`;
-    // '<div id="print-receipt">' +
-    // '<div class="receipt" id="receipt">' +
-    // '<p class="centered" id="ticket-title">Minimarketku' +
-    // '<table>' +
-    // '<thead>' +
-    // '<tr>' +
-    // '<th class="quantity">Qty.</th>' +
-    // '<th class="description">Item</th>' +
-    // '<th class="price">Total</th>' +
-    // '</tr>' +
-    // '</thead>' +
-    // '<tbody>' +
-    // receipt_body +
-    // '</tbody>' +
-    // '</table>' +
-    // '<p class="centered">Terimakasih, datang kembali' +
-    // '</div>' +
-    // '</div>';
-
-    var receipt_css =
-        `<style type="text/css">
-            @page {margin: 0;}
-            .print-receipt {
-                width: 58mm;
-            }
-            .center {
-                text-align: center;
-                font-size: 8px;
-              }
-            table, th, td {
-            font-size: 8px;
-            }
-            table {width:100%;}
-            td .item {width:50%;}
-            td .quantity {width:10%;}
-            td .price {width:20%;}
-            td .subtotal {width:20%;}
-            
-        </style>`;
-
-
-    // var myPrintWindow = window.open('', 'Cetak Receipt', '');
-    // myPrintWindow.document.write(receipt_css);
-    // myPrintWindow.document.write(receipt);
-    // myPrintWindow.document.close();
-    // myPrintWindow.focus();
-    // myPrintWindow.print();
-    // myPrintWindow.close();
-    // return false;
-}
-
-// Class definition
-// var ProductsForm = function () {
-//     // Base elements
-//     var formEl;
-//     var validator;
-
-//     var initValidation = function() {
-//         validator = formEl.validate({
-//             // Validate only visible fields
-//             ignore: ":hidden",
-
-//             // Validation rules
-//             rules: {
-//             },
-
-//             // Display error
-//             invalidHandler: function(event, validator) {
-//                 KTUtil.scrollTop();
-//             },
-//         });
-//     }
-
-//     return {
-//         // public functions
-//         init: function() {
-//             formEl = $('#kt_form');
-// 			initValidation();
-// 			$('.select2').select2();
-//         }
-//     };
-// }();
-
-// $('#btn-print-report').click(function() {
-//     printResult()
-//     console.log($('#date-picker-range').val());
-// })
 
 
 jQuery(document).ready(function() {

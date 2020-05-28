@@ -10,7 +10,7 @@
     <!-- begin:: Aside -->
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
-            <a href="index.html">
+            <a href="{% url 'dash_view' %}">
                 <img alt="Logo" src="{% static 'vendors/metronic/media/logos/logo-dark.png' %}" />
             </a>
         </div>
@@ -89,18 +89,18 @@
                     <h4 class="kt-menu__section-text">Transaksi</h4>
                     <i class="kt-menu__section-icon flaticon-more-v2"></i>
                 </li>
-                <li class="kt-menu__item {% if url_name == 'dash_transaction_create' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                <li class="kt-menu__item {% if url_name == 'dash_transaction_list' or url_name == 'dash_transaction_create'  %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_transaction_list' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Penjualan</span>
                     </a>
                 </li>
-                <li class="kt-menu__item {% if url_name == 'dash_expenses_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                {% comment %} <li class="kt-menu__item {% if url_name == 'dash_expenses_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_expenses_list' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Pengeluaran</span>
                     </a>
-                </li>
+                </li> {% endcomment %}
 
                 <li class="kt-menu__section ">
                     <h4 class="kt-menu__section-text">Laporan</h4>
@@ -112,18 +112,18 @@
                         <span class="kt-menu__link-text">Penjualan</span>
                     </a>
                 </li>
-                <li class="kt-menu__item {% if url_name == 'dash_report_transaction' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                <li class="kt-menu__item {% if url_name == 'dash_report_sale_by_product' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_report_sale_by_product' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Penjualan Produk</span>
                     </a>
                 </li>
-                <li class="kt-menu__item {% if url_name == 'dash_report_transaction' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                {% comment %} <li class="kt-menu__item {% if url_name == 'dash_report_profit_loss' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_report_profit_loss' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Laba Rugi</span>
                     </a>
-                </li>
+                </li> {% endcomment %}
             </ul>
         </div>
     </div>

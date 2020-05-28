@@ -24,38 +24,30 @@ var KTDatatablesDataSourceAjaxServer = function() {
             columnDefs: [{
                     targets: 0,
                     render: function(data) {
-                            console.log(data);
-                            return !$.trim(data) ? '' : data;
-                        }
-                        // render: function(data, type, row){
-                        // 	return `<a href="products/${row.id}" title="Product Details">${data}</a>`;
-                        // }
+                        return !$.trim(data) ? '' : data;
+                    }
                 },
                 {
                     targets: 1,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 2,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 3,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 4,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },

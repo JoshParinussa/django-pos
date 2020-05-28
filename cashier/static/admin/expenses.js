@@ -24,28 +24,24 @@ var KTDatatablesDataSourceAjaxServer = function() {
             columnDefs: [{
                     targets: 0,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : moment.utc(data).local().format('LLL');
                     }
                 },
                 {
                     targets: 1,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 2,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 3,
                     render: function(data) {
-                        console.log(data);
                         return !$.trim(data) ? '' : data;
                     }
                 },

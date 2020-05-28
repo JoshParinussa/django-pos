@@ -411,9 +411,3 @@ var printResult = function() {
     myPrintWindow.close();
     return false;
 }
-
-$('#btn-check').click(function() {
-    $("#item_table tbody").find("tr").each(function() {
-        console.log($(this).find('.product-name').html());
-    });
-})

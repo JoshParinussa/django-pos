@@ -26,9 +26,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             columnDefs: [{
                     targets: 0,
                     render: function(data, type, row) {
-                        var output = `
-								<span class="kt-user-card-v2__name"><a href="users/${row.id}" title="User Details">${data}</a></span>`;
-                        return !$.trim(data) ? '' : output;
+                        return !$.trim(data) ? '' : data;
                     }
                 },
                 {
@@ -57,13 +55,24 @@ var KTDatatablesDataSourceAjaxServer = function() {
                             return '<span class="kt-badge kt-badge--danger kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-danger">Inactive</span>';
                         }
                     }
-                }
+                },
+                {
+                    targets: -1,
+                    title: 'Actions',
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return `<a href="users/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit User">
+                          <i class="nav-icon fas fa-edit"></i>
+                    </a>`;
+                    },
+                },
             ],
             columns: [
                 { data: 'email', orderable: true, searchable: true, name: 'email' },
                 { data: 'date_joined', orderable: true, searchable: false },
-                { data: 'is_staff', orderable: true, searchable: false },
-                { data: 'is_active', orderable: true, searchable: false }
+                { data: 'is_superuser', orderable: true, searchable: false },
+                { data: 'is_active', orderable: true, searchable: false },
+                { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ]
         });
     };

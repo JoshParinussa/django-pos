@@ -155,7 +155,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     });
                     table_body +=
                         `<tr class="table-row" style="border-bottom:1px dashed black;">
-                                <th>Total</th>
+                                <th>Total Penjualan</th>
                                 <td></td>
                                 <td></td>
                                 <td></td>

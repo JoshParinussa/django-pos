@@ -6,7 +6,7 @@ from pytz import timezone
 from django.views.generic import TemplateView
 
 from cashier.models import Invoice, Sale, User
-from cashier.views.dash.base import DashListView
+from cashier.views.dash.base import DashListView, BaseUserPassesTestMixin, ManageBaseView
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class SaleTransactionListView(DashListView):
 
 
 
-class SaleTransactionView(TemplateView):
+class SaleTransactionView(ManageBaseView, TemplateView):
     """SaleTransactionView."""
     template_name = 'dash/transaction/sale.html'
 
@@ -44,12 +44,12 @@ class SaleTransactionView(TemplateView):
 
         return context
 
-class ReportTransactionView(DashListView):
+class ReportTransactionView(DashListView, BaseUserPassesTestMixin):
     """ReportTransactionView"""
     template_name = "dash/report/list_transaction.html"
     model = Invoice
 
-class ReportSaleView(DashListView):
+class ReportSaleView(DashListView, BaseUserPassesTestMixin):
     """ReportSaleView"""
     template_name = "dash/report/list_sale_2.html"
     model = Sale
@@ -88,7 +88,7 @@ class ReportSaleView(DashListView):
 
         return context
 
-class ReportSalebyProductView(DashListView):
+class ReportSalebyProductView(DashListView, BaseUserPassesTestMixin):
     """ReportSaleView"""
     template_name = "dash/report/list_sale_by_product.html"
     model = Sale
@@ -107,6 +107,6 @@ class ReportSalebyProductView(DashListView):
 
         return context
 
-class ReportProfitLossView(DashListView):
+class ReportProfitLossView(DashListView, BaseUserPassesTestMixin):
     template_name = "dash/report/profit_loss.html"
     model = Invoice

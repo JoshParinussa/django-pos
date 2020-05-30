@@ -1,8 +1,9 @@
 """Base view module."""
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import AccessMixin
+from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.text import camel_case_to_spaces, slugify
 from django.views.generic import (CreateView, DeleteView, FormView,
@@ -43,16 +44,32 @@ class CustomView(SuccessMessageMixin, View):
     """CustomFormView."""
 
 
+class BaseUserPassesTestMixin(UserPassesTestMixin):
+    """BaseUserPassesTestMixin."""
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        return redirect('dash_view')
+
 class ManageBaseView(AccessMixin):
     """ManageViewMixin."""
     login_url = settings.LOGIN_URL
+    level = False
 
     def dispatch(self, request, *args, **kwargs):
         """Override dispatch."""
+        user = self.request.user
+        self.level = user.is_superuser
+
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['level'] = self.request.user.is_superuser
+        return context
 
 
 class CmsCrudMixin(ManageBaseView):

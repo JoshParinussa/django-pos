@@ -1,12 +1,12 @@
 """Product views."""
 from cashier.forms.user import DashUserCreationForm, DashUserUpdateForm
 from django.contrib.auth import get_user_model
-from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView, DashDeleteView
+from cashier.views.dash.base import DashCreateView, DashListView, DashUpdateView, DashDeleteView, BaseUserPassesTestMixin
 
 User = get_user_model()
 
 
-class DashUserMixin:
+class DashUserMixin(BaseUserPassesTestMixin):
     """Mixin for define common attribute between classes."""
 
     def get_icon(self):

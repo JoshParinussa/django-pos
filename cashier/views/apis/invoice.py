@@ -22,7 +22,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         dates = common_services.convert_date_to_utc(date_range)
         
         if date_range:
-            queryset = self.queryset.filter(date__range=(dates[0], dates[1]))
+            queryset = self.queryset.filter(date__range=dates, cashier=self.request.user)
             
         return queryset
 
@@ -33,6 +33,5 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
         if date_range:
             queryset = self.queryset.filter(date__range=dates)
-            
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

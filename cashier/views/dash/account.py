@@ -15,7 +15,7 @@ class Login(account_views.LoginView):
 
         user = self.request.user
 
-        if user.is_superuser:
+        if user.is_superuser or user.is_staff:
             return url or resolve_url('dash_view')
 
 

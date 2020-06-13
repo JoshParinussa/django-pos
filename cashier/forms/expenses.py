@@ -17,4 +17,4 @@ class DashExpensesUpdateForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Expenses
-        fields = '__all__'
+        fields = ('information', 'cost', )

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'dash_expenses_list' %}" class="kt-subheader__breadcrumbs-link">Pengeluaran</a>
+<a href="{% url 'dash_income_list' %}" class="kt-subheader__breadcrumbs-link">Pemasukan</a>
 {% if object %}
 <span class="kt-subheader__breadcrumbs-separator"></span>
 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
@@ -32,7 +32,7 @@
                 <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">Pengeluaran <small>Edit Pengeluaran</small></h3>
+                            <h3 class="kt-portlet__head-title">Pemasukan <small>Edit Pemasukan</small></h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
@@ -68,10 +68,10 @@
                                     <div class="form-group row kt-margin-t-20 kt-margin-b-0">
                                         <label class="col-xl-3 col-lg-3 col-form-label"></label>
                                         <div class="col-lg-9 col-xl-6">
-                                        <a href="{% url 'dash_expenses_delete' object.id %}">
-                                            <button type="button" class="btn btn-label-danger btn-bold btn-sm kt-margin-t-5 kt-margin-b-5">Hapus Pengeluaran ?</button>
+                                        <a href="{% url 'dash_income_delete' object.id %}">
+                                            <button type="button" class="btn btn-label-danger btn-bold btn-sm kt-margin-t-5 kt-margin-b-5">Hapus Pemasukan ?</button>
                                             <span class="form-text text-muted">
-                                                <strong>Perhatian!</strong> Pengeluaran akan dihapus permanen dan tidak dapat dikembalikan.
+                                                <strong>Perhatian!</strong> Pemasukan akan dihapus permanen dan tidak dapat dikembalikan.
                                             </span>
                                         </a>
                                         </div>
@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="col-lg-9 col-xl-9">
                                         <button type="submit" class="btn btn-primary">Perbaharui</button>&nbsp;
-                                        <a href="{% url 'dash_expenses_list'%}">
+                                        <a href="{% url 'dash_income_list'%}">
                                             <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                                         </a>
                                     </div>

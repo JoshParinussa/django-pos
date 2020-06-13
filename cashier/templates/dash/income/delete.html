@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'dash_expenses_list' %}" class="kt-subheader__breadcrumbs-link">Pengeluaran</a>
+<a href="{% url 'dash_income_list' %}" class="kt-subheader__breadcrumbs-link">Pemasukan</a>
 {% if object %}
 <span class="kt-subheader__breadcrumbs-separator"></span>
 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
@@ -29,7 +29,7 @@
                 <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">Pengeluaran <small>Hapus Pengeluaran</small></h3>
+                            <h3 class="kt-portlet__head-title">Pemasukan <small>Hapus Pemasukan</small></h3>
                         </div>
                     </div>
 
@@ -50,7 +50,7 @@
                                         <label class="col-xl-3"></label>
                                         <div class="col-lg-9 col-xl-6">
                                             <span class="form-text text-muted">
-                                                Pengeluaran akan dihapus secara permanen dan tidak dapat dikembalikan.
+                                                Pemasukan akan dihapus secara permanen dan tidak dapat dikembalikan.
                                             </span>
                                         </div>
                                     </div>
@@ -58,8 +58,8 @@
                                     <div class="row">
                                         <label class="col-xl-3"></label>
                                         <div class="col-lg-9 col-xl-6">
-                                            <a href="{% url 'dash_expenses_update' object.id %}">
-                                                <h3 class="kt-section__title kt-section__title-sm">Pengeluaran : {{ object.information }}</h3>
+                                            <a href="{% url 'dash_income_update' object.id %}">
+                                                <h3 class="kt-section__title kt-section__title-sm">Pemasukan : {{ object.information }}</h3>
                                             </a>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-xl-3">
                                         <button type="submit" class="btn btn-danger">Hapus</button>&nbsp;
-                                        <a href="{% url 'dash_expenses_update' object.id %}">
+                                        <a href="{% url 'dash_income_update' object.id %}">
                                             <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                                         </a>
                                     </div>

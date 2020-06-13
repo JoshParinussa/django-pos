@@ -4,3 +4,4 @@ from .product import Product, ConvertBarang, HargaBertingkat, ProductCategory, U
 from .supplier import Supplier
 from .sale import Invoice, Sale, Pembayaran, PembayaranProduct
 from .expenses import Expenses
+from .member import Member

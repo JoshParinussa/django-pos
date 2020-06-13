@@ -84,6 +84,12 @@
                         <span class="kt-menu__link-text">Supplier</span>
                     </a>
                 </li>
+                <li class="kt-menu__item {% if url_name == 'dash_member_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_member_list' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-layers"></i>
+                        <span class="kt-menu__link-text">Member</span>
+                    </a>
+                </li>
                 
                 <li class="kt-menu__section">
                     <h4 class="kt-menu__section-text">Transaksi</h4>

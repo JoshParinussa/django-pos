@@ -9,7 +9,7 @@ class DashIncomeCreationForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Income
-        fields = ('information', 'cost', )
+        fields = ('keterangan', 'jumlah_pemasukan', )
 
 
 class DashIncomeUpdateForm(CustomModelForm):
@@ -17,4 +17,4 @@ class DashIncomeUpdateForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Income
-        fields = ('information', 'cost', )
+        fields = ('keterangan', 'jumlah_pemasukan', )

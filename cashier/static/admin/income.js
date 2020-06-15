@@ -42,7 +42,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {
@@ -59,20 +59,15 @@ var KTDatatablesDataSourceAjaxServer = function() {
             columns: [
                 { data: 'date', orderable: true, searchable: true, name: 'date' },
                 { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
-                { data: 'information', orderable: true, searchable: true, name: 'information' },
-                { data: 'cost', orderable: true, searchable: true, name: 'cost' },
+                { data: 'keterangan', orderable: true, searchable: true, name: 'keterangan' },
+                { data: 'jumlah_pemasukan', orderable: true, searchable: true, name: 'jumlah_pemasukan' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
     };
     return {
-
-        //main function to initiate the module
         init: function() {
             initTable1();
-            // if ($.fn.dataTable){
-            // 	initTable1();
-            // }
         },
 
     };

@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 
 from cashier.models import Invoice, Sale, User
 from cashier.views.dash.base import DashListView, BaseUserPassesTestMixin, ManageBaseView
+from cashier.services.member import member_services
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,8 @@ class SaleTransactionView(ManageBaseView, TemplateView):
                 invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
         
             context['invoice_number'] = invoice_number
-
+        context['members'] = member_services.get_members_list()
+        
         return context
 
 class ReportTransactionView(DashListView, BaseUserPassesTestMixin):

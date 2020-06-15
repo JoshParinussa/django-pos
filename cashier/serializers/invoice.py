@@ -15,4 +15,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:  # noqa D106
         model = Invoice
         name = 'invoice'
-        fields = ('id', 'invoice', 'date', 'cashier', 'cash', 'change', 'total', 'status', 'invoice_sale')
+        fields = ('id', 'invoice', 'date', 'cashier', 'cash', 'change', 'total', 'status', 'member', 'invoice_sale')

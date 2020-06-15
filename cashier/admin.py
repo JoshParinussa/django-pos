@@ -42,7 +42,8 @@ class ConvertBarangAdmin(admin.ModelAdmin):
 
 class InvoiceAdmin(admin.ModelAdmin):
     """InvoiceAdmin."""
-    pass
+    list_display = ("invoice", "created_at")
+    ordering = ['-created_at']
 
 
 class SaleAdmin(admin.ModelAdmin):

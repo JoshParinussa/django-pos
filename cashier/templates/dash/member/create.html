@@ -1,0 +1,88 @@
+{% extends 'dash/layout/base.html' %}
+{% load static widget_tweaks %}
+
+{% block css %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'dash_member_list' %}" class="kt-subheader__breadcrumbs-link">Member</a>
+{% if object %}
+<span class="kt-subheader__breadcrumbs-separator"></span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Member <small>Tambah Member</small></h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+            </div>
+        </div>
+    </div>
+
+    <form class="kt-form kt-form--label-right form-main" id="kt_form" method="post">
+        {% csrf_token %}
+
+        <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+                <div class="kt-section__body">
+                    <div class="form-group row pt-4">
+                        {{ form.name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.name|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.name.help_text %}<span class="form-text text-muted">{{ form.name.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row pt-4">
+                        {{ form.address|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.address|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.address.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.address.help_text %}<span class="form-text text-muted">{{ form.address.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row pt-4">
+                        {{ form.phone|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.phone|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.phone.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.phone.help_text %}<span class="form-text text-muted">{{ form.phone.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row pt-4">
+                        {{ form.profession|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-9 col-xl-6">
+                            {% render_field form.profession|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.profession.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.profession.help_text %}<span class="form-text text-muted">{{ form.profession.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-3 col-xl-3">
+                    </div>
+                    <div class="col-lg-9 col-xl-9">
+                        <button type="submit" class="btn btn-primary">Tambah</button>&nbsp;
+                        <a href="{% url 'dash_member_list'%}">
+                            <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -20,6 +20,7 @@ class Invoice(BaseModel):
     cash = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     change = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     total = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
+    member = models.ForeignKey('Member', on_delete=models.CASCADE, null=True, blank=True, related_name='invoice_member')
     status = models.PositiveSmallIntegerField(choices=InvoiceStatus.choices, default=InvoiceStatus.ONPROCESS, db_index=True)
 
     def __str__(self):

@@ -11,6 +11,7 @@ from cashier.views.apis import supplier as api_supplier
 from cashier.views.apis import sale as api_sale
 from cashier.views.apis import expenses as api_expenses
 from cashier.views.apis import invoice as api_invoice
+from cashier.views.apis import member as api_member
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
@@ -19,6 +20,7 @@ from cashier.views.dash import user as dash_user_view
 from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
 from cashier.views.dash import expenses as dash_expenses_view
+from cashier.views.dash import member as dash_member_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'sales', api_sale.SaleViewSet)
@@ -32,6 +34,7 @@ router.register(r'expenses', api_expenses.ExpensesViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
 router.register(r'invoice', api_invoice.InvoiceViewSet)
+router.register(r'member', api_member.MemberViewSet)
 
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
@@ -67,6 +70,12 @@ urlpatterns = [
     path('dash/supplier/create', dash_supplier_view.SupplierCreateView.as_view(), name='dash_supplier_create'),
     path('dash/supplier/<str:pk>', dash_supplier_view.SupplierUpdateView.as_view(), name='dash_supplier_update'),
     path('dash/supplier/<str:pk>/delete', dash_supplier_view.SupplierDeleteView.as_view(), name='dash_supplier_delete'),
+
+    # MEMBER
+    path('dash/member', dash_member_view.MemberListView.as_view(), name='dash_member_list'),
+    path('dash/member/create', dash_member_view.MemberCreateView.as_view(), name='dash_member_create'),
+    path('dash/member/<str:pk>', dash_member_view.MemberUpdateView.as_view(), name='dash_member_update'),
+    path('dash/member/<str:pk>/delete', dash_member_view.MemberDeleteView.as_view(), name='dash_member_delete'),
 
     # EMPLOYEES
     path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),

@@ -43,6 +43,14 @@
                             <div class="col-lg-3 col-xl-3">
                                 <input type="text" id="cashier" class="form-control" disabled>
                             </div>
+                            <div class="col-lg-3 col-xl-3">
+                                <select name="member" id="member" class="form-control" required="">
+                                    <option value="">Bukan member</option>
+                                {% for member in members %}
+                                    <option value="{{ member.id }}">{{ member.name }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
                             <div class="col-lg-4 col-xl-2">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>

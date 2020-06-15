@@ -55,6 +55,7 @@ var getProductByBarcode = function() {
 
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
+    var member = $('#member').val()
         // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
@@ -64,6 +65,7 @@ var drawPurchaseRow = function() {
             "invoice_number": invoice_number,
             "barcode": itemBarcode,
             "qty": purchaseItemQty,
+            "member": member,
         },
         success: function(result) {
             var idRow = itemBarcode;
@@ -120,6 +122,8 @@ var getInvoiceSaleItem = function() {
         success: function(result) {
             try {
                 var invoice_data = result.data['invoice'][0];
+                console.log(invoice_data['member'])
+                $('#member').val(invoice_data['member'])
                 date = moment.utc(invoice_data['date']).local().format('LLL');
                 $('#sale-date').val(date);
                 var sale_items = result.data['sale_items'];
@@ -170,6 +174,7 @@ var getInvoiceSaleItem = function() {
                 if (invoice_data['status'] == 1) {
                     $('.alert-status').attr("hidden", false);
                     $('#process_payment').attr("disabled", true);
+                    $('#member').attr("disabled", true);
                     $('#cash').attr("disabled", true);
                     var item_table = $('#item_table');
                     $("#btn-print-payment").prop('disabled', false);
@@ -220,6 +225,7 @@ $('#qty-item-cart').on('keypress', function(e) {
 })
 
 $('#process_payment').click(function(e) {
+    var member = $('#member').val()
     $.ajax({
         type: "POST",
         url: "/v1/sales/process_payment",
@@ -228,6 +234,7 @@ $('#process_payment').click(function(e) {
             "cash": cash,
             "change": change,
             "total": grandTotal,
+            "member": member
         },
         success: function(result) {
             window.location.href = '/dash/transaction/sale';

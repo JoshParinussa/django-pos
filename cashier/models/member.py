@@ -5,9 +5,9 @@ from .base import BaseModel
 class Member(BaseModel):
     """Member model."""
     name = models.CharField(max_length=128, db_index=True)
-    address = models.CharField(max_length=128, db_index=True)
-    phone = models.CharField(max_length=128, blank=False, null=False)
-    profession = models.CharField(max_length=128, blank=False, null=False)
+    address = models.CharField(max_length=128, db_index=True, blank=True, null=True)
+    phone = models.CharField(max_length=128, blank=True, null=True)
+    profession = models.CharField(max_length=128, blank=True, null=True)
     
 
     def __str__(self):

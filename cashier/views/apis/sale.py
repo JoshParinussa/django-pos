@@ -12,10 +12,11 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from cashier.models import Invoice, Product, Sale
+from cashier.models import Invoice, Product, Sale, Member
 from cashier.serializers.invoice import InvoiceSerializer
 from cashier.serializers.sale import SaleSerializer
 from cashier.services.common import common_services
+from cashier.services.member import member_services
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -49,10 +50,14 @@ class SaleViewSet(viewsets.ModelViewSet):
         barcode = request.POST.get('barcode')
         qty = request.POST.get('qty')
         total = request.POST.get('total')
+        member = request.POST.get('member')
+        member = member_services.get_member_by_id(member)
         try:
             invoice = Invoice.objects.get(invoice=invoice_number)
+            invoice.member = member
+            invoice.save()
         except Exception as e:
-            invoice = Invoice.objects.create(invoice=invoice_number, cashier=self.request.user)
+            invoice = Invoice.objects.create(invoice=invoice_number, cashier=self.request.user, member=member)
         product = Product.objects.get(barcode=barcode)
         harga_bertingkats = product.hargabertingkat.all() 
         
@@ -109,6 +114,9 @@ class SaleViewSet(viewsets.ModelViewSet):
         cash = request.POST.get('cash')
         change = request.POST.get('change')
         total = request.POST.get('total')
+        member = request.POST.get('member')
+        member = member_services.get_member_by_id(member)
+        print("#M", member)
 
         invoice = Invoice.objects.get(invoice=invoice_number)
         invoice.cash = cash
@@ -116,7 +124,8 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice.total = total
         invoice.status = 1
         invoice.cashier = self.request.user
-        invoice.save(update_fields=["cash", "cashier", "change", "total", "status"])
+        invoice.member = member
+        invoice.save(update_fields=["cash", "cashier", "change", "total", "member", "status"])
 
         return HttpResponse(status=202)
 

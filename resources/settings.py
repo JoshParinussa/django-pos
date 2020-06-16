@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dc8)csv-4_2^-@94h%f!_)qj%@6qe^m69xofcubt58l+lha=w#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://djangocashier.herokuapp.com', 'localhost']
 
 
 # Application definition

@@ -3,7 +3,7 @@ djangorestframework==3.11.0
 djangorestframework-datatables==0.5.1
 django-filter==2.2.0
 dynamic-rest==1.9.6
-mysqlclient==1.4.4
+# mysqlclient==1.4.4
 ujson==1.35
 requests==2.22.0
 django-storages[google]==1.8

@@ -25,7 +25,7 @@ SECRET_KEY = 'dc8)csv-4_2^-@94h%f!_)qj%@6qe^m69xofcubt58l+lha=w#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://djangocashier.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '34.87.81.232']
 
 
 # Application definition
@@ -78,11 +78,22 @@ WSGI_APPLICATION = 'resources.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cashier',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
 }
 
 

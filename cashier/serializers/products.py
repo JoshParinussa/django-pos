@@ -2,10 +2,12 @@
 from rest_framework import serializers
 
 from cashier.models import Product, ConvertBarang
+from django_restql.mixins import DynamicFieldsMixin
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """Products Serializer."""
+    text = serializers.CharField(source='name', read_only=True)
     category = serializers.CharField(source='category.name', read_only=True)
     unit = serializers.CharField(source='unit.name', read_only=True)
 

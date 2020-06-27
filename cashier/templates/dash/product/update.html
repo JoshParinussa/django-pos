@@ -39,7 +39,7 @@
                     <div class="form-group row pt-4">
                         {{ form.barcode|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                         <div class="col-lg-6 col-xl-6">
-                            {% render_field form.barcode|add_error_class:"is-invalid" class="form-control" %}
+                            {% render_field form.barcode|append_attr:"autofocus"|add_error_class:"is-invalid" class="form-control" %}
                             {% for error in form.barcodecategorystock.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.barcode.help_text %}
                             <span class="form-text text-muted">{{ form.barcode.help_text }}</span>{% endif %}

@@ -221,3 +221,8 @@ class ConvertBarangDeleteView(DashProductMixin, DashDeleteView):
             return reverse(self._get_url_name('create'))
         else:
             return reverse(self._get_url_name('list'), args=(self.kwargs.get('product'),))
+
+class ReportOutOfStockListView(DashProductMixin, DashListView):
+    """BrandListView."""
+    template_name = 'dash/report/out_of_stock.html'
+    model = Product

@@ -24,6 +24,7 @@ class Product(BaseModel):
     category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE)
     unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True)
     stock = models.PositiveIntegerField(blank=True, null=True)
+    minimal_stock = models.PositiveIntegerField(blank=True, null=True)
     purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
 

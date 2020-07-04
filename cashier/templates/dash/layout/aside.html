@@ -95,6 +95,12 @@
                     <h4 class="kt-menu__section-text">Transaksi</h4>
                     <i class="kt-menu__section-icon flaticon-more-v2"></i>
                 </li>
+                <li class="kt-menu__item {% if url_name == 'dash_purchase_list' or url_name == 'dash_purchase_create'  %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_purchase_list' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Pembelian</span>
+                    </a>
+                </li>
                 <li class="kt-menu__item {% if url_name == 'dash_transaction_list' or url_name == 'dash_transaction_create'  %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_transaction_list' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
@@ -128,6 +134,12 @@
                     <a href="{% url 'dash_report_sale_by_product' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Penjualan Produk</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item {% if url_name == 'dash_report_out_of_stock' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_report_out_of_stock' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Stok Kosong</span>
                     </a>
                 </li>
                 {% comment %} <li class="kt-menu__item {% if url_name == 'dash_report_profit_loss' %}kt-menu__item--active{% endif %}" aria-haspopup="true">

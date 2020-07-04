@@ -12,6 +12,8 @@ from cashier.views.apis import sale as api_sale
 from cashier.views.apis import income as api_income
 from cashier.views.apis import expenses as api_expenses
 from cashier.views.apis import invoice as api_invoice
+from cashier.views.apis import purchase as api_purchase
+from cashier.views.apis import purchase_detail as api_purchase_detail
 from cashier.views.apis import member as api_member
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
@@ -20,6 +22,7 @@ from cashier.views.dash import unit as dash_unit_view
 from cashier.views.dash import user as dash_user_view
 from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
+from cashier.views.dash import purchase as dash_purchase_view
 from cashier.views.dash import income as dash_income_view
 from cashier.views.dash import expenses as dash_expenses_view
 from cashier.views.dash import member as dash_member_view
@@ -37,6 +40,8 @@ router.register(r'expenses', api_expenses.ExpensesViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
 router.register(r'invoice', api_invoice.InvoiceViewSet)
+router.register(r'purchase', api_purchase.PurchaseViewSet)
+router.register(r'purchase_detail', api_purchase_detail.PurchaseDetailViewSet)
 router.register(r'member', api_member.MemberViewSet)
 
 urlpatterns = [
@@ -86,11 +91,16 @@ urlpatterns = [
     path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
 
-    # TRANSACTION
+    # SALE
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionListView.as_view(), name='dash_transaction_list'),
     path('dash/transaction/sale/new', dash_transaction_view.SaleTransactionView.as_view(), name='dash_transaction_create'),
     path('dash/transaction/sale/update/<str:pk>', dash_transaction_view.SaleTransactionView.as_view(), name='dash_report_transaction_detail'),
     
+    # PURCHASE
+    path('dash/transaction/purchase', dash_purchase_view.PurchaseListView.as_view(), name='dash_purchase_list'),
+    path('dash/transaction/purchase/new', dash_purchase_view.PurchaseDetailView.as_view(), name='dash_purchase_create'),
+    path('dash/transaction/purchase/update/<str:pk>', dash_purchase_view.PurchaseDetailView.as_view(), name='dash_purchase_detail'),
+
     # INCOME
     path('dash/transaction/income', dash_income_view.IncomeListView.as_view(), name='dash_income_list'),
     path('dash/transaction/income/create', dash_income_view.IncomeCreateView.as_view(), name='dash_income_create'),
@@ -108,4 +118,5 @@ urlpatterns = [
     path('dash/report/sale-product', dash_transaction_view.ReportSalebyProductView.as_view(), name='dash_report_sale_by_product'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
     path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
+    path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock')
 ]   

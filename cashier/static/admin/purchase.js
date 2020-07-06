@@ -41,7 +41,7 @@ var getProductByBarcode = function() {
                     var data = result[0]
                     itemBarcode = data.barcode;
                     itemName = data.name;
-                    itemPrice = data.selling_price;
+                    itemPrice = data.purchase_price;
                     drawPurchaseRow();
                     $('#barcode').val(null);
                 } else {
@@ -54,15 +54,17 @@ var getProductByBarcode = function() {
 
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
+    var supplier = $('#supplier').val()
         // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
         type: "POST",
-        url: "/v1/purchase/add_item",
+        url: "/v1/purchase_detail/add_item",
         data: {
             "invoice_purchase": invoice_number,
             "barcode": itemBarcode,
             "qty": purchaseItemQty,
+            "supplier": supplier
         },
         success: function(result) {
             var idRow = itemBarcode;
@@ -112,19 +114,18 @@ var drawPurchaseRow = function() {
 var getInvoicePurchaseItem = function() {
     $.ajax({
         type: "POST",
-        url: "/v1/purchase/get_by_invoice?format=datatables",
+        url: "/v1/purchase_detail/get_by_invoice?format=datatables",
         data: {
             "invoice_purchase": invoice_number,
         },
         success: function(result) {
             try {
-                var invoice_data = result.data['invoice'][0];
-                console.log(invoice_data['member'])
+                var invoice_data = result.data['purchase'][0];
+                console.log(invoice_data['supplier'])
+                $('#supplier').val(invoice_data['supplier'])
                 date = moment.utc(invoice_data['date']).local().format('LLL');
                 $('#purchase-date').val(date);
                 var purchase_items = result.data['purchase_items'];
-
-                $('#cash').val(Number(invoice_data['cash']));
 
                 purchase_items.forEach(function(item) {
                     grandTotal += Number(item.total);
@@ -220,14 +221,14 @@ $('#qty-item-cart').on('keypress', function(e) {
 })
 
 $('#process_payment').click(function(e) {
+    var supplier = $('#supplier').val()
     $.ajax({
         type: "POST",
-        url: "/v1/purchases/process_payment",
+        url: "/v1/purchase_detail/process_payment",
         data: {
-            "invoice_number": invoice_number,
-            "cash": cash,
-            "change": change,
+            "invoice_purchase": invoice_number,
             "total": grandTotal,
+            "supplier": supplier
         },
         success: function(result) {
             window.location.href = '/dash/transaction/purchase';
@@ -255,9 +256,9 @@ var deleteItem = function(e) {
 
     $.ajax({
         type: "POST",
-        url: "/v1/purchases/delete_item",
+        url: "/v1/purchase_detail/delete_item",
         data: {
-            "invoice_number": invoice_number,
+            "invoice_purchase": invoice_number,
             "barcode": row_barcode,
         },
         success: function(result) {
@@ -284,9 +285,9 @@ $('#modal-btn-update').click(function(e) {
     var newTotal = Number(newQty) * Number(row.find(".price").html());
     $.ajax({
         type: "POST",
-        url: "/v1/purchases/update_item",
+        url: "/v1/purchase_detail/update_item",
         data: {
-            "invoice_number": invoice_number,
+            "invoice_purchase": invoice_number,
             "barcode": $('#modal-barcode').val(),
             "qty": newQty,
             'total': newTotal

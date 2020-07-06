@@ -61,7 +61,7 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
             total = int(qty) * harga
             purchase_item = PurchaseDetail.objects.create(invoice=purchase, product=product, qty=qty, total=total)
         
-        context = {'sale': model_to_dict(purchase_item),
+        context = {'purchase': model_to_dict(purchase_item),
                    'price': harga}
 
         return Response(context)
@@ -95,7 +95,7 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         supplier = supplier_services.get_supplier_by_id(supplier)
         print("#M", supplier)
 
-        purchase = Purchase.objects.get(invoice=invoice_number)
+        purchase = Purchase.objects.get(invoice=invoice_purchase)
         purchase.total = total
         purchase.cashier = self.request.user
         purchase.supplier = supplier
@@ -113,6 +113,8 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
+        product.stock-=item.qty
+        product.save(update_fields=["stock"])
         item.delete()
         return Response(model_to_dict(item))
 
@@ -128,9 +130,15 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
+        if(item.qty<new_qty):
+            product.stock+=(new_qty-item.qty)
+        else:
+            product.stock-=(item.qty-new_qty)
+        product.save(update_fields=["stock"])
         item.qty = new_qty
         item.total = new_qty * product.purchase_price
         item.save()
+        
         return Response(model_to_dict(item))
 
     @action(detail=False, methods=['POST'])

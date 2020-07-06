@@ -22,7 +22,7 @@ class PurchaseViewSet(viewsets.ModelViewSet):
         dates = common_services.convert_date_to_utc(date_range)
         
         if date_range:
-            queryset = self.queryset.filter(date__range=dates, cashier=self.request.user)
+            queryset = self.queryset.filter(date__range=dates, cashier=self.request.user, total__isnull=False)
             
         return queryset
 

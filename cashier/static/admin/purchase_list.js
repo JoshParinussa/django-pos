@@ -78,6 +78,12 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
+                        return !$.trim(data) ? '' : data;
+                    }
+                },
+                {
+                    targets: 4,
+                    render: function(data) {
                         return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
@@ -96,6 +102,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
                 { data: 'date', orderable: true, searchable: true, name: 'date' },
                 { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
+                { data: 'supplier', orderable: true, searchable: true, name: 'supplier' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],

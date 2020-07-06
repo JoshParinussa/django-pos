@@ -139,6 +139,8 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
+        product.stock+=item.qty
+        product.save(update_fields=["stock"])
         item.delete()
         return Response(model_to_dict(item))
 
@@ -154,6 +156,12 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
+        if(item.qty<new_qty):
+            product.stock-=(new_qty-item.qty)
+        else:
+            product.stock+=(item.qty-new_qty)
+        product.save(update_fields=["stock"])
+        
         harga = self.get_price(product, new_qty)
         item.qty = new_qty
         item.price = harga

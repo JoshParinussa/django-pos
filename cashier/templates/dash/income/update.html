@@ -50,7 +50,7 @@
                                     <div class="form-group row pt-4">
                                         {{ form.keterangan|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                                         <div class="col-lg-9 col-xl-6">
-                                            {% render_field form.keterangan|add_error_class:"is-invalid" class="form-control" %}
+                                            {% render_field form.keterangan|append_attr:"autofocus"|add_error_class:"is-invalid" class="form-control" %}
                                             {% for error in form.keterangan.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                                             {% if form.keterangan.help_text %}<span class="form-text text-muted">{{ form.keterangan.help_text }}</span>{% endif %}
                                         </div>
@@ -58,7 +58,7 @@
                                     <div class="form-group row pt-4">
                                         {{ form.jumlah_pemasukan|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                                         <div class="col-lg-9 col-xl-6">
-                                            {% render_field form.jumlah_pemasukan|add_error_class:"is-invalid" class="form-control" %}
+                                            {% render_field form.jumlah_pemasukan|append_attr:"autofocus"|add_error_class:"is-invalid" class="form-control" %}
                                             {% for error in form.jumlah_pemasukan.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                                             {% if form.jumlah_pemasukan.help_text %}<span class="form-text text-muted">{{ form.jumlah_pemasukan.help_text }}</span>{% endif %}
                                         </div>

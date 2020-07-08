@@ -31,3 +31,85 @@
 /* .qty {
     font-size: large;
 } */
+
+
+/* .select2-selection {
+    overflow: hidden !important;
+    height: auto !important;
+} */
+
+
+/* .select2-selection__rendered {
+    line-height: 31px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 35px !important;
+}
+
+.select2-selection__arrow {
+    height: 34px !important;
+} */
+
+
+/* @import url("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css");
+.select2-dropdown--below {
+    top: -38px;
+} */
+
+
+/* adjust css to change look */
+
+
+/* .select2 {
+    width: 100%!important;
+} */
+
+
+/* .select-box {
+    width: 300px;
+} */
+
+
+/* 
+.select-box {
+    position: relatove;
+    display: block;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 0;
+    border-radius: 4px;
+    height: 36px;
+    line-height: 36px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 34px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 5px;
+}
+
+.select2-container {
+    height: 38px;
+    border: solid 1px #ddd;
+}
+
+#custom-select {
+    height: 38px;
+    border: solid 1px #ddd;
+} */
+
+.input-group>.select2-container--bootstrap {
+    width: auto;
+    flex: 1 1 auto;
+}
+
+.input-group>.select2-container--bootstrap .select2-selection--single {
+    height: 100%;
+    line-height: inherit;
+    padding: 0.5rem 1rem;
+}

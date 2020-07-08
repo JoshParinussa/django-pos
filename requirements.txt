@@ -12,6 +12,7 @@ django-widget-tweaks==1.4.5
 sorl-thumbnail==12.6.2
 Pillow==7.0.0
 whitenoise==5.1.0
+django-restql
 
 # Test, Coverage, Standard
 flake8==3.7.8

@@ -19,13 +19,17 @@ class ProductStatus(models.IntegerChoices):
 
 class Product(BaseModel):
     """Product model."""
-    name = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128, db_index=True, verbose_name="nama")
     barcode = models.CharField(max_length=128, blank=False, null=False)
-    category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE)
-    unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True)
-    stock = models.PositiveIntegerField(blank=True, null=True)
-    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
-    selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, verbose_name="kategori")
+    unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True, verbose_name="satuan")
+    stock = models.PositiveIntegerField(blank=True, null=True, verbose_name="stok")
+    minimal_stock = models.PositiveIntegerField(blank=True, null=True, verbose_name="batas minimal")
+    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
+    selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="eceran")
+    grosir_1 = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    grosir_2 = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    grosir_3 = models.DecimalField(max_digits=9, decimal_places=0, null=True)
 
     supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, blank=True, null=True)
 

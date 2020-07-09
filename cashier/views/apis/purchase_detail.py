@@ -12,77 +12,56 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from cashier.models import Invoice, Product, Sale, Member
-from cashier.serializers.invoice import InvoiceSerializer
-from cashier.serializers.sale import SaleSerializer
+from cashier.models import Purchase, Product, PurchaseDetail, Supplier
+from cashier.serializers.purchase import PurchaseSerializer
+from cashier.serializers.purchase_detail import PurchaseDetailSerializer
 from cashier.services.common import common_services
-from cashier.services.member import member_services
+from cashier.services.supplier import supplier_services
 
 
-class SaleViewSet(viewsets.ModelViewSet):
+class PurchaseDetailViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
-    serializer_class = SaleSerializer
-    queryset = Sale.objects.order_by('created_at')
-
-    def get_price(self, product, newqty):
-        """get_price."""
-        harga_bertingkats = product.hargabertingkat.all().order_by('max_quantity')
-        found = False
-        if harga_bertingkats:
-            for harga_bertingkat in harga_bertingkats:
-                if harga_bertingkat.min_quantity <= newqty <= harga_bertingkat.max_quantity:
-                    harga = harga_bertingkat.price
-                    found = True
-                    break
-            if found is False:
-                if newqty > harga_bertingkats.last().max_quantity:
-                    harga = harga_bertingkats.last().price
-                else:
-                    harga = product.selling_price
-        else:
-            harga = product.selling_price
-        return harga
+    serializer_class = PurchaseDetailSerializer
+    queryset = PurchaseDetail.objects.order_by('created_at')
 
     @action(detail=False, methods=['POST'])
     def add_item(self, request):
         """add_item."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         qty = request.POST.get('qty')
         total = request.POST.get('total')
-        member = request.POST.get('member')
-        member = member_services.get_member_by_id(member)
+        supplier = request.POST.get('supplier')
+        supplier = supplier_services.get_supplier_by_id(supplier)
         try:
-            invoice = Invoice.objects.get(invoice=invoice_number)
-            invoice.member = member
-            invoice.save()
+            purchase = Purchase.objects.get(invoice=invoice_purchase)
+            purchase.supplier = supplier
+            purchase.save()
         except Exception as e:
-            invoice = Invoice.objects.create(invoice=invoice_number, cashier=self.request.user, member=member)
+            purchase = Purchase.objects.create(invoice=invoice_purchase, cashier=self.request.user, supplier=supplier)
         product = Product.objects.get(barcode=barcode)
-        harga_bertingkats = product.hargabertingkat.all() 
         
         try:
-            product.stock = product.stock - int(qty)
+            product.stock = product.stock + int(qty)
             product.save(update_fields=["stock"])
         except Exception as e:
             print(e)
 
         try:
-            sale_item = Sale.objects.get(invoice=invoice, product=product)
-            new_qty = int(sale_item.qty) + int(qty)
-            harga = self.get_price(product, new_qty)
+            purchase_item = PurchaseDetail.objects.get(invoice=purchase, product=product)
+            new_qty = int(purchase_item.qty) + int(qty)
+            harga = product.purchase_price
             new_total = new_qty * harga
-            sale_item.qty = new_qty
-            sale_item.price = harga
-            sale_item.total = new_total
-            sale_item.save(update_fields=['qty', 'price', 'total'])
+            purchase_item.qty = new_qty
+            purchase_item.total = new_total
+            purchase_item.save(update_fields=['qty', 'total'])
         except Exception as e:
             print(e)
-            harga = self.get_price(product, int(qty))
+            harga = product.purchase_price
             total = int(qty) * harga
-            sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
+            purchase_item = PurchaseDetail.objects.create(invoice=purchase, product=product, qty=qty, total=total)
         
-        context = {'sale': model_to_dict(sale_item),
+        context = {'purchase': model_to_dict(purchase_item),
                    'price': harga}
 
         return Response(context)
@@ -90,18 +69,18 @@ class SaleViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def get_by_invoice(self, request):
         """get_by_invoice."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         try:
-            invoice = Invoice.objects.filter(invoice=invoice_number)
-            invoice_serializer = InvoiceSerializer(invoice, many=True)
-            invoice_result = invoice_serializer.data
+            purchase = Purchase.objects.filter(invoice=invoice_purchase)
+            purchase_serializer = PurchaseSerializer(purchase, many=True)
+            purchase_result = purchase_serializer.data
             
-            queryset = self.get_queryset().filter(invoice=invoice.first())
+            queryset = self.get_queryset().filter(invoice=purchase.first())
             serializer = self.get_serializer(queryset, many=True)
             result = serializer.data
             context = {
-                'sale_items':result,
-                'invoice': invoice_result
+                'purchase_items':result,
+                'purchase': purchase_result
                 }
         except Exception as e:
             context = None
@@ -110,35 +89,31 @@ class SaleViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def process_payment(self, request):
         """get_by_invoice."""
-        invoice_number = request.POST.get('invoice_number')
-        cash = request.POST.get('cash')
-        change = request.POST.get('change')
+        invoice_purchase = request.POST.get('invoice_purchase')
         total = request.POST.get('total')
-        member = request.POST.get('member')
-        member = member_services.get_member_by_id(member)
+        supplier = request.POST.get('supplier')
+        supplier = supplier_services.get_supplier_by_id(supplier)
 
-        invoice = Invoice.objects.get(invoice=invoice_number)
-        invoice.cash = cash
-        invoice.change = change
-        invoice.total = total
-        invoice.status = 1
-        invoice.cashier = self.request.user
-        invoice.member = member
-        invoice.save(update_fields=["cash", "cashier", "change", "total", "member", "status"])
+        purchase = Purchase.objects.get(invoice=invoice_purchase)
+        purchase.total = total
+        purchase.cashier = self.request.user
+        purchase.supplier = supplier
+        purchase.status = 1
+        purchase.save(update_fields=["cashier", "total", "supplier", "status"])
 
         return HttpResponse(status=202)
 
     @action(detail=False, methods=['POST'])
     def delete_item(self, request):
         """delete_item."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
 
-        invoice = Invoice.objects.get(invoice=invoice_number)
+        purchase = Purchase.objects.get(invoice=invoice_purchase)
         product = Product.objects.get(barcode=barcode)
 
-        item = Sale.objects.get(invoice=invoice, product=product)
-        product.stock+=item.qty
+        item = PurchaseDetail.objects.get(invoice=purchase, product=product)
+        product.stock-=item.qty
         product.save(update_fields=["stock"])
         item.delete()
         return Response(model_to_dict(item))
@@ -146,26 +121,24 @@ class SaleViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def update_item(self, request):
         """update_item."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         new_qty = int(request.POST.get('qty'))
         new_total = request.POST.get('total')
 
-        invoice = Invoice.objects.get(invoice=invoice_number)
+        purchase = Purchase.objects.get(invoice=invoice_purchase)
         product = Product.objects.get(barcode=barcode)
 
-        item = Sale.objects.get(invoice=invoice, product=product)
+        item = PurchaseDetail.objects.get(invoice=purchase, product=product)
         if(item.qty<new_qty):
-            product.stock-=(new_qty-item.qty)
+            product.stock+=(new_qty-item.qty)
         else:
-            product.stock+=(item.qty-new_qty)
+            product.stock-=(item.qty-new_qty)
         product.save(update_fields=["stock"])
-        
-        harga = self.get_price(product, new_qty)
         item.qty = new_qty
-        item.price = harga
-        item.total = new_qty * harga
+        item.total = new_qty * product.purchase_price
         item.save()
+        
         return Response(model_to_dict(item))
 
     @action(detail=False, methods=['POST'])
@@ -184,10 +157,10 @@ class SaleViewSet(viewsets.ModelViewSet):
 
         return Response(products)
 
-class ReportTransactionViewSet(viewsets.ModelViewSet):
-    """ReportTransactionViewSet."""
-    serializer_class = InvoiceSerializer
-    queryset = Invoice.objects.order_by('created_at')
+class ReportPurchaseViewSet(viewsets.ModelViewSet):
+    """ReportPurchaseViewSet."""
+    serializer_class = PurchaseSerializer
+    queryset = Purchase.objects.order_by('created_at')
 
     @action(detail=False, methods=['POST'])
     def set_datatable(self, request):
@@ -200,10 +173,10 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
-
+"""
     @action(detail=False, methods=['POST'])
     def set_income_profit(self, request):
-        """set_income."""
+        """'''set_income.'''"""
         condition = request.POST.get('date')
         if condition == '1':
             date_condition = datetime.now().date()
@@ -244,19 +217,19 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         context['data_2'] = data_2.values()
         context['product'] = products.values()
         return Response(context)
-    
+"""    
 
 
-class ReportSaleViewSet(viewsets.ModelViewSet):
-    """ReportSaleViewSet."""
-    serializer_class = SaleSerializer
-    queryset = Sale.objects.order_by('created_at')
+class ReportPurchaseDetailViewSet(viewsets.ModelViewSet):
+    """ReportPurchaseDetailViewSet."""
+    serializer_class = PurchaseDetailSerializer
+    queryset = PurchaseDetail.objects.order_by('created_at')
 
     @action(detail=False, methods=['POST'])
     def get_by_invoice(self, request):
         """get_by_invoice."""
-        invoice_id = request.POST.get('invoice')
-        queryset = self.get_queryset().filter(invoice_id=invoice_id)
+        invoice_purchase = request.POST.get('invoice_purchase')
+        queryset = self.get_queryset().filter(invoice=invoice_purchase)
         # queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -264,57 +237,50 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def delete_item(self, request):
         """delete_item."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         total = request.POST.get('total')
-        change = request.POST.get('change')
         qty = request.POST.get('qty')
 
-        invoice = Invoice.objects.get(id=invoice_number)
+        purchase = Purchase.objects.get(id=invoice_purchase)
         product = Product.objects.get(barcode=barcode)
-        product.stock += int(qty)
+        product.stock -= int(qty)
         product.save()
 
-        item = Sale.objects.get(invoice=invoice, product=product)
+        item = PurchaseDetail.objects.get(invoice=purchase, product=product)
         item.delete()
 
-        invoice.total = total
-        invoice.change = change
-        invoice.save()
+        purchase.total = total
+        purchase.save()
 
         return HttpResponse(status=201)
 
     @action(detail=False, methods=['POST'])
     def update_item(self, request):
         """update_item."""
-        invoice_number = request.POST.get('invoice_number')
+        invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         new_qty = int(request.POST.get('qty'))
         new_total = request.POST.get('total')
         grand_total = request.POST.get('grand_total')
-        cash = request.POST.get('cash')
-        change = request.POST.get('change')
         diff_qty = request.POST.get('diffQty')
 
-        invoice = Invoice.objects.get(id=invoice_number)
+        purchase = Purchase.objects.get(id=invoice_purchase)
         product = Product.objects.get(barcode=barcode)
-        product.stock += int(diff_qty)
+        product.stock -= int(diff_qty)
         product.save()
         
-        item = Sale.objects.get(invoice=invoice, product=product)
+        item = PurchaseDetail.objects.get(invoice=purchase, product=product)
         old_item_total = item.total
-        item.price = SaleViewSet.get_price(self,product, new_qty)
         item.qty = new_qty
         item.total = new_qty * item.price
         item.save()
 
-        invoice.total = (invoice.total - old_item_total) + item.total
-        invoice.cash = cash
-        invoice.change = change
-        invoice.save()
+        purchase.total = (purchase.total - old_item_total) + item.total
+        purchase.save()
 
         context = {
-            'grand_total': invoice.total
+            'grand_total': purchase.total
         }
 
         return Response(context)

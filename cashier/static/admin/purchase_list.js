@@ -30,6 +30,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
     };
     var getDaterange = function() {
         var date_range = $('#date-picker-range').val();
+
         dates = date_range.split(' to ');
         return dates
     }
@@ -50,7 +51,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/invoice?format=datatables',
+                'url': '/v1/purchase?format=datatables',
                 'data': function(d) {
                     d.date_range = getDaterange();
                 }
@@ -76,11 +77,17 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
+                        return !$.trim(data) ? '' : data;
                     }
                 },
                 {
                     targets: 4,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
+                    }
+                },
+                {
+                    targets: 5,
                     render: function(data) {
                         return !$.trim(data) ? '' : data == 1 ?
                             '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
@@ -92,7 +99,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="sale/update/${row.id}" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="purchase/update/${row.id}" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },
@@ -102,6 +109,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
                 { data: 'date', orderable: true, searchable: true, name: 'date' },
                 { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
+                { data: 'supplier', orderable: true, searchable: true, name: 'supplier' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
                 { data: 'status', orderable: true, searchable: true, name: 'status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }

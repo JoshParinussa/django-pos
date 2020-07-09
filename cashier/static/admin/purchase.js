@@ -26,6 +26,67 @@ var emptyingCashChange = function() {
     $('#cash').val('');
 }
 
+var getProductByNameAPI = function(id) {
+    $.ajax({
+        type: "POST",
+        url: "/v1/products/get_by_name",
+        data: {
+            'id': id
+        },
+        success: function(result) {
+            if (result.length > 0) {
+                var data = result[0]
+                itemBarcode = data.barcode;
+                itemName = data.name;
+                itemPrice = data.selling_price;
+                drawPurchaseRow();
+                $("#product_name").val(null).trigger('change');
+                $('#barcode').val(null);
+            } else {
+                alert("Product not found");
+            }
+        }
+    });
+}
+
+var getProductByName = function() {
+    var product_arr = [];
+    var res;
+    $.ajax({
+        type: "GET",
+        url: "/v1/products?query={id, text}",
+        success: function(data) {
+            product_arr = data.results,
+                res = data.results.map(function(item) {
+                    return { id: item.id, text: item.text };
+                });
+            $('#product_name').select2({
+                theme: "bootstrap",
+                data: res,
+                multiple: true,
+                maximumSelectionLength: 1,
+                placeholder: "Cari berdasarkan nama produk",
+
+            });
+        }
+    });
+
+    $('#search-product-name').click(function() {
+        var id = $('#product_name').select2('data')[0].id;
+        getProductByNameAPI(id);
+        $('#product_name').val('').trigger("change");
+    });
+    $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
+        if (e.keyCode == 13) {
+            var id = $('#product_name').select2('data')[0].id;
+            $('#product_name').val('').trigger("change");
+            getProductByNameAPI(id);
+        }
+    });
+}
+
+getProductByName();
+
 var getProductByBarcode = function() {
     var barcode = $('#barcode').val();
 
@@ -121,7 +182,6 @@ var getInvoicePurchaseItem = function() {
         success: function(result) {
             try {
                 var invoice_data = result.data['purchase'][0];
-                console.log(invoice_data['supplier'])
                 $('#supplier').val(invoice_data['supplier'])
                 date = moment.utc(invoice_data['date']).local().format('LLL');
                 $('#purchase-date').val(date);

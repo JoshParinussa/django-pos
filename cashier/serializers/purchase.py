@@ -16,4 +16,4 @@ class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:  # noqa D106
         model = Purchase
         name = 'purchase'
-        fields = ('id', 'invoice', 'date', 'cashier', 'supplier', 'total', 'invoice_purchase')
+        fields = ('id', 'invoice', 'date', 'cashier', 'supplier', 'total', 'invoice_purchase', 'status')

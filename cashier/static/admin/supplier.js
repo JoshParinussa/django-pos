@@ -52,6 +52,12 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
+                    targets: 5,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data;
+                    }
+                },
+                {
                     targets: -1,
                     title: 'Actions',
                     orderable: false,
@@ -63,6 +69,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 },
             ],
             columns: [
+                { data: 'kode', orderable: true, searchable: true, name: 'kode' },
                 { data: 'company_name', orderable: true, searchable: true, name: 'company_name' },
                 { data: 'address', orderable: true, searchable: true, name: 'address' },
                 { data: 'contact_person', orderable: true, searchable: true, name: 'contact_person' },

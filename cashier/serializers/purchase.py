@@ -9,7 +9,7 @@ from cashier.serializers.purchase_detail import PurchaseDetailSerializer
 class PurchaseSerializer(serializers.ModelSerializer):
     """Purchase Serializer."""
     cashier = serializers.CharField(source='cashier.first_name', read_only=True)
-    supplier = serializers.CharField(source='supplier.company_name', read_only=True)
+    supplier = serializers.CharField(source='supplier.kode', read_only=True)
     invoice_purchase = PurchaseDetailSerializer(read_only=True, many=True)
     date = serializers.DateTimeField(required=False, read_only=True)
 

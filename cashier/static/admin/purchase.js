@@ -70,7 +70,11 @@ var getProductByName = function() {
             });
         }
     });
+    $('#supplier').select2({
+        theme: "bootstrap",
+        placeholder: "Kode supplier",
 
+    });
     $('#search-product-name').click(function() {
         var id = $('#product_name').select2('data')[0].id;
         getProductByNameAPI(id);

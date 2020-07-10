@@ -33,7 +33,7 @@ class SaleTransactionView(ManageBaseView, TemplateView):
             logger.error(e)
             user = self.request.user
             today_invoice = datetime.now(timezone('Asia/Jakarta')).strftime("%d%m%Y")
-            last_invoice = Invoice.objects.filter(created_at__startswith=date.today()).order_by('-created_at').first()
+            last_invoice = Invoice.objects.filter(created_at__startswith=datetime.now().date()).order_by('-created_at').first()
             if not last_invoice:
                 count = 1
                 invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)

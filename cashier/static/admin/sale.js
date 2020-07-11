@@ -254,6 +254,8 @@ var getInvoiceSaleItem = function() {
                 if (invoice_data['status'] == 1) {
                     $('.alert-status').attr("hidden", false);
                     $('#process_payment').attr("disabled", true);
+                    $('#product_name').attr("disabled", true);
+                    $('#barcode').attr("disabled", true);
                     $('#member').attr("disabled", true);
                     $('#cash').attr("disabled", true);
                     var item_table = $('#item_table');

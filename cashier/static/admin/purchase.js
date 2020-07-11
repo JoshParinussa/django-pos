@@ -52,41 +52,65 @@ var getProductByNameAPI = function(id) {
 var getProductByName = function() {
     var product_arr = [];
     var res;
-    $.ajax({
-        type: "GET",
-        url: "/v1/products?query={id, text}",
-        success: function(data) {
-            product_arr = data.results,
-                res = data.results.map(function(item) {
-                    return { id: item.id, text: item.text };
-                });
-            $('#product_name').select2({
-                theme: "bootstrap",
-                data: res,
-                multiple: true,
-                maximumSelectionLength: 1,
-                placeholder: "Cari berdasarkan nama produk",
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/v1/products?query={id, text}",
+    //     success: function(data) {
+    //         product_arr = data.results,
+    //             res = data.results.map(function(item) {
+    //                 return { id: item.id, text: item.text };
+    //             });
+    //         $('#product_name').select2({
+    //             theme: "bootstrap",
+    //             data: res,
+    //             multiple: true,
+    //             maximumSelectionLength: 1,
+    //             placeholder: "Cari berdasarkan nama produk",
 
-            });
-        }
+    //         });
+    //     }
+    // });
+    // SELECT2 from AJAX
+    $('.product_name').select2({
+        ajax: {
+            type: "GET",
+            url: "/v1/products?query={id, text}",
+            dataType: 'json',
+
+        },
+        theme: "bootstrap",
+        // selectOnClose: true,
+        placeholder: "Cari berdasarkan nama produk",
     });
+
+    $('.product_name').on("select2:select", function(evt) {
+        var id = $(this).val();
+        $('#product_name').val('').trigger("change");
+        getProductByNameAPI(id);
+        $('#barcode').focus();
+    });
+
     $('#supplier').select2({
         theme: "bootstrap",
         placeholder: "Kode supplier",
 
     });
-    $('#search-product-name').click(function() {
-        var id = $('#product_name').select2('data')[0].id;
-        getProductByNameAPI(id);
-        $('#product_name').val('').trigger("change");
+
+    $(document).on('focus', '.select2-selection.select2-selection--single', function(e) {
+        $(this).closest(".select2-container").siblings('select:enabled').select2('open');
     });
-    $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
-        if (e.keyCode == 13) {
-            var id = $('#product_name').select2('data')[0].id;
-            $('#product_name').val('').trigger("change");
-            getProductByNameAPI(id);
-        }
-    });
+    // $('#search-product-name').click(function() {
+    //     var id = $('#product_name').select2('data')[0].id;
+    //     getProductByNameAPI(id);
+    //     $('#product_name').val('').trigger("change");
+    // });
+    // $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
+    //     if (e.keyCode == 13) {
+    //         var id = $('#product_name').select2('data')[0].id;
+    //         $('#product_name').val('').trigger("change");
+    //         getProductByNameAPI(id);
+    //     }
+    // });
 }
 
 getProductByName();

@@ -19,7 +19,6 @@ class PurchaseViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         date_range = self.request.GET.getlist('date_range[]')
-        date_range = ['2020-07-10', '2020-07-10']
         dates = common_services.convert_date_to_utc(date_range)
         
         if date_range:

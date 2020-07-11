@@ -19,12 +19,12 @@ class ProductStatus(models.IntegerChoices):
 
 class Product(BaseModel):
     """Product model."""
-    name = models.CharField(max_length=128, db_index=True, verbose_name="nama")
+    name = models.CharField(max_length=128, verbose_name="nama")
     barcode = models.CharField(max_length=128, blank=False, null=False)
-    category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, verbose_name="kategori")
+    category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, verbose_name="kategori", blank=True, null=True)
     unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True, verbose_name="satuan")
-    stock = models.PositiveIntegerField(blank=True, null=True, verbose_name="stok")
-    minimal_stock = models.PositiveIntegerField(blank=True, null=True, verbose_name="batas minimal")
+    stock = models.BigIntegerField(blank=True, null=True, verbose_name="stok")
+    minimal_stock = models.BigIntegerField(blank=True, null=True, verbose_name="batas minimal")
     purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="eceran")
     grosir_1 = models.DecimalField(max_digits=9, decimal_places=0, blank=True, null=True)
@@ -42,7 +42,7 @@ class Product(BaseModel):
 
 class Unit(BaseModel):
     """Unit."""
-    name = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128)
 
     def __str__(self):
         """String representation."""

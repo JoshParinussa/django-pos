@@ -30,7 +30,8 @@ class PurchaseDetailView(ManageBaseView, TemplateView):
         except Exception as e:
             logger.error(e)
             user = self.request.user
-            today_invoice = datetime.now(timezone('Asia/Jakarta')).strftime("%d%m%Y")
+            # today_invoice = datetime.now(timezone('Asia/Jakarta')).strftime("%d%m%Y")
+            today_invoice = datetime.now().strftime("%d%m%Y")
             last_invoice = Purchase.objects.filter(created_at__startswith=datetime.now().date()).order_by('-created_at').first()
             alast_invoice = Purchase.objects.filter(created_at__startswith=date.today())
             if not last_invoice:

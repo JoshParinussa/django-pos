@@ -112,7 +112,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
     var initEvents = function() {
         $('#btn-filter-date').on('click', function(e) {
-            console.log("TES")
             table.api().ajax.reload();
         });
     };

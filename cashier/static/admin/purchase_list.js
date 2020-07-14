@@ -30,9 +30,8 @@ var KTDatatablesDataSourceAjaxServer = function() {
     };
     var getDaterange = function() {
         var date_range = $('#date-picker-range').val();
-        
+
         dates = date_range.split(' to ');
-        console.log(dates);
         return dates
     }
 
@@ -88,6 +87,14 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
+                    targets: 5,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
+                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
+                    }
+                },
+                {
                     targets: -1,
                     title: 'Actions',
                     orderable: false,
@@ -104,6 +111,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
                 { data: 'supplier', orderable: true, searchable: true, name: 'supplier' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
+                { data: 'status', orderable: true, searchable: true, name: 'status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
@@ -112,7 +120,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
     var initEvents = function() {
         $('#btn-filter-date').on('click', function(e) {
-            console.log(getDaterange());
             table.api().ajax.reload();
         });
     };

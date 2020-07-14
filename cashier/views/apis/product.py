@@ -4,18 +4,27 @@ from cashier.serializers.products import ProductSerializer, ConvertBarangSeriali
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+import django_filters
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     """ProductViewSet."""
     serializer_class = ProductSerializer
     queryset = Product.objects.order_by('created_at')
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        product_name = self.request.query_params.get('q', None)
+        if product_name is not None:
+            queryset = queryset.filter(name__icontains=product_name)
+        return queryset
+
 
     @action(detail=False, methods=['POST'])
     def get_by_barcode(self, request):
         """get_by_barcode."""
         barcode = request.POST.get('barcode')
-        # product = Product.objects.get(barcode=barcode)
         queryset = self.get_queryset().filter(barcode=barcode)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -24,17 +33,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_by_name(self, request):
         """get_by_name."""
         id = request.POST.get('id')
-        # product = Product.objects.get(barcode=barcode)
-        queryset = self.get_queryset().filter(id=id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        if id is not None:
+            queryset = self.get_queryset().filter(id=id)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
 
     @action(detail=False, methods=['GET'])
     def get_product_select2(self, request):
         """get_by_barcode."""
-        # barcode = request.POST.get('barcode')
-        # product = Product.objects.get(barcode=barcode)
-        # queryset = self.get_queryset().values('id', 'name', 'barcode')
         queryset = Product.objects.order_by('created_at').defer('id', 'name', 'barcode')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

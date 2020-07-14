@@ -7,9 +7,13 @@ from django_restql.mixins import DynamicFieldsMixin
 
 class ProductSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """Products Serializer."""
-    text = serializers.CharField(source='name', read_only=True)
+    text = serializers.SerializerMethodField()
     category = serializers.CharField(source='category.name', read_only=True)
     unit = serializers.CharField(source='unit.name', read_only=True)
+
+
+    def get_text(self, obj):
+        return '{item} Rp. {selling_price}'.format(item=obj.name, selling_price=f"{int(obj.selling_price):,d}") 
 
     class Meta:  # noqa D106
         model = Product

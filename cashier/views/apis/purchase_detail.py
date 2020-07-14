@@ -93,13 +93,13 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         total = request.POST.get('total')
         supplier = request.POST.get('supplier')
         supplier = supplier_services.get_supplier_by_id(supplier)
-        print("#M", supplier)
 
         purchase = Purchase.objects.get(invoice=invoice_purchase)
         purchase.total = total
         purchase.cashier = self.request.user
         purchase.supplier = supplier
-        purchase.save(update_fields=["cashier", "total", "supplier"])
+        purchase.status = 1
+        purchase.save(update_fields=["cashier", "total", "supplier", "status"])
 
         return HttpResponse(status=202)
 

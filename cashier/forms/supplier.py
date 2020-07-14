@@ -17,4 +17,4 @@ class DashSupplierUpdateForm(CustomModelForm):
 
     class Meta:  # noqa D106
         model = Supplier
-        fields = ("company_name", "address", "contact_person", "office_phone", "phone")
+        fields = ("kode", "company_name", "address", "contact_person", "office_phone", "phone")

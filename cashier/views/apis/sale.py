@@ -116,7 +116,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         total = request.POST.get('total')
         member = request.POST.get('member')
         member = member_services.get_member_by_id(member)
-        print("#M", member)
 
         invoice = Invoice.objects.get(invoice=invoice_number)
         invoice.cash = cash

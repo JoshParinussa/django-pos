@@ -18,6 +18,7 @@ var change = 0;
 var row;
 
 
+
 var date = moment().format('LLL');
 $('#sale-date').val(date);
 $('#cashier').val(currentUser);
@@ -41,7 +42,7 @@ var getProductByNameAPI = function(id) {
                 itemName = data.name;
                 itemPrice = data.selling_price;
                 drawPurchaseRow();
-                $("#product_name").val(null).trigger('change');
+                // $("#product_name").val(null).trigger('change');
                 $('#barcode').val(null);
             } else {
                 alert("Product not found");
@@ -53,36 +54,55 @@ var getProductByNameAPI = function(id) {
 var getProductByName = function() {
     var product_arr = [];
     var res;
-    $.ajax({
-        type: "GET",
-        url: "/v1/products?query={id, text}",
-        success: function(data) {
-            product_arr = data.results,
-                res = data.results.map(function(item) {
-                    return { id: item.id, text: item.text };
-                });
-            $('#product_name').select2({
-                theme: "bootstrap",
-                data: res,
-                multiple: true,
-                maximumSelectionLength: 1,
-                placeholder: "Cari berdasarkan nama produk",
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/v1/products?query={id, text}",
+    //     success: function(data) {
+    //         product_arr = data.results,
+    //             res = data.results.map(function(item) {
+    //                 return { id: item.id, text: item.text };
+    //             });
+    //         $('#product_name').select2({
+    //             theme: "bootstrap",
+    //             data: res,
+    //             multiple: true,
+    //             maximumSelectionLength: 1,
+    //             placeholder: "Cari berdasarkan nama produk",
 
-            });
-        }
+    //         });
+    //     }
+    // });
+
+    // SELECT2 from AJAX
+    $('.product_name').select2({
+        ajax: {
+            type: "GET",
+            url: "/v1/products?query={id, text}",
+            dataType: 'json',
+
+        },
+        theme: "bootstrap",
+        // selectOnClose: true,
+        placeholder: "Cari berdasarkan nama produk",
     });
 
-    $('#search-product-name').click(function() {
-        var id = $('#product_name').select2('data')[0].id;
-        getProductByNameAPI(id);
+    $('.product_name').on("select2:select", function(evt) {
+        var id = $(this).val();
         $('#product_name').val('').trigger("change");
+        getProductByNameAPI(id);
+        $('#barcode').focus();
     });
-    $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
-        if (e.keyCode == 13) {
-            var id = $('#product_name').select2('data')[0].id;
-            $('#product_name').val('').trigger("change");
-            getProductByNameAPI(id);
-        }
+    // $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
+    //     if (e.keyCode == 13) {
+    //         var id = $('#product_name').select2('data')[0].id;
+    //         $('#product_name').val('').trigger("change");
+    //         getProductByNameAPI(id);
+    //         $('#barcode').focus();
+    //     }
+    // });
+
+    $(document).on('focus', '.select2-selection.select2-selection--single', function(e) {
+        $(this).closest(".select2-container").siblings('select:enabled').select2('open');
     });
 }
 
@@ -234,6 +254,8 @@ var getInvoiceSaleItem = function() {
                 if (invoice_data['status'] == 1) {
                     $('.alert-status').attr("hidden", false);
                     $('#process_payment').attr("disabled", true);
+                    $('#product_name').attr("disabled", true);
+                    $('#barcode').attr("disabled", true);
                     $('#member').attr("disabled", true);
                     $('#cash').attr("disabled", true);
                     var item_table = $('#item_table');

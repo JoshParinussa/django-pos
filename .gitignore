@@ -14,3 +14,4 @@ __pycache__
 
 resources/settings_*.py
 resources/*.json
+resources/settings/env_*.py

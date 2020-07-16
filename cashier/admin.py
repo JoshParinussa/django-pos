@@ -24,7 +24,7 @@ class PembayaranProductAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     """ProductAdmin."""
-    pass
+    ordering = ['name']
 
 
 class ProductCategoryAdmin(admin.ModelAdmin):

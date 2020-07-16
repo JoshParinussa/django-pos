@@ -5,16 +5,17 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 import django_filters
+from cashier.views.apis.base import APIBaseView
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(APIBaseView):
     """ProductViewSet."""
     serializer_class = ProductSerializer
-    queryset = Product.objects.order_by('created_at')
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    queryset = Product.objects.order_by('name')
+    # filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Product.objects.all()
         product_name = self.request.query_params.get('q', None)
         if product_name is not None:
             queryset = queryset.filter(name__icontains=product_name)

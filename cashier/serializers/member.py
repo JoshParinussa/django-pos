@@ -10,4 +10,4 @@ class MemberSerializer(serializers.ModelSerializer):
         model = Member
         name = 'member'
         fields = '__all__'
-        datatables_always_serialize = ('id','name','address','phone','profession')
+        datatables_always_serialize = ('id','name','address','phone')

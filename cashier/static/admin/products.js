@@ -4,20 +4,21 @@ var KTDatatablesDataSourceAjaxServer = function() {
     var initTable1 = function() {
         var table = $('.data-table');
         table.DataTable({
-            autoWidth: false,
-            processing: true,
+            // autoWidth: false,
+            // processing: true,
             serverSide: true,
-            serverSide: false,
             pageLength: 10,
-            ordering: true,
-            paging: true,
-            scrollX: true,
+            // ordering: true,
+            // paging: true,
+            // scrollX: true,
             order: [
                 [0, "asc"]
             ],
             ajax: {
                 'type': 'GET',
                 'url': '/v1/products?format=datatables',
+                // 'url': '/v1/products',
+                // 'dataSrc': 'data.results'
             },
             columnDefs: [{
                     targets: 0,
@@ -76,12 +77,12 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             columns: [
                 { data: 'name', orderable: true, searchable: true, name: 'name' },
-                { data: 'barcode', orderable: true, searchable: true, name: 'barcode' },
-                { data: 'stock', orderable: true, searchable: true, name: 'stock' },
-                { data: 'category', orderable: true, searchable: true, name: 'category.name' },
-                { data: 'unit', orderable: true, searchable: true, name: 'unit' },
-                { data: 'purchase_price', orderable: true, searchable: true, name: 'purchase_price' },
-                { data: 'selling_price', orderable: true, searchable: true, name: 'selling_price' },
+                { data: 'barcode', orderable: true, searchable: false, name: 'barcode' },
+                { data: 'stock', orderable: true, searchable: false, name: 'stock' },
+                { data: 'category', orderable: true, searchable: false, name: 'category.name' },
+                { data: 'unit', orderable: true, searchable: false, name: 'unit' },
+                { data: 'purchase_price', orderable: true, searchable: false, name: 'purchase_price' },
+                { data: 'selling_price', orderable: true, searchable: false, name: 'selling_price' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });

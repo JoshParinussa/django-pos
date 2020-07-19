@@ -113,3 +113,24 @@
     line-height: inherit;
     padding: 0.5rem 1rem;
 }
+
+table tbody {
+    font-weight: bold;
+}
+
+
+/* input[type="number"] {
+    font-size: 24px;
+} */
+
+#tr-total,
+#cash,
+#change,
+input[type="number"] {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#div-rp {
+    font-size: 22px;
+}

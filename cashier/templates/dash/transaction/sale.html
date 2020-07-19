@@ -124,10 +124,10 @@
                                         <th class="text-left">Discount</th>
                                         <th class="text-right" id="disc-total">- Rp. 0</th>
                                     </tr> {% endcomment %}
-                                    <tr>
-                                        <th class="text-left"><h3>TOTAL</h3></th>
+                                    <tr id="tr-total">
+                                        <th class="text-left"><div>TOTAL</div></th>
                                         <th class="text-right">
-                                            <h3 id="grand_total">0</h3>
+                                            <div id="grand_total">0</div>
                                         </th>
                                     </tr>
                                 <thead>
@@ -144,8 +144,8 @@
                                 <tbody>
                                     <tr>
                                         <th class="text-left">
-                                            <div class="row">
-                                                <div class="col-3">
+                                            <div class="row" >
+                                                <div class="col-3" id="div-rp">
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
@@ -155,8 +155,8 @@
                                             </div>
                                         </th>
                                         <th class="text-right">
-                                            <div class="row">
-                                                <div class="col-3">
+                                            <div class="row" >
+                                                <div class="col-3" id="div-rp">
                                                     Rp. 
                                                 </div>
                                                 <div class="col-9">
@@ -173,16 +173,25 @@
                 <div class="kt-portlet__foot">
                     <div class="kt-form__actions">
                         <div class="row">
+                            {% if invoice_status == 1 %}
                             <div class="col-lg-6 col-xl-6">
                                 <button type="button" class="btn btn-info btn-block m-1" id="btn-print-payment" disabled>
                                     <i class="flaticon2-print"></i>&nbsp;Cetak nota
                                 </button>
                             </div>
+                            {% else %}
                             <div class="col-lg-6 col-xl-6">
+                                <button type="button" class="btn btn-info btn-block m-1" id="btn-print-process-payment" disabled>
+                                    <i class="flaticon2-print"></i>&nbsp;Cetak nota & Akhiri Transaksi
+                                </button>
+                            </div>
+                            {% endif %}
+                            
+                            {% comment %} <div class="col-lg-6 col-xl-6">
                                 <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
                                     <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
                                 </button>&nbsp;
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                     </div>
                 </div>

@@ -22,5 +22,13 @@ class ProductServices:
             harga = product.selling_price
         return harga
 
+    def check_product_stock(self, product, qty):
+        """get_product_stock."""
+        is_out_of_stock = True
+        if product.stock >= int(qty):
+            is_out_of_stock = False
+        print("# STOCK", product.stock, qty)
+        return is_out_of_stock
+
 
 product_services = ProductServices()

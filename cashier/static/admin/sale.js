@@ -18,7 +18,6 @@ var change = 0;
 var row;
 
 
-
 var date = moment().format('LLL');
 $('#sale-date').val(date);
 $('#cashier').val(currentUser);
@@ -149,46 +148,50 @@ var drawPurchaseRow = function() {
             "member": member,
         },
         success: function(result) {
-            var idRow = itemBarcode;
-            var purchaseItemTotal = Number(result.sale.total);
-            var purchaseItemPrice = Number(result.price);
-            if ($('#item_table').find("#" + idRow).length > 0) {
-                var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
-                var currentTotal = $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total');
-                grandTotal -= Number(currentTotal);
-                grandTotal += purchaseItemTotal;
-                var newQty = Number(currentQty) + Number(purchaseItemQty);
-
-                $('#item_table').find("#" + idRow + " .qty").text(newQty);
-                $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total', purchaseItemTotal);
-                $('#item_table').find("#" + idRow + " .purchase_total").text(purchaseItemTotal.toLocaleString('id-ID'));
-                $('#item_table').find("#" + idRow + " .price").text(purchaseItemPrice.toLocaleString('id-ID'));
-
-
-
+            if (result.is_out_of_stock) {
+                toastr.error('Stok ' + result.product.name + ' KOSONG atau HABIS.');
             } else {
-                var row = "<tr id='" + idRow + "'" + itemBarcode + "'>" +
-                    "<td class='product-barcode' style='display:none;'>" + itemBarcode + "</td>" +
-                    "<td class='product-name'>" + itemName + "</td>" +
-                    "<td class='price' data-price='" + purchaseItemPrice + "'>" + purchaseItemPrice.toLocaleString('id-ID') + "</td>" +
-                    "<td class='qty'>" + purchaseItemQty + "</td>" +
-                    "<td class='purchase_total' data-purchase-total='" + purchaseItemTotal + "'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
-                    "<td>" +
-                    "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                    "<i class='la la-edit'></i>" +
-                    "</span>" +
-                    "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                    "<i class='la la-trash'></i>" +
-                    "</span>" +
-                    "</td>" +
-                    "</tr>";
-                var tableBody = $("#item_table tbody");
-                tableBody.append(row);
-                grandTotal += Number(purchaseItemTotal);
-                lineNo++;
+                var idRow = itemBarcode;
+                var purchaseItemTotal = Number(result.sale.total);
+                var purchaseItemPrice = Number(result.price);
+                if ($('#item_table').find("#" + idRow).length > 0) {
+                    var currentQty = $('#item_table').find("#" + idRow + " .qty").html();
+                    var currentTotal = $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total');
+                    grandTotal -= Number(currentTotal);
+                    grandTotal += purchaseItemTotal;
+                    var newQty = Number(currentQty) + Number(purchaseItemQty);
+
+                    $('#item_table').find("#" + idRow + " .qty").text(newQty);
+                    $('#item_table').find("#" + idRow + " .purchase_total").attr('data-purchase-total', purchaseItemTotal);
+                    $('#item_table').find("#" + idRow + " .purchase_total").text(purchaseItemTotal.toLocaleString('id-ID'));
+                    $('#item_table').find("#" + idRow + " .price").text(purchaseItemPrice.toLocaleString('id-ID'));
+
+
+
+                } else {
+                    var row = "<tr id='" + idRow + "'" + itemBarcode + "'>" +
+                        "<td class='product-barcode' style='display:none;'>" + itemBarcode + "</td>" +
+                        "<td class='product-name'>" + itemName + "</td>" +
+                        "<td class='price' data-price='" + purchaseItemPrice + "'>" + purchaseItemPrice.toLocaleString('id-ID') + "</td>" +
+                        "<td class='qty'>" + purchaseItemQty + "</td>" +
+                        "<td class='purchase_total' data-purchase-total='" + purchaseItemTotal + "'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
+                        "<td>" +
+                        "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
+                        "<i class='la la-edit'></i>" +
+                        "</span>" +
+                        "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
+                        "<i class='la la-trash'></i>" +
+                        "</span>" +
+                        "</td>" +
+                        "</tr>";
+                    var tableBody = $("#item_table tbody");
+                    tableBody.append(row);
+                    grandTotal += Number(purchaseItemTotal);
+                    lineNo++;
+                }
+                $('#grand_total').text(grandTotal.toLocaleString('id-ID'));
+                $('#sub-total').text(grandTotal.toLocaleString('id-ID'));
             }
-            $('#grand_total').text(grandTotal.toLocaleString('id-ID'));
-            $('#sub-total').text(grandTotal.toLocaleString('id-ID'));
         }
     });
 }
@@ -306,7 +309,7 @@ $('#qty-item-cart').on('keypress', function(e) {
     }
 })
 
-$('#process_payment').click(function(e) {
+var processPayment = function() {
     var member = $('#member').val()
     $.ajax({
         type: "POST",
@@ -319,23 +322,36 @@ $('#process_payment').click(function(e) {
             "member": member
         },
         success: function(result) {
-            window.location.href = '/dash/transaction/sale';
+            // window.location.href = '/dash/transaction/sale';
+            window.location.href = '/dash/transaction/sale/new';
         }
     });
+}
+
+$('#process_payment').click(function(e) {
+    processPayment();
 })
 
 $('#cash').on('keyup', function(e) {
     cash = e.currentTarget.value;
     change = cash - grandTotal;
     $('#change').val(change.toLocaleString('id-ID'));
-    if (e.currentTarget.value == 0)
+    if (e.currentTarget.value == 0) {
         $("#btn-print-payment").prop('disabled', true);
-    else
+        $("#btn-print-process-payment").prop('disabled', true);
+    } else {
         $("#btn-print-payment").prop('disabled', false);
+        $("#btn-print-process-payment").prop('disabled', false);
+    }
 });
 
 $('#btn-print-payment').click(function() {
-    printResult()
+    printResult();
+})
+
+$('#btn-print-process-payment').click(function() {
+    processPayment();
+    printResult();
 })
 
 var deleteItem = function(e) {
@@ -357,10 +373,12 @@ var deleteItem = function(e) {
     });
 }
 
+var curItemQty;
 var updateItem = function(e) {
     row = $(e).closest('tr')
     var itemName = row.find(".product-name").html();
     var itemQty = row.find(".qty").html();
+    curItemQty = itemQty;
     var itemBarcode = row.find(".product-barcode").html();
     $('#modal-item-name').val(itemName);
     $('#modal-qty-item-cart').val(itemQty);
@@ -369,29 +387,41 @@ var updateItem = function(e) {
 
 $('#modal-btn-update').click(function(e) {
     var newQty = $('#modal-qty-item-cart').val();
-    grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
-    var newTotal = Number(newQty) * Number(row.find(".price").html());
-    $.ajax({
-        type: "POST",
-        url: "/v1/sales/update_item",
-        data: {
-            "invoice_number": invoice_number,
-            "barcode": $('#modal-barcode').val(),
-            "qty": newQty,
-            'total': newTotal
-        },
-        success: function(result) {
-            row.find(".qty").html(newQty);
-            row.find(".price").html(result.price);
-            row.find(".purchase_total").html(Number(result.total).toLocaleString('id-ID'));
-            row.find(".purchase_total").attr('data-purchase-total', result.total);
-            $('#modal-default').modal('toggle');
+    // grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
+    // var newTotal = Number(newQty) * Number(row.find(".price").html());
+    if (curItemQty != newQty) {
+        $.ajax({
+            type: "POST",
+            url: "/v1/sales/update_item",
+            data: {
+                "invoice_number": invoice_number,
+                "barcode": $('#modal-barcode').val(),
+                "qty": newQty,
+                // 'total': newTotal
+            },
+            success: function(result) {
+                if (result.is_out_of_stock) {
+                    toastr.error('Stok ' + result.product.name + ' KOSONG atau HABIS.');
+                } else {
+                    // var newQty = $('#modal-qty-item-cart').val();
+                    grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
+                    // var newTotal = Number(newQty) * Number(row.find(".price").html());
 
-            grandTotal += result.total;
-            $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
-            emptyingCashChange();
-        }
-    });
+                    row.find(".qty").html(newQty);
+                    row.find(".price").html(result.sale.price);
+                    row.find(".purchase_total").html(Number(result.sale.total).toLocaleString('id-ID'));
+                    row.find(".purchase_total").attr('data-purchase-total', result.sale.total);
+                    $('#modal-default').modal('toggle');
+
+                    grandTotal += result.sale.total;
+                    $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
+                    emptyingCashChange();
+                }
+            }
+        });
+    } else {
+        $('.modal').modal('toggle');
+    }
 });
 
 var printResult = function() {
@@ -417,7 +447,7 @@ var printResult = function() {
         `<div class="print-receipt">
             <div class="col-12">
                 <div class="row center">
-                    <h3>Minimarketku</div>
+                    <h3>Assalam Paiton</h3>
                 </div>
                 <div class="information">
                     ${date}<br>
@@ -457,6 +487,7 @@ var printResult = function() {
                 <br><br><br>
                     <p>===== TERIMA KASIH =====</p>
                     <p>SELAMAT BERBELANJA KEMBALI</p>
+                    <p>Barang yang sudah dibeli tidak dapat dikembalikan</p>
                 </div>
             </div>
         </div>`;

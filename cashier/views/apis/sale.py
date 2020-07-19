@@ -17,6 +17,7 @@ from cashier.serializers.invoice import InvoiceSerializer
 from cashier.serializers.sale import SaleSerializer
 from cashier.services.common import common_services
 from cashier.services.member import member_services
+from cashier.services.products import product_services
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -61,29 +62,35 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
         harga_bertingkats = product.hargabertingkat.all() 
         
-        try:
-            product.stock = product.stock - int(qty)
-            product.save(update_fields=["stock"])
-        except Exception as e:
-            print(e)
+        is_out_of_stock = product_services.check_product_stock(product, int(qty))
+        if not is_out_of_stock:
+            try:
+                product.stock = product.stock - int(qty)
+                product.save(update_fields=["stock"])
+            except Exception as e:
+                print(e)
 
-        try:
-            sale_item = Sale.objects.get(invoice=invoice, product=product)
-            new_qty = int(sale_item.qty) + int(qty)
-            harga = self.get_price(product, new_qty)
-            new_total = new_qty * harga
-            sale_item.qty = new_qty
-            sale_item.price = harga
-            sale_item.total = new_total
-            sale_item.save(update_fields=['qty', 'price', 'total'])
-        except Exception as e:
-            print(e)
-            harga = self.get_price(product, int(qty))
-            total = int(qty) * harga
-            sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
-        
-        context = {'sale': model_to_dict(sale_item),
-                   'price': harga}
+            try:
+                sale_item = Sale.objects.get(invoice=invoice, product=product)
+                new_qty = int(sale_item.qty) + int(qty)
+                harga = self.get_price(product, new_qty)
+                new_total = new_qty * harga
+                sale_item.qty = new_qty
+                sale_item.price = harga
+                sale_item.total = new_total
+                sale_item.save(update_fields=['qty', 'price', 'total'])
+            except Exception as e:
+                print(e)
+                harga = self.get_price(product, int(qty))
+                total = int(qty) * harga
+                sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
+            
+            context = {'sale': model_to_dict(sale_item),
+                    'price': harga,
+                    'is_out_of_stock': False}
+        else:
+            context = {'product': model_to_dict(product),
+                'is_out_of_stock': True}
 
         return Response(context)
 
@@ -146,27 +153,39 @@ class SaleViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def update_item(self, request):
         """update_item."""
+        is_out_of_stock = None
         invoice_number = request.POST.get('invoice_number')
         barcode = request.POST.get('barcode')
         new_qty = int(request.POST.get('qty'))
-        new_total = request.POST.get('total')
+        # new_total = request.POST.get('total')
 
         invoice = Invoice.objects.get(invoice=invoice_number)
         product = Product.objects.get(barcode=barcode)
-
         item = Sale.objects.get(invoice=invoice, product=product)
-        if(item.qty<new_qty):
-            product.stock-=(new_qty-item.qty)
-        else:
-            product.stock+=(item.qty-new_qty)
-        product.save(update_fields=["stock"])
         
-        harga = self.get_price(product, new_qty)
-        item.qty = new_qty
-        item.price = harga
-        item.total = new_qty * harga
-        item.save()
-        return Response(model_to_dict(item))
+        if item.qty < new_qty:
+            qty_addition = new_qty - item.qty
+            is_out_of_stock = product_services.check_product_stock(product, qty_addition)
+        
+        if not is_out_of_stock:
+            if(item.qty<new_qty):
+                product.stock-=(new_qty-item.qty)
+            else:
+                product.stock+=(item.qty-new_qty)
+            product.save(update_fields=["stock"])
+            
+            harga = self.get_price(product, new_qty)
+            item.qty = new_qty
+            item.price = harga
+            item.total = new_qty * harga
+            item.save()
+            context = {'sale': model_to_dict(item),
+                        'is_out_of_stock': False}
+        else:
+            context = {'product': model_to_dict(product),
+                'is_out_of_stock': True}
+
+        return Response(context)
 
     @action(detail=False, methods=['POST'])
     def sale_report_by_product(self, request):

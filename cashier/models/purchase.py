@@ -15,8 +15,8 @@ class PurchaseStatus(models.IntegerChoices):
 class Purchase(BaseModel):
     """Purchase"""
     invoice = models.CharField(max_length=128, db_index=True)
-    date = models.DateTimeField(auto_now_add=True)
-    cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name='purchase_cashier')
+    date = models.DateTimeField(auto_now_add=True, verbose_name="tanggal")
+    cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name='purchase_cashier', verbose_name="kasir")
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=False, related_name='purchase_supplier')
     total = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     status = models.PositiveSmallIntegerField(choices=PurchaseStatus.choices, default=PurchaseStatus.ONPROCESS, db_index=True)
@@ -29,7 +29,7 @@ class Purchase(BaseModel):
 class PurchaseDetail(BaseModel):
     """PurchaseDetail"""
     invoice = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='purchase_invoice')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchase_product')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchase_product', verbose_name="produk")
     qty = models.IntegerField(blank=False, null=False)
     total = models.DecimalField(max_digits=9, decimal_places=0)
 

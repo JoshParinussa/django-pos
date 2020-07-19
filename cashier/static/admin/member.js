@@ -40,12 +40,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
-                    targets: 3,
-                    render: function(data) {
-                        return !$.trim(data) ? '' : data;
-                    }
-                },
-                {
                     targets: -1,
                     title: 'Actions',
                     orderable: false,
@@ -60,7 +54,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'name', orderable: true, searchable: true, name: 'name' },
                 { data: 'address', orderable: true, searchable: true, name: 'address' },
                 { data: 'phone', orderable: true, searchable: true, name: 'phone' },
-                { data: 'profession', orderable: true, searchable: true, name: 'profession' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });

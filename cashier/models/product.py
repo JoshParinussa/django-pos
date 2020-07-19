@@ -19,7 +19,7 @@ class ProductStatus(models.IntegerChoices):
 
 class Product(BaseModel):
     """Product model."""
-    name = models.CharField(max_length=128, verbose_name="nama")
+    name = models.CharField(max_length=128, verbose_name="nama produk")
     barcode = models.CharField(max_length=128, blank=False, null=False)
     category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, verbose_name="kategori", blank=True, null=True)
     unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True, verbose_name="satuan")
@@ -42,7 +42,7 @@ class Product(BaseModel):
 
 class Unit(BaseModel):
     """Unit."""
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, verbose_name="nama satuan")
 
     def __str__(self):
         """String representation."""
@@ -51,7 +51,7 @@ class Unit(BaseModel):
 
 class ProductCategory(BaseModel):
     """ProductCategory model."""
-    name = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128, db_index=True, verbose_name="nama kategori")
 
     def __str__(self):
         """String representation."""
@@ -61,9 +61,9 @@ class ProductCategory(BaseModel):
 class HargaBertingkat(BaseModel):
     """HargaBertingkat."""
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='hargabertingkat')
-    min_quantity = models.IntegerField(blank=True, null=True)
-    max_quantity = models.IntegerField(blank=True, null=True)
-    price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    min_quantity = models.IntegerField(blank=True, null=True, verbose_name="min qty")
+    max_quantity = models.IntegerField(blank=True, null=True, verbose_name="max qty")
+    price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga jual")
 
     def __str__(self):
         """String representation."""
@@ -72,11 +72,11 @@ class HargaBertingkat(BaseModel):
 
 class ConvertBarang(BaseModel):
     """ConvertBarang."""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='convert_barang')
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True)
-    quantity = models.IntegerField(blank=False, null=False)
-    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
-    selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='convert_barang', verbose_name="produk")
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True, verbose_name="satuan")
+    quantity = models.IntegerField(blank=False, null=False, verbose_name="kuantiti")
+    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
+    selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga jual")
     grosir_1_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     grosir_2_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     grosir_3_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)

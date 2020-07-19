@@ -4,10 +4,9 @@ from .base import BaseModel
 
 class Member(BaseModel):
     """Member model."""
-    name = models.CharField(max_length=128, db_index=True)
-    address = models.CharField(max_length=128, db_index=True, blank=True, null=True)
-    phone = models.CharField(max_length=128, blank=True, null=True)
-    profession = models.CharField(max_length=128, blank=True, null=True)
+    name = models.CharField(max_length=128, db_index=True, verbose_name="nama")
+    address = models.CharField(max_length=128, db_index=True, blank=True, null=True, verbose_name="alamat")
+    phone = models.CharField(max_length=128, blank=True, null=True, verbose_name="no telp")
     
 
     def __str__(self):

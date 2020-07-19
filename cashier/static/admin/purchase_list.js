@@ -41,7 +41,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
             autoWidth: false,
             processing: true,
             serverSide: true,
-            serverSide: false,
             pageLength: 10,
             ordering: true,
             paging: true,

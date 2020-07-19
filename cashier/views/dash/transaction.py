@@ -29,6 +29,8 @@ class SaleTransactionView(ManageBaseView, TemplateView):
             invoice_id = self.kwargs['pk']
             invoice = Invoice.objects.get(id=invoice_id)
             context['invoice_number'] = invoice.invoice
+            context['invoice_status'] = invoice.status
+            print("# STATUS", invoice.status)
         except Exception as e:
             logger.error(e)
             user = self.request.user

@@ -1,4 +1,5 @@
 """Product Api view."""
+from django.db.models import F
 from cashier.models import Product, ConvertBarang
 from cashier.serializers.products import ProductSerializer, ConvertBarangSerializer
 from rest_framework import viewsets
@@ -59,3 +60,13 @@ class ConvertViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+class ReportOutOfStockViewSet(APIBaseView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.order_by('name')
+
+    @action(detail=False, methods=['GET'])
+    def set_datatable(self, request):
+        """set_datatable"""
+        queryset = self.get_queryset().exclude(stock__gt=F('minimal_stock'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

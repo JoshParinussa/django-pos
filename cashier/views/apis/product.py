@@ -64,9 +64,17 @@ class ReportOutOfStockViewSet(APIBaseView):
     serializer_class = ProductSerializer
     queryset = Product.objects.order_by('name')
 
-    @action(detail=False, methods=['GET'])
-    def set_datatable(self, request):
-        """set_datatable"""
-        queryset = self.get_queryset().exclude(stock__gt=F('minimal_stock'))
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        queryset = Product.objects.all()
+        product_name = self.request.query_params.get('q', None)
+        if product_name is not None:
+            queryset = queryset.filter(name__icontains=product_name)
+        return queryset
+
+    ## REMOVE IF NOT USE
+    # @action(detail=False, methods=['GET'])
+    # def set_datatable(self, request):
+    #     """set_datatable"""
+    #     queryset = self.get_queryset().exclude(stock__gt=F('minimal_stock'))
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)

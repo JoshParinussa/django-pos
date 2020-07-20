@@ -5,21 +5,14 @@ var KTDatatablesDataSourceAjaxServer = function() {
         var table = $('.data-table');
         // begin first table
         table.DataTable({
-            responsive: true,
-            searchDelay: 500,
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
             serverSide: true,
             pageLength: 10,
-            ordering: true,
-            paging: true,
             order: [
                 [0, "asc"]
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/report_out_of_stock/set_datatable?format=datatables',
+                'url': '/v1/report_out_of_stock?format=datatables',
             },
             columnDefs: [{
                     targets: 0,

@@ -19,6 +19,7 @@ class ProductSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         model = Product
         name = 'product'
         fields = '__all__'
+        datatables_always_serialize = ('id')
 
 class ConvertBarangSerializer(serializers.ModelSerializer):
     """ConvertBarangSerializer."""

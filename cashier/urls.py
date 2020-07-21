@@ -43,6 +43,7 @@ router.register(r'report_sale', api_sale.ReportSaleViewSet)
 router.register(r'invoice', api_invoice.InvoiceViewSet)
 router.register(r'purchase', api_purchase.PurchaseViewSet)
 router.register(r'purchase_detail', api_purchase_detail.PurchaseDetailViewSet)
+router.register(r'report_purchase', api_purchase.ReportPurchaseViewSet)
 router.register(r'member', api_member.MemberViewSet)
 
 urlpatterns = [
@@ -119,5 +120,6 @@ urlpatterns = [
     path('dash/report/sale-product', dash_transaction_view.ReportSalebyProductView.as_view(), name='dash_report_sale_by_product'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
     path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
-    path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock')
+    path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock'),
+    path('dash/report/purchase',dash_purchase_view.ReportPurchaseView.as_view(),name='dash_report_purchase')
 ]   

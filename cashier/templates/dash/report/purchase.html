@@ -1,0 +1,78 @@
+{% extends 'dash/layout/base.html' %}
+{% load static i18n %}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+<script src="{% static 'common.js' %}"></script>
+<script src="{% static 'admin/report_purchase.js' %}"></script>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
+{% endblock %}
+
+{% block breadcrumb %}
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Laporan</span>
+{% endblock %}
+
+
+{% block content %}
+{% csrf_token %}
+<div class="kt-portlet">
+    <div class="kt-portlet__body">
+        <div class="row">
+            <div class="col-5">
+                <div class='input-group pull-left' id='kt_daterangepicker_6'>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                    </div>
+                    <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-primary btn-block btn-icon-sm" id="btn-filter-date" title="Filter">
+                    <i class="flaticon-search"></i>Filter
+                </button>
+            </div>
+            {% comment %} <div class="col-5">
+            </div> {% endcomment %}
+            <div class="col-2">
+                <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
+                    <i class="flaticon2-print"></i>Cetak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-soft-icons"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                List Invoice Pembelian
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <table class="table table-striped- table-hover table-checkable data-table">
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Tanggal</th>
+                    <th>Kasir</th>
+                    <th>Supplier</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

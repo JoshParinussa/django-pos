@@ -45,3 +45,8 @@ class PurchaseDetailView(ManageBaseView, TemplateView):
         context['suppliers'] = supplier_services.get_suppliers_list()
         
         return context
+
+class ReportPurchaseView(DashListView):
+    """ReportPurchaseView."""
+    template_name = 'dash/report/purchase.html'
+    model = Purchase

@@ -76,7 +76,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                     }
                 },
                 {

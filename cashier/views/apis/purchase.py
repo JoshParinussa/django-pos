@@ -20,9 +20,12 @@ class PurchaseViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         date_range = self.request.GET.getlist('date_range[]')
         dates = common_services.convert_date_to_utc(date_range)
-        
+        queryset = Purchase.objects.all()
         if date_range:
-            queryset = self.queryset.filter(date__range=dates, cashier=self.request.user, total__isnull=False)
+            if self.request.user.is_superuser:
+                queryset = queryset.filter(date__range=dates)
+            else:
+                queryset = queryset.filter(date__range=dates, cashier=self.request.user)
             
         return queryset
 
@@ -35,3 +38,20 @@ class PurchaseViewSet(viewsets.ModelViewSet):
             queryset = self.queryset.filter(date__range=dates)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class ReportPurchaseViewSet(viewsets.ModelViewSet):
+    """ReportPurchaseViewSet."""
+    serializer_class = PurchaseSerializer
+    queryset = Purchase.objects.order_by('created_at')
+
+    @action(detail=False, methods=['POST'])
+    def set_datatable(self, request):
+        """set_datatable."""
+        date_range = request.POST.getlist('date_range[]')
+        dates = common_services.convert_date_to_utc(date_range)
+        queryset = Purchase.objects.all()
+        if date_range:
+            queryset = queryset.filter(date__range=dates)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+

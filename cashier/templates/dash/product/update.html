@@ -71,6 +71,14 @@
                         </div>
                     </div>
                     <div class="form-group row pt-4">
+                        {{ form.minimal_stock|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                        <div class="col-lg-6 col-xl-6">
+                            {% render_field form.minimal_stock|add_error_class:"is-invalid" class="form-control" %}
+                            {% for error in form.minimal_stock.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% if form.minimal_stock.help_text %}<span class="form-text text-muted">{{ form.minimal_stock.help_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row pt-4">
                         {{ form.unit|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                         <div class="col-lg-6 col-xl-6">
                             {% render_field form.unit|add_error_class:"is-invalid" class="form-control" %}

@@ -332,9 +332,38 @@ $('#process_payment').click(function(e) {
     processPayment();
 })
 
+$('input.number').keyup(function(event) {
+
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+        return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+});
+
 $('#cash').on('keyup', function(e) {
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    // $(this).val(e.currentTarget.value.toLocaleString('id-ID'));
+    // $(this).val(function(index, value) {
+    //     console.log("TES")
+    //     return value
+    //         .replace(/\D/g, "")
+    //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // });
+
     cash = e.currentTarget.value;
+    console.log(cash.replace(/,/g, ''));
+    cash = cash.replace(/,/g, '');
+    // $(this).text(oldtext.replace(',', ''));
     change = cash - grandTotal;
+    // $('#change2').text(change.toLocaleString('id-ID'))
     $('#change').val(change.toLocaleString('id-ID'));
     if (e.currentTarget.value == 0) {
         $("#btn-print-payment").prop('disabled', true);
@@ -428,6 +457,7 @@ var printResult = function() {
     var total = $('#grand_total').html()
     change = $('#change').val();
     cash = $('#cash').val();
+    cash = cash.replace(/,/g, '');
     var receipt_body = ''
     $("#item_table tbody").find("tr").each(function() {
         var item = $(this).find('.product-name').html()

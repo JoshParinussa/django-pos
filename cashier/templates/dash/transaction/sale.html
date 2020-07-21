@@ -10,6 +10,7 @@
 
 {% block js %}
 <script src="{% static 'select2/js/select2.full.min.js' %}"></script>
+<script src="{% static 'vendors/js/easy-number-separator.js' %}"></script>
 <script type="text/javascript">
     let currentUser = '{{ request.user.first_name }}';
 </script>
@@ -18,6 +19,7 @@
 <script>
     var css_url = "{% static 'admin/css/sale.css' %}";
 </script>
+
 {% endblock %}
 
 
@@ -38,7 +40,7 @@
     <div class="row">
         <div class="col-8">
             <div class="kt-portlet">
-                <form class="kt-form kt-form--label-right">
+                <form class="kt-form kt-form--label-right" id="form-upper">
                     <div class="kt-portlet__body">
                         <div class="form-group row">
                             <div class="col-lg-3 col-xl-3">
@@ -52,7 +54,7 @@
                                 {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-lg-4 col-xl-2">
+                            <div class="col-lg-6 col-xl-4">
                                 <input type="text" id="sale-date" class="form-control" disabled>
                             </div>
                         </div>
@@ -133,8 +135,12 @@
                                 <thead>
                             </table>
                         </div>
-                        {% comment %} <div class="row">
+                        <div class="row">
                             <table class="table ">
+                                <colgroup>
+                                    <col span="1" style="width: 50%;">
+                                    <col span="1" style="width: 50%;">
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         <th class="text-left">Cash</th>
@@ -145,30 +151,32 @@
                                     <tr>
                                         <th class="text-left">
                                             <div class="row" >
-                                                <div class="col-3" id="div-rp">
+                                                <div class="col-2" id="div-rp">
                                                     Rp. 
                                                 </div>
-                                                <div class="col-9">
-                                                    <input type="number" min="0"  class="form-control" id="cash" required>
+                                                <div class="col-10">
+                                                    <input type="text" class="number-separator form-control" id="cash" required placeholder="0">
+                                                    {% comment %} <input type="number" min="0"  class="form-control" id="cash" required> {% endcomment %}
                                                 </div>
                                                 
                                             </div>
                                         </th>
                                         <th class="text-right">
                                             <div class="row" >
-                                                <div class="col-3" id="div-rp">
+                                                <div class="col-2" id="div-rp">
                                                     Rp. 
                                                 </div>
-                                                <div class="col-9">
-                                                    <input type="number" min="0" class="form-control" id="change" disabled>
+                                                <div class="col-10">
+                                                    {% comment %} <div id="change">0</div> {% endcomment %}
+                                                    <input type="text" min="0" class="form-control" id="change" disabled>
                                                 </div>
                                             </div>
                                         </th>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div> {% endcomment %}
-                        <div class="row">
+                        </div>
+                        {% comment %} <div class="row">
                             <div class="col-1" id="div-rp">
                                 Rp. 
                             </div>
@@ -185,7 +193,7 @@
                             <div class="col-11">
                                 <input type="number" min="0" class="form-control" id="change" disabled>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
                 <div class="kt-portlet__foot">

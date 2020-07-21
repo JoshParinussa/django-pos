@@ -189,3 +189,5 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "login"
 CASHIER_DASH_LOGOUT_REDIRECT_URL = 'login'
+
+AUTHENTICATION_BACKENDS = ('cashier.backend.auth_backend.EmailOrUsernameModelBackend', )

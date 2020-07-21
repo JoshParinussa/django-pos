@@ -213,10 +213,10 @@ class ReportTransactionViewSet(viewsets.ModelViewSet):
         """set_datatable."""
         date_range = request.POST.getlist('date_range[]')
         dates = common_services.convert_date_to_utc(date_range)
-
+        queryset = Invoice.objects.all()
         if date_range:
-            self.queryset = self.get_queryset().filter(date__range=dates)
-        serializer = self.get_serializer(self.queryset, many=True)
+            queryset = queryset.filter(date__range=dates)
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 

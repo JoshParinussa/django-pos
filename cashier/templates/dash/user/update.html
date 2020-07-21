@@ -56,6 +56,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        {{ form.username|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                                        <div class="col-lg-9 col-xl-6">
+                                            {% render_field form.username|append_attr:"autofocus"|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in form.username.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if form.username.help_text %}<span class="form-text text-muted">{{ form.username.help_text }}</span>{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         {{ form.first_name|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
                                         <div class="col-lg-9 col-xl-6">
                                             {% render_field form.first_name|add_error_class:"is-invalid" class="form-control" %}

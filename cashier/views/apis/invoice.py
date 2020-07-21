@@ -20,9 +20,12 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         date_range = self.request.GET.getlist('date_range[]')
         dates = common_services.convert_date_to_utc(date_range)
-        
+        queryset = Invoice.objects.all()
         if date_range:
-            queryset = self.queryset.filter(date__range=dates, cashier=self.request.user)
+            if self.request.user.is_superuser:
+                queryset = queryset.filter(date__range=dates)
+            else:
+                queryset = queryset.filter(date__range=dates, cashier=self.request.user)
             
         return queryset
 
@@ -30,8 +33,8 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     def print_report(self, request):
         date_range = request.POST.getlist('date_range[]')
         dates = common_services.convert_date_to_utc(date_range)
-
+        queryset = Invoice.objects.all()
         if date_range:
-            queryset = self.queryset.filter(date__range=dates)
+            queryset = queryset.filter(date__range=dates)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

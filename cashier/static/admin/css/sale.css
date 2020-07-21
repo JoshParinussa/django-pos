@@ -114,23 +114,25 @@
     padding: 0.5rem 1rem;
 }
 
-table tbody {
+
+/* table tbody {
     font-weight: bold;
-}
+} */
 
 
 /* input[type="number"] {
     font-size: 24px;
 } */
 
-#tr-total,
 #cash,
-#change,
-input[type="number"] {
+#change {
     font-size: 24px;
-    font-weight: bold;
 }
 
 #div-rp {
     font-size: 22px;
+}
+
+#grand_total {
+    font-size: 36px;
 }

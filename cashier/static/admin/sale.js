@@ -177,10 +177,10 @@ var drawPurchaseRow = function() {
                         "<td class='purchase_total' data-purchase-total='" + purchaseItemTotal + "'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
                         "<td>" +
                         "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                        "<i class='la la-edit'></i>" +
+                        "<i class='la la-edit icon-10x'></i>" +
                         "</span>" +
                         "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                        "<i class='la la-trash'></i>" +
+                        "<i class='la la-trash icon-10x'></i>" +
                         "</span>" +
                         "</td>" +
                         "</tr>";
@@ -238,11 +238,11 @@ var getInvoiceSaleItem = function() {
                             "<td class='qty'>" + item.qty + "</td>" +
                             "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
                             "<td class='col-actions'>" +
-                            "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                            "<i class='la la-edit'></i>" +
+                            "<span onclick='updateItem(this)' class='btn btn-xl btn-clean btn-icon btn-icon-xl' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
+                            "<i class='la la-edit icon-10x'></i>" +
                             "</span>" +
-                            "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md btn-delete' title='Hapus item'>" +
-                            "<i class='la la-trash'></i>" +
+                            "<span onclick='deleteItem(this)' class='btn btn-xl btn-clean btn-icon btn-icon-xl btn-delete' title='Hapus item'>" +
+                            "<i class='la la-trash icon-10x'></i>" +
                             "</span>" +
                             "</td>" +
                             "</tr>";

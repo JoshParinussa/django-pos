@@ -177,10 +177,10 @@ var drawPurchaseRow = function() {
                         "<td class='purchase_total' data-purchase-total='" + purchaseItemTotal + "'>" + purchaseItemTotal.toLocaleString('id-ID') + "</td>" +
                         "<td>" +
                         "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                        "<i class='la la-edit'></i>" +
+                        "<i class='la la-edit icon-10x'></i>" +
                         "</span>" +
                         "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' title='Hapus item'>" +
-                        "<i class='la la-trash'></i>" +
+                        "<i class='la la-trash icon-10x'></i>" +
                         "</span>" +
                         "</td>" +
                         "</tr>";
@@ -238,11 +238,11 @@ var getInvoiceSaleItem = function() {
                             "<td class='qty'>" + item.qty + "</td>" +
                             "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
                             "<td class='col-actions'>" +
-                            "<span onclick='updateItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
-                            "<i class='la la-edit'></i>" +
+                            "<span onclick='updateItem(this)' class='btn btn-xl btn-clean btn-icon btn-icon-xl' data-toggle='modal' data-target='#modal-default' title='Edit item'>" +
+                            "<i class='la la-edit icon-10x'></i>" +
                             "</span>" +
-                            "<span onclick='deleteItem(this)' class='btn btn-sm btn-clean btn-icon btn-icon-md btn-delete' title='Hapus item'>" +
-                            "<i class='la la-trash'></i>" +
+                            "<span onclick='deleteItem(this)' class='btn btn-xl btn-clean btn-icon btn-icon-xl btn-delete' title='Hapus item'>" +
+                            "<i class='la la-trash icon-10x'></i>" +
                             "</span>" +
                             "</td>" +
                             "</tr>";
@@ -332,9 +332,27 @@ $('#process_payment').click(function(e) {
     processPayment();
 })
 
+$('input.number').keyup(function(event) {
+
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) return;
+
+    // format number
+    $(this).val(function(index, value) {
+        return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+});
+
 $('#cash').on('keyup', function(e) {
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) return;
     cash = e.currentTarget.value;
+    cash = cash.replace(/,/g, '');
+
     change = cash - grandTotal;
+
     $('#change').val(change.toLocaleString('id-ID'));
     if (e.currentTarget.value == 0) {
         $("#btn-print-payment").prop('disabled', true);
@@ -428,6 +446,7 @@ var printResult = function() {
     var total = $('#grand_total').html()
     change = $('#change').val();
     cash = $('#cash').val();
+    cash = cash.replace(/,/g, '');
     var receipt_body = ''
     $("#item_table tbody").find("tr").each(function() {
         var item = $(this).find('.product-name').html()

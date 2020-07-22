@@ -11,10 +11,10 @@ User = get_user_model()
 class DashUserCreationForm(CustomUserCreationForm):
     """Custom user creation form."""
 
-    # def save(self, *args, **kwargs):
-    #     """Override save."""
-    #     self.instance.username = self.instance.email
-    #     return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        """Override save."""
+        self.instance.is_staff = True
+        return super().save(*args, **kwargs)
 
     class Meta:  # noqa D106
         model = User

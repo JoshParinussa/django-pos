@@ -153,7 +153,8 @@ var drawPurchaseRow = function() {
             "invoice_purchase": invoice_number,
             "barcode": itemBarcode,
             "qty": purchaseItemQty,
-            "supplier": supplier
+            "supplier": supplier,
+            "total":grandTotal,
         },
         success: function(result) {
             var idRow = itemBarcode;

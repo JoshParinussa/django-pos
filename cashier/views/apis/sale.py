@@ -65,12 +65,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         is_out_of_stock = product_services.check_product_stock(product, int(qty))
         if not is_out_of_stock:
             try:
-                product.stock = product.stock - int(qty)
-                product.save(update_fields=["stock"])
-            except Exception as e:
-                print(e)
-
-            try:
                 sale_item = Sale.objects.get(invoice=invoice, product=product)
                 new_qty = int(sale_item.qty) + int(qty)
                 harga = self.get_price(product, new_qty)
@@ -133,6 +127,15 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice.member = member
         invoice.save(update_fields=["cash", "cashier", "change", "total", "member", "status"])
 
+        sales = Sale.objects.filter(invoice=invoice)
+        for sale in sales:
+            product = Product.objects.get(name=sale.product)
+            try:
+                product.stock = product.stock - int(sale.qty)
+                product.save(update_fields=["stock"])
+            except Exception as e:
+                print(e)
+
         return HttpResponse(status=202)
 
     @action(detail=False, methods=['POST'])
@@ -145,8 +148,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
-        product.stock+=item.qty
-        product.save(update_fields=["stock"])
         item.delete()
         return Response(model_to_dict(item))
 
@@ -167,13 +168,7 @@ class SaleViewSet(viewsets.ModelViewSet):
             qty_addition = new_qty - item.qty
             is_out_of_stock = product_services.check_product_stock(product, qty_addition)
         
-        if not is_out_of_stock:
-            if(item.qty<new_qty):
-                product.stock-=(new_qty-item.qty)
-            else:
-                product.stock+=(item.qty-new_qty)
-            product.save(update_fields=["stock"])
-            
+        if not is_out_of_stock:            
             harga = self.get_price(product, new_qty)
             item.qty = new_qty
             item.price = harga

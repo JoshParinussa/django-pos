@@ -17,3 +17,4 @@ class PurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
         name = 'purchase'
         fields = ('id', 'invoice', 'date', 'cashier', 'supplier', 'total', 'invoice_purchase', 'status')
+        datatables_always_serialize = ('id')

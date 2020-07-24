@@ -211,6 +211,7 @@ var getInvoicePurchaseItem = function() {
         success: function(result) {
             try {
                 var invoice_data = result.data['purchase'][0];
+                console.log(invoice_data['supplier']);
                 $('#supplier').val(invoice_data['supplier'])
                 date = moment.utc(invoice_data['date']).local().format('LLL');
                 $('#purchase-date').val(date);

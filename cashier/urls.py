@@ -89,7 +89,9 @@ urlpatterns = [
     path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),
     path('dash/users/create', dash_user_view.UserCreateView.as_view(), name='dash_user_create'),
     path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
+    # path('dash/users/<str:pk>/change_password', dash_user_view.ChangePasswordView.as_view(), name='dash_change_password'),
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
+    
 
     # SALE
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionListView.as_view(), name='dash_transaction_list'),
@@ -118,5 +120,5 @@ urlpatterns = [
     path('dash/report/sale-product', dash_transaction_view.ReportSalebyProductView.as_view(), name='dash_report_sale_by_product'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
     path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
-    path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock')
+    path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock'),
 ]   

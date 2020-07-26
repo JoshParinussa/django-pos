@@ -21,7 +21,7 @@
 <div class="kt-portlet">
     <div class="kt-portlet__body">
         <div class="row">
-            <div class="col-5">
+            <div class="col-4">
                 <div class='input-group pull-left' id='kt_daterangepicker_6'>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
@@ -29,13 +29,18 @@
                     <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
                 </div>
             </div>
+            <div class="col-4">
+                <select name="payment_status" id="payment_status" class="form-control">
+                    <option value="">Pilih Pembayaran</option>
+                    <option value="1">Cash</option>
+                    <option value="0">Hutang</option>
+                </select>
+            </div>
             <div class="col-2">
                 <button type="button" class="btn btn-primary btn-block btn-icon-sm" id="btn-filter-date" title="Filter">
                     <i class="flaticon-search"></i>Filter
                 </button>
             </div>
-            {% comment %} <div class="col-5">
-            </div> {% endcomment %}
             <div class="col-2">
                 <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
                     <i class="flaticon2-print"></i>Cetak
@@ -66,6 +71,7 @@
                     <th>Supplier</th>
                     <th>Total</th>
                     <th>Status</th>
+                    <th>Pembayaran</th>
                     <th>Action</th>
                 </tr>
             </thead>

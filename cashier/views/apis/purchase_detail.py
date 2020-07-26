@@ -89,13 +89,15 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         total = request.POST.get('total')
         supplier = request.POST.get('supplier')
         supplier = supplier_services.get_supplier_by_id(supplier)
+        payment_status = request.POST.get('payment_status')
 
         purchase = Purchase.objects.get(invoice=invoice_purchase)
         purchase.total = total
         purchase.cashier = self.request.user
         purchase.supplier = supplier
         purchase.status = 1
-        purchase.save(update_fields=["cashier", "total", "supplier", "status"])
+        purchase.payment_status = payment_status
+        purchase.save(update_fields=["cashier", "total", "supplier", "status", "payment_status"])
 
         purchase_details = PurchaseDetail.objects.filter(invoice=purchase)
         for purchase_detail in purchase_details:

@@ -10,6 +10,7 @@ var data;
 var data_2;
 var product_all;
 var dates;
+var payment_status;
 
 
 var KTDatatablesDataSourceAjaxServer = function() {
@@ -41,6 +42,10 @@ var KTDatatablesDataSourceAjaxServer = function() {
         dates = date_range.split(' to ');
         return dates
     }
+    var getPaymentStatus = function() {
+        payment_status = $('#payment_status').val();
+        return payment_status
+    }
     var initTable1 = function() {
         table = $('.data-table');
         var date = moment.utc().format('YYYY-MM-DD HH:mm:ss');
@@ -66,6 +71,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 'url': '/v1/report_purchase/set_datatable?format=datatables',
                 'data': function(d) {
                     d.date_range = getDaterange();
+                    d.payment_status = getPaymentStatus();
                 }
             },
             columnDefs: [{
@@ -107,6 +113,14 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
+                    targets: 6,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--primary kt-badge--inline kt-badge--pill">Cash</span>' :
+                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Hutang</span>';
+                    }
+                },
+                {
                     targets: -1,
                     title: 'Actions',
                     orderable: false,
@@ -124,10 +138,17 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'supplier', orderable: true, searchable: true, name: 'supplier' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
                 { data: 'status', orderable: true, searchable: true, name: 'status' },
+                { data: 'payment_status', orderable: true, searchable: true, name: 'payment_status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
     };
+
+    $('#payment_status').select2({
+        theme: "bootstrap",
+        placeholder: "Pilih Pembayaran",
+
+    });
 
     var initEvents = function() {
         $('#btn-filter-date').on('click', function(e) {

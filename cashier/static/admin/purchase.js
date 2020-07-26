@@ -96,6 +96,12 @@ var getProductByName = function() {
 
     });
 
+    $('#payment_status').select2({
+        theme: "bootstrap",
+        placeholder: "Pilih Pembayaran",
+
+    });
+
     $(document).on('focus', '.select2-selection.select2-selection--single', function(e) {
         $(this).closest(".select2-container").siblings('select:enabled').select2('open');
     });
@@ -313,13 +319,15 @@ $('#qty-item-cart').on('keypress', function(e) {
 
 $('#process_payment').click(function(e) {
     var supplier = $('#supplier').val()
+    var payment_status = $('#payment_status').val()
     $.ajax({
         type: "POST",
         url: "/v1/purchase_detail/process_payment",
         data: {
             "invoice_purchase": invoice_number,
             "total": grandTotal,
-            "supplier": supplier
+            "supplier": supplier,
+            "payment_status":payment_status
         },
         success: function(result) {
             window.location.href = '/dash/transaction/purchase';

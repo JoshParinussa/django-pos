@@ -48,10 +48,14 @@ class ReportPurchaseViewSet(viewsets.ModelViewSet):
     def set_datatable(self, request):
         """set_datatable."""
         date_range = request.POST.getlist('date_range[]')
+        payment_status = request.POST.get('payment_status')
         dates = common_services.convert_date_to_utc(date_range)
         queryset = Purchase.objects.all()
         if date_range:
-            queryset = queryset.filter(date__range=dates)
+            if payment_status:
+                queryset = queryset.filter(date__range=dates, payment_status=payment_status)
+            else:
+                queryset = queryset.filter(date__range=dates)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 

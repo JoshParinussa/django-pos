@@ -91,7 +91,9 @@ urlpatterns = [
     path('dash/users', dash_user_view.UserListView.as_view(), name='dash_user_list'),
     path('dash/users/create', dash_user_view.UserCreateView.as_view(), name='dash_user_create'),
     path('dash/users/<str:pk>', dash_user_view.UserUpdateView.as_view(), name='dash_user_update'),
+    # path('dash/users/<str:pk>/change_password', dash_user_view.ChangePasswordView.as_view(), name='dash_change_password'),
     path('dash/users/<str:pk>/delete', dash_user_view.UserDeleteView.as_view(), name='dash_user_delete'),
+    
 
     # SALE
     path('dash/transaction/sale', dash_transaction_view.SaleTransactionListView.as_view(), name='dash_transaction_list'),

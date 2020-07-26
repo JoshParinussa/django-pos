@@ -80,6 +80,22 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        {{ form.password1|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                                        <div class="col-lg-9 col-xl-6">
+                                            {% render_field form.password1|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in form.password1.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if form.password1.help_text %}<span class="form-text text-muted">{{ form.password1.help_text }}</span>{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.password2|add_label_class:"col-xl-3 col-lg-3 col-form-label" }}
+                                        <div class="col-lg-9 col-xl-6">
+                                            {% render_field form.password2|add_error_class:"is-invalid" class="form-control" %}
+                                            {% for error in form.password2.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                                            {% if form.password2.help_text %}<span class="form-text text-muted">{{ form.password2.help_text }}</span>{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                             <div class="col-xl-3 col-lg-3"></div>
                                             <div class="col-lg-9 col-xl-6">
                                                 <label class="kt-checkbox kt-checkbox--bold"
@@ -135,6 +151,18 @@
                                         </a>
                                         </div>
                                     </div>
+
+                                    {% comment %} <div class="form-group row kt-margin-t-20 kt-margin-b-0">
+                                        <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                        <div class="col-lg-9 col-xl-6">
+                                        <a href="{% url 'dash_change_password' object.id %}">
+                                            <button type="button" class="btn btn-label-danger btn-bold btn-sm kt-margin-t-5 kt-margin-b-5">Ganti password ?</button>
+                                            <span class="form-text text-muted">
+                                                <strong>Perhatian!</strong> akun akan dihapus permanen dan tidak dapat dikembalikan.
+                                            </span>
+                                        </a>
+                                        </div>
+                                    </div> {% endcomment %}
 
                                 </div>
                             </div>

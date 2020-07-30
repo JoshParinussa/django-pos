@@ -90,7 +90,8 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         supplier = request.POST.get('supplier')
         supplier = supplier_services.get_supplier_by_id(supplier)
         payment_status = request.POST.get('payment_status')
-
+        if payment_status == '':
+            payment_status = 1
         purchase = Purchase.objects.get(invoice=invoice_purchase)
         purchase.total = total
         purchase.cashier = self.request.user
@@ -103,8 +104,9 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         for purchase_detail in purchase_details:
             product = Product.objects.get(name=purchase_detail.product)
             try:
+                product.purchase_price = (int(purchase_detail.total)/int(purchase_detail.qty))
                 product.stock = product.stock + int(purchase_detail.qty)
-                product.save(update_fields=["stock"])
+                product.save(update_fields=["stock","purchase_price"])
             except Exception as e:
                 print(e)
 
@@ -131,6 +133,7 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         new_qty = int(request.POST.get('qty'))
+        new_price = int(request.POST.get('price'))
         new_total = request.POST.get('total')
 
         purchase = Purchase.objects.get(invoice=invoice_purchase)
@@ -139,7 +142,7 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
 
         item.qty = new_qty
-        item.total = new_qty * product.purchase_price
+        item.total = new_qty * new_price
         item.save()
 
 

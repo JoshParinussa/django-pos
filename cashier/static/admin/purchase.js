@@ -372,16 +372,19 @@ var updateItem = function(e) {
     row = $(e).closest('tr')
     var itemName = row.find(".product-name").html();
     var itemQty = row.find(".qty").html();
+    var itemPrice = row.find(".price").html();
     var itemBarcode = row.find(".product-barcode").html();
     $('#modal-item-name').val(itemName);
     $('#modal-qty-item-cart').val(itemQty);
+    $('#modal-price').val(itemPrice);
     $('#modal-barcode').val(itemBarcode);
 }
 
 $('#modal-btn-update').click(function(e) {
     var newQty = $('#modal-qty-item-cart').val();
+    var newPrice = $('#modal-price').val();
     grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
-    var newTotal = Number(newQty) * Number(row.find(".price").html());
+    var newTotal = Number(newQty) * Number(newPrice);
     $.ajax({
         type: "POST",
         url: "/v1/purchase_detail/update_item",
@@ -389,11 +392,12 @@ $('#modal-btn-update').click(function(e) {
             "invoice_purchase": invoice_number,
             "barcode": $('#modal-barcode').val(),
             "qty": newQty,
+            "price": newPrice.replace(/[^0-9\-]+/g,""),
             'total': newTotal
         },
         success: function(result) {
             row.find(".qty").html(newQty);
-            row.find(".price").html(result.price);
+            row.find(".price").html(Number(newPrice).toLocaleString('id-ID'));
             row.find(".purchase_total").html(Number(result.total).toLocaleString('id-ID'));
             row.find(".purchase_total").attr('data-purchase-total', result.total);
             $('#modal-default').modal('toggle');

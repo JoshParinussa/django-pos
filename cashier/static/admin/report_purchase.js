@@ -64,7 +64,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             paging: true,
             scrollX: true,
             order: [
-                [0, "asc"]
+                [1, "asc"]
             ],
             ajax: {
                 'type': 'POST',

@@ -13,13 +13,15 @@ class ProductViewSet(APIBaseView):
     """ProductViewSet."""
     serializer_class = ProductSerializer
     queryset = Product.objects.order_by('name')
-    # filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
     def get_queryset(self):
         queryset = Product.objects.all()
         product_name = self.request.query_params.get('q', None)
+        product_barcode = self.request.query_params.get('barcode', None)
         if product_name is not None:
             queryset = queryset.filter(name__icontains=product_name)
+        if product_barcode is not None:
+            queryset = queryset.filter(barcode__icontains=product_barcode)
         return queryset
 
 

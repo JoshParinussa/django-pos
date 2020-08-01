@@ -73,6 +73,27 @@ var getProductByName = function() {
     // });
 
     // SELECT2 from AJAX
+    $('.barcode').select2({
+        ajax: {
+            type: "GET",
+            url: "/v1/products?query={id, text}",
+            dataType: 'json',
+            data: function(params) {
+                var query = {
+                    barcode: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            }
+
+        },
+        theme: "bootstrap",
+        // selectOnClose: true,
+        placeholder: "Cari berdasarkan barcode produk",
+    });
+
     $('.product_name').select2({
         ajax: {
             type: "GET",
@@ -88,6 +109,13 @@ var getProductByName = function() {
     $('.product_name').on("select2:select", function(evt) {
         var id = $(this).val();
         $('#product_name').val('').trigger("change");
+        getProductByNameAPI(id);
+        $('#barcode').focus();
+    });
+
+    $('.barcode').on("select2:select", function(evt) {
+        var id = $(this).val();
+        $('#barcode').val('').trigger("change");
         getProductByNameAPI(id);
         $('#barcode').focus();
     });
@@ -137,9 +165,7 @@ var drawPurchaseRow = function() {
     purchaseItemQty = 1
     var member = $('#member').val()
     var idRow = itemBarcode;
-    console.log("MASUK")
-    console.log($('#item_table').find("#" + idRow))
-        // purchaseItemTotal = itemPrice * purchaseItemQty;
+    // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
         type: "POST",

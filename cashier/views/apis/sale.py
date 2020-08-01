@@ -51,9 +51,11 @@ class SaleViewSet(viewsets.ModelViewSet):
             new_qty = int(sale_item.qty) + int(qty)
             is_out_of_stock = product_services.check_product_stock(product, int(new_qty))
             if not is_out_of_stock:
+                harga = product_services.get_harga_bertingkat_price(product, int(new_qty))
+
                 sale_item.qty = new_qty
                 sale_item.price = harga
-                sale_item.total = new_total
+                sale_item.total = new_qty * harga
                 sale_item.save(update_fields=['qty', 'price', 'total'])
                 context = {'sale': model_to_dict(sale_item),
                     'price': harga,
@@ -61,11 +63,13 @@ class SaleViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
             harga = product_services.get_harga_bertingkat_price(product, int(qty))
-            total = int(qty) * harga
-            sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
-            context = {'sale': model_to_dict(sale_item),
-                    'price': harga,
-                    'is_out_of_stock': False}
+            is_out_of_stock = product_services.check_product_stock(product, int(qty))
+            if not is_out_of_stock:
+                total = int(qty) * harga
+                sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
+                context = {'sale': model_to_dict(sale_item),
+                        'price': harga,
+                        'is_out_of_stock': False}
 
         return Response(context)
 

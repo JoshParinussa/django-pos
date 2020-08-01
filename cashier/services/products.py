@@ -35,14 +35,13 @@ class ProductServices:
             
             elif qty < int(harga_bertingkats.first().min_quantity) :
                 return product.selling_price
+        return product.selling_price
 
     def check_product_stock(self, product, qty):
         """get_product_stock."""
         is_out_of_stock = True
-        print("# QTY", qty)
         if int(qty) <= product.stock :
             is_out_of_stock = False
-        print("# STOCK", is_out_of_stock, product.stock, qty)
         return is_out_of_stock
 
 

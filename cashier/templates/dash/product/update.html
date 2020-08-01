@@ -40,7 +40,7 @@
                         <div class="col-lg-4">
                             {{ form.barcode|add_label_class:"col-form-label" }}
                             {% render_field form.barcode|append_attr:"autofocus"|add_error_class:"is-invalid" class="form-control" %}
-                            {% for error in form.barcodecategorystock.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                            {% for error in form.barcode.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                             {% if form.barcode.help_text %}
                             <span class="form-text text-muted">{{ form.barcode.help_text }}</span>{% endif %}
                         </div>
@@ -154,7 +154,6 @@
                                 <thead>
                                     <tr>
                                         <th class="col-form-label">Min quantity:</th>
-                                        {% comment %} <th class="col-form-label">Max quantity:</th> {% endcomment %}
                                         <th class="col-form-label">Price:</th>
                                         <th>Tambah</th>
                                     </tr>
@@ -171,11 +170,6 @@
                                             {% for error in frm.min_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                                             {% if frm.min_quantity.help_text %}<span class="form-text text-muted">{{ frm.min_quantity.help_text }}</span>{% endif %}
                                         </td>
-                                        {% comment %} <td>
-                                            {% render_field frm.max_quantity|add_error_class:"is-invalid" class="form-control" %}
-                                            {% for error in frm.max_quantity.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
-                                            {% if frm.max_quantity.help_text %}<span class="form-text text-muted">{{ frm.max_quantity.help_text }}</span>{% endif %}
-                                        </td> {% endcomment %}
                                         <td>
                                             {% render_field frm.price|add_error_class:"is-invalid" class="form-control" %}
                                             {% for error in frm.price.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}

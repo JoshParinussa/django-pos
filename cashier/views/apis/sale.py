@@ -25,25 +25,6 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer
     queryset = Sale.objects.order_by('created_at')
 
-    def get_price(self, product, newqty):
-        """get_price."""
-        harga_bertingkats = product.hargabertingkat.all().order_by('max_quantity')
-        found = False
-        if harga_bertingkats:
-            for harga_bertingkat in harga_bertingkats:
-                if harga_bertingkat.min_quantity <= newqty <= harga_bertingkat.max_quantity:
-                    harga = harga_bertingkat.price
-                    found = True
-                    break
-            if found is False:
-                if newqty > harga_bertingkats.last().max_quantity:
-                    harga = harga_bertingkats.last().price
-                else:
-                    harga = product.selling_price
-        else:
-            harga = product.selling_price
-        return harga
-
     @action(detail=False, methods=['POST'])
     def add_item(self, request):
         """add_item."""
@@ -62,35 +43,33 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
         harga_bertingkats = product.hargabertingkat.all() 
         
-        is_out_of_stock = product_services.check_product_stock(product, int(qty))
-        if not is_out_of_stock:
-            try:
-                product.stock = product.stock - int(qty)
-                product.save(update_fields=["stock"])
-            except Exception as e:
-                print(e)
+        context = {'product': model_to_dict(product),
+                'is_out_of_stock': True}
 
-            try:
-                sale_item = Sale.objects.get(invoice=invoice, product=product)
-                new_qty = int(sale_item.qty) + int(qty)
-                harga = self.get_price(product, new_qty)
-                new_total = new_qty * harga
+        try:
+            sale_item = Sale.objects.get(invoice=invoice, product=product)
+            new_qty = int(sale_item.qty) + int(qty)
+            is_out_of_stock = product_services.check_product_stock(product, int(new_qty))
+            if not is_out_of_stock:
+                harga = product_services.get_harga_bertingkat_price(product, int(new_qty))
+
                 sale_item.qty = new_qty
                 sale_item.price = harga
-                sale_item.total = new_total
+                sale_item.total = new_qty * harga
                 sale_item.save(update_fields=['qty', 'price', 'total'])
-            except Exception as e:
-                print(e)
-                harga = self.get_price(product, int(qty))
-                total = int(qty) * harga
-                sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
-            
-            context = {'sale': model_to_dict(sale_item),
+                context = {'sale': model_to_dict(sale_item),
                     'price': harga,
                     'is_out_of_stock': False}
-        else:
-            context = {'product': model_to_dict(product),
-                'is_out_of_stock': True}
+        except Exception as e:
+            print(e)
+            harga = product_services.get_harga_bertingkat_price(product, int(qty))
+            is_out_of_stock = product_services.check_product_stock(product, int(qty))
+            if not is_out_of_stock:
+                total = int(qty) * harga
+                sale_item = Sale.objects.create(invoice=invoice, product=product, qty=qty, price=harga, total=total)
+                context = {'sale': model_to_dict(sale_item),
+                        'price': harga,
+                        'is_out_of_stock': False}
 
         return Response(context)
 
@@ -133,6 +112,15 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice.member = member
         invoice.save(update_fields=["cash", "cashier", "change", "total", "member", "status"])
 
+        sales = Sale.objects.filter(invoice=invoice)
+        for sale in sales:
+            product = Product.objects.get(name=sale.product)
+            try:
+                product.stock = product.stock - int(sale.qty)
+                product.save(update_fields=["stock"])
+            except Exception as e:
+                print(e)
+
         return HttpResponse(status=202)
 
     @action(detail=False, methods=['POST'])
@@ -145,8 +133,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = Sale.objects.get(invoice=invoice, product=product)
-        product.stock+=item.qty
-        product.save(update_fields=["stock"])
         item.delete()
         return Response(model_to_dict(item))
 
@@ -165,16 +151,10 @@ class SaleViewSet(viewsets.ModelViewSet):
         
         if item.qty < new_qty:
             qty_addition = new_qty - item.qty
-            is_out_of_stock = product_services.check_product_stock(product, qty_addition)
+            is_out_of_stock = product_services.check_product_stock(product, new_qty)
         
-        if not is_out_of_stock:
-            if(item.qty<new_qty):
-                product.stock-=(new_qty-item.qty)
-            else:
-                product.stock+=(item.qty-new_qty)
-            product.save(update_fields=["stock"])
-            
-            harga = self.get_price(product, new_qty)
+        if not is_out_of_stock:            
+            harga = product_services.get_harga_bertingkat_price(product, int(new_qty))
             item.qty = new_qty
             item.price = harga
             item.total = new_qty * harga
@@ -322,7 +302,7 @@ class ReportSaleViewSet(viewsets.ModelViewSet):
         
         item = Sale.objects.get(invoice=invoice, product=product)
         old_item_total = item.total
-        item.price = SaleViewSet.get_price(self,product, new_qty)
+        item.price =  product_services.get_harga_bertingkat_price(product, int(new_qty))
         item.qty = new_qty
         item.total = new_qty * item.price
         item.save()

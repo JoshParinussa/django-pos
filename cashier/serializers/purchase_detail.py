@@ -7,11 +7,12 @@ from cashier.models import Purchase, PurchaseDetail
 class PurchaseDetailSerializer(serializers.ModelSerializer):
     """Purchase Serializer."""
     product = serializers.CharField(source='product.name', read_only=True)
-    price   = serializers.CharField(source='product.purchase_price', read_only=True)
+    barcode = serializers.CharField(source='product.barcode', read_only=True)
+    # price   = serializers.CharField(source='product.purchase_price', read_only=True)
     invoice = serializers.CharField(source='invoice.invoice', read_only=True)
 
     class Meta:  # noqa D106
         model = PurchaseDetail
         name = 'purchasedetail'
-        fields = ['id', 'invoice', 'product', 'price', 'qty', 'total']
-        datatables_always_serialize = ('id', 'invoice', 'product', 'price', 'qty', 'total')
+        fields = ['id', 'invoice', 'product', 'barcode', 'purchase_price', 'qty', 'total']
+        datatables_always_serialize = ('id', 'invoice', 'product', 'purchase_price', 'qty', 'total')

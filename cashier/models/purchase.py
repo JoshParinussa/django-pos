@@ -11,6 +11,10 @@ class PurchaseStatus(models.IntegerChoices):
     ONPROCESS = 0
     SUCCESS = 1
 
+class PurchasePaymentStatus(models.IntegerChoices):
+    """PurchaseStatus choice."""
+    DEBT = 0
+    CASH = 1
 
 class Purchase(BaseModel):
     """Purchase"""
@@ -20,6 +24,7 @@ class Purchase(BaseModel):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=False, related_name='purchase_supplier')
     total = models.DecimalField(max_digits=9, decimal_places=0, null=True, blank=True)
     status = models.PositiveSmallIntegerField(choices=PurchaseStatus.choices, default=PurchaseStatus.ONPROCESS, db_index=True)
+    payment_status = models.PositiveSmallIntegerField(choices=PurchasePaymentStatus.choices, default=PurchasePaymentStatus.CASH, db_index=True)
 
     def __str__(self):
         """String representation."""
@@ -30,6 +35,7 @@ class PurchaseDetail(BaseModel):
     """PurchaseDetail"""
     invoice = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='purchase_invoice')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchase_product', verbose_name="produk")
+    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
     qty = models.IntegerField(blank=False, null=False)
     total = models.DecimalField(max_digits=9, decimal_places=0)
 

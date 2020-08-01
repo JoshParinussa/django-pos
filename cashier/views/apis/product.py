@@ -1,4 +1,5 @@
 """Product Api view."""
+from django.db.models import F
 from cashier.models import Product, ConvertBarang
 from cashier.serializers.products import ProductSerializer, ConvertBarangSerializer
 from rest_framework import viewsets
@@ -12,13 +13,15 @@ class ProductViewSet(APIBaseView):
     """ProductViewSet."""
     serializer_class = ProductSerializer
     queryset = Product.objects.order_by('name')
-    # filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
     def get_queryset(self):
         queryset = Product.objects.all()
         product_name = self.request.query_params.get('q', None)
+        product_barcode = self.request.query_params.get('barcode', None)
         if product_name is not None:
             queryset = queryset.filter(name__icontains=product_name)
+        if product_barcode is not None:
+            queryset = queryset.filter(barcode__icontains=product_barcode)
         return queryset
 
 
@@ -59,3 +62,13 @@ class ConvertViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+class ReportOutOfStockViewSet(APIBaseView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.order_by('name')
+
+    def get_queryset(self):
+        queryset = Product.objects.exclude(stock__gt=F('minimal_stock'))
+        product_name = self.request.query_params.get('q', None)
+        if product_name is not None:
+            queryset = queryset.filter(name__icontains=product_name)
+        return queryset

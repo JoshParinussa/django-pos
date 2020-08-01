@@ -71,6 +71,27 @@ var getProductByName = function() {
     //     }
     // });
     // SELECT2 from AJAX
+    $('.barcode').select2({
+        ajax: {
+            type: "GET",
+            url: "/v1/products?query={id, text}",
+            dataType: 'json',
+            data: function(params) {
+                var query = {
+                    barcode: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            }
+
+        },
+        theme: "bootstrap",
+        // selectOnClose: true,
+        placeholder: "Cari berdasarkan barcode produk",
+    });
+
     $('.product_name').select2({
         ajax: {
             type: "GET",
@@ -95,6 +116,19 @@ var getProductByName = function() {
         placeholder: "Kode supplier",
 
     });
+
+    $('.barcode').on("select2:select", function(evt) {
+        var id = $(this).val();
+        $('#barcode').val('').trigger("change");
+        getProductByNameAPI(id);
+        $('#barcode').focus();
+    });
+
+    // $('#payment_status').select2({
+    //     theme: "bootstrap",
+    //     placeholder: "Pilih Pembayaran",
+
+    // });
 
     $(document).on('focus', '.select2-selection.select2-selection--single', function(e) {
         $(this).closest(".select2-container").siblings('select:enabled').select2('open');
@@ -153,7 +187,8 @@ var drawPurchaseRow = function() {
             "invoice_purchase": invoice_number,
             "barcode": itemBarcode,
             "qty": purchaseItemQty,
-            "supplier": supplier
+            "supplier": supplier,
+            "total": grandTotal,
         },
         success: function(result) {
             var idRow = itemBarcode;
@@ -208,9 +243,11 @@ var getInvoicePurchaseItem = function() {
             "invoice_purchase": invoice_number,
         },
         success: function(result) {
+            console.log(result)
             try {
                 var invoice_data = result.data['purchase'][0];
-                $('#supplier').val(invoice_data['supplier'])
+                $('#supplier').val(invoice_data['supplier_id']).trigger('change')
+                $('#payment_status').val(invoice_data['payment_status'])
                 date = moment.utc(invoice_data['date']).local().format('LLL');
                 $('#purchase-date').val(date);
                 var purchase_items = result.data['purchase_items'];
@@ -235,7 +272,7 @@ var getInvoicePurchaseItem = function() {
                             // "<td>" + lineNo + "</td>" +
                             "<td class='product-barcode' style='display:none;'>" + item.barcode + "</td>" +
                             "<td class='product-name'>" + item.product + "</td>" +
-                            "<td class='price' data-price='" + item.price + "'>" + Number(item.price).toLocaleString('id-ID') + "</td>" +
+                            "<td class='price' data-price='" + item.purchase_price + "'>" + Number(item.purchase_price).toLocaleString('id-ID') + "</td>" +
                             "<td class='qty'>" + item.qty + "</td>" +
                             "<td class='purchase_total' data-purchase-total='" + item.total + "'>" + Number(item.total).toLocaleString('id-ID') + "</td>" +
                             "<td class='col-actions'>" +
@@ -261,6 +298,7 @@ var getInvoicePurchaseItem = function() {
                     $('#barcode').attr("disabled", true);
                     $('#process_payment').attr("disabled", true);
                     $('#supplier').attr("disabled", true);
+                    $('#payment_status').attr("disabled", true);
                     $('#cash').attr("disabled", true);
                     var item_table = $('#item_table');
                     $("#btn-print-payment").prop('disabled', false);
@@ -312,13 +350,15 @@ $('#qty-item-cart').on('keypress', function(e) {
 
 $('#process_payment').click(function(e) {
     var supplier = $('#supplier').val()
+    var payment_status = $('#payment_status').val()
     $.ajax({
         type: "POST",
         url: "/v1/purchase_detail/process_payment",
         data: {
             "invoice_purchase": invoice_number,
             "total": grandTotal,
-            "supplier": supplier
+            "supplier": supplier,
+            "payment_status": payment_status
         },
         success: function(result) {
             window.location.href = '/dash/transaction/purchase';
@@ -363,16 +403,19 @@ var updateItem = function(e) {
     row = $(e).closest('tr')
     var itemName = row.find(".product-name").html();
     var itemQty = row.find(".qty").html();
+    var itemPrice = row.find(".price").html();
     var itemBarcode = row.find(".product-barcode").html();
     $('#modal-item-name').val(itemName);
     $('#modal-qty-item-cart').val(itemQty);
+    $('#modal-price').val(itemPrice);
     $('#modal-barcode').val(itemBarcode);
 }
 
 $('#modal-btn-update').click(function(e) {
     var newQty = $('#modal-qty-item-cart').val();
+    var newPrice = $('#modal-price').val();
     grandTotal -= Number(row.find(".purchase_total").attr('data-purchase-total'));
-    var newTotal = Number(newQty) * Number(row.find(".price").html());
+    var newTotal = Number(newQty) * Number(newPrice);
     $.ajax({
         type: "POST",
         url: "/v1/purchase_detail/update_item",
@@ -380,16 +423,19 @@ $('#modal-btn-update').click(function(e) {
             "invoice_purchase": invoice_number,
             "barcode": $('#modal-barcode').val(),
             "qty": newQty,
+            "price": newPrice.replace(/[^0-9\-]+/g, ""),
             'total': newTotal
         },
         success: function(result) {
-            row.find(".qty").html(newQty);
-            row.find(".price").html(result.price);
-            row.find(".purchase_total").html(Number(result.total).toLocaleString('id-ID'));
-            row.find(".purchase_total").attr('data-purchase-total', result.total);
+            console.log(result.item)
+            var item = result.item;
+            row.find(".qty").html(item.qty);
+            row.find(".price").html(Number(item.purchase_price).toLocaleString('id-ID'));
+            row.find(".purchase_total").html(Number(item.total).toLocaleString('id-ID'));
+            row.find(".purchase_total").attr('data-purchase-total', item.total);
             $('#modal-default').modal('toggle');
 
-            grandTotal += result.total;
+            grandTotal += item.total;
             $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
             emptyingCashChange();
         }

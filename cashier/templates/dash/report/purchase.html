@@ -1,31 +1,27 @@
 {% extends 'dash/layout/base.html' %}
-{% load static widget_tweaks%}
-
+{% load static i18n %}
 {% block css %}
 <link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
-{% comment %}<link rel="stylesheet" href="{% static 'admin/css/sale.css' %}">{% endcomment %}
 {% endblock %}
 
 {% block js %}
 <script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
-<script type="text/javascript">
-    let currentUser = '{{ request.user.first_name }}';
-</script>
 <script src="{% static 'common.js' %}"></script>
-<script src="{% static 'admin/purchase_list.js' %}"></script>
+<script src="{% static 'admin/report_purchase.js' %}"></script>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
 {% endblock %}
-
 
 {% block breadcrumb %}
-<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Pembelian</span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Laporan</span>
 {% endblock %}
-  
-{% block content %}
 
+
+{% block content %}
+{% csrf_token %}
 <div class="kt-portlet">
     <div class="kt-portlet__body">
         <div class="row">
-            <div class="col-5">
+            <div class="col-4">
                 <div class='input-group pull-left' id='kt_daterangepicker_6'>
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
@@ -33,15 +29,27 @@
                     <input type="text" class="form-control" readonly placeholder="Select date range" id="date-picker-range"/>
                 </div>
             </div>
+            <div class="col-4">
+                <select name="payment_status" id="payment_status" class="form-control">
+                    <option value="">Pilih Pembayaran</option>
+                    <option value="1">Cash</option>
+                    <option value="0">Hutang</option>
+                </select>
+            </div>
             <div class="col-2">
                 <button type="button" class="btn btn-primary btn-block btn-icon-sm" id="btn-filter-date" title="Filter">
                     <i class="flaticon-search"></i>Filter
                 </button>
             </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
+                    <i class="flaticon2-print"></i>Cetak
+                </button>
+            </div>
         </div>
     </div>
 </div>
-{% csrf_token %}
+    
 <div class="kt-portlet kt-portlet--mobile">
     <div class="kt-portlet__head kt-portlet__head--lg">
         <div class="kt-portlet__head-label">
@@ -49,18 +57,8 @@
                 <i class="kt-font-brand flaticon2-soft-icons"></i>
             </span>
             <h3 class="kt-portlet__head-title">
-                List Invoice Pembelian {{ request.user.first_name }}
+                List Invoice Pembelian
             </h3>
-        </div>
-        <div class="kt-portlet__head-toolbar">
-            <div class="kt-portlet__head-wrapper">
-                <div class="kt-portlet__head-actions">
-                    <a href="{% url 'dash_purchase_create' %}" class="btn btn-brand btn-elevate btn-icon-sm">
-                        <i class="la la-plus"></i>
-                        Pembelian Baru
-                    </a>
-                </div>
-            </div>
         </div>
     </div>
     <div class="kt-portlet__body">
@@ -82,5 +80,5 @@
         </table>
     </div>
 </div>
-{% endblock %}
 
+{% endblock %}

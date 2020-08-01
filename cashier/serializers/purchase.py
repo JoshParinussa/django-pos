@@ -10,10 +10,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
     """Purchase Serializer."""
     cashier = serializers.CharField(source='cashier.first_name', read_only=True)
     supplier = serializers.CharField(source='supplier.kode', read_only=True)
+    supplier_id = serializers.CharField(source='supplier.id', read_only=True)
     invoice_purchase = PurchaseDetailSerializer(read_only=True, many=True)
     date = serializers.DateTimeField(required=False, read_only=True)
 
     class Meta:  # noqa D106
         model = Purchase
         name = 'purchase'
-        fields = ('id', 'invoice', 'date', 'cashier', 'supplier', 'total', 'invoice_purchase', 'status')
+        fields = ('id', 'invoice', 'date', 'cashier', 'supplier', 'supplier_id', 'total', 'invoice_purchase', 'status', 'payment_status')
+        datatables_always_serialize = ('id')

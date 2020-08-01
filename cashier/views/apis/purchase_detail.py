@@ -35,17 +35,10 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         supplier = supplier_services.get_supplier_by_id(supplier)
         try:
             purchase = Purchase.objects.get(invoice=invoice_purchase)
-            purchase.supplier = supplier
-            purchase.save()
         except Exception as e:
-            purchase = Purchase.objects.create(invoice=invoice_purchase, cashier=self.request.user, supplier=supplier)
+            purchase = Purchase.objects.create(invoice=invoice_purchase, cashier=self.request.user, supplier=supplier, total=0)
+
         product = Product.objects.get(barcode=barcode)
-        
-        try:
-            product.stock = product.stock + int(qty)
-            product.save(update_fields=["stock"])
-        except Exception as e:
-            print(e)
 
         try:
             purchase_item = PurchaseDetail.objects.get(invoice=purchase, product=product)
@@ -60,6 +53,9 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
             harga = product.purchase_price
             total = int(qty) * harga
             purchase_item = PurchaseDetail.objects.create(invoice=purchase, product=product, qty=qty, total=total)
+
+        purchase.total = purchase.total + purchase_item.total
+        purchase.save(update_fields=['total'])
         
         context = {'purchase': model_to_dict(purchase_item),
                    'price': harga}
@@ -93,13 +89,26 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         total = request.POST.get('total')
         supplier = request.POST.get('supplier')
         supplier = supplier_services.get_supplier_by_id(supplier)
-
+        payment_status = request.POST.get('payment_status')
+        if payment_status == '':
+            payment_status = 1
         purchase = Purchase.objects.get(invoice=invoice_purchase)
         purchase.total = total
         purchase.cashier = self.request.user
         purchase.supplier = supplier
         purchase.status = 1
-        purchase.save(update_fields=["cashier", "total", "supplier", "status"])
+        purchase.payment_status = payment_status
+        purchase.save(update_fields=["cashier", "total", "supplier", "status", "payment_status"])
+
+        purchase_details = PurchaseDetail.objects.filter(invoice=purchase)
+        for purchase_detail in purchase_details:
+            product = Product.objects.get(name=purchase_detail.product)
+            try:
+                product.purchase_price = (int(purchase_detail.total)/int(purchase_detail.qty))
+                product.stock = product.stock + int(purchase_detail.qty)
+                product.save(update_fields=["stock","purchase_price"])
+            except Exception as e:
+                print(e)
 
         return HttpResponse(status=202)
 
@@ -113,9 +122,9 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         product = Product.objects.get(barcode=barcode)
 
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
-        product.stock-=item.qty
-        product.save(update_fields=["stock"])
+        purchase.total -= item.total
         item.delete()
+        purchase.save(update_fields=['total'])
         return Response(model_to_dict(item))
 
     @action(detail=False, methods=['POST'])
@@ -124,22 +133,23 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
         invoice_purchase = request.POST.get('invoice_purchase')
         barcode = request.POST.get('barcode')
         new_qty = int(request.POST.get('qty'))
+        new_price = int(request.POST.get('price'))
         new_total = request.POST.get('total')
 
         purchase = Purchase.objects.get(invoice=invoice_purchase)
         product = Product.objects.get(barcode=barcode)
 
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
-        if(item.qty<new_qty):
-            product.stock+=(new_qty-item.qty)
-        else:
-            product.stock-=(item.qty-new_qty)
-        product.save(update_fields=["stock"])
+
+        item.purchase_price = new_price
         item.qty = new_qty
-        item.total = new_qty * product.purchase_price
+        item.total = new_qty * new_price
         item.save()
-        
-        return Response(model_to_dict(item))
+        context = {'item': model_to_dict(item),
+                    'product': model_to_dict(product)}
+
+        # return Response(model_to_dict(item))
+        return Response(context)
 
     @action(detail=False, methods=['POST'])
     def sale_report_by_product(self, request):

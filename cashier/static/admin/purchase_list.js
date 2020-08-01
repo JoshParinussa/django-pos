@@ -94,11 +94,19 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
+                    targets: 6,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : data == 1 ?
+                            '<span class="kt-badge kt-badge--primary kt-badge--inline kt-badge--pill">Cash</span>' :
+                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">kredit</span>';
+                    }
+                },
+                {
                     targets: -1,
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="purchase/update/${row.id}" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="purchase/update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },
@@ -111,6 +119,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'supplier', orderable: true, searchable: true, name: 'supplier' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
                 { data: 'status', orderable: true, searchable: true, name: 'status' },
+                { data: 'payment_status', orderable: true, searchable: true, name: 'payment_status' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });

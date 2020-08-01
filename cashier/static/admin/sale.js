@@ -73,6 +73,27 @@ var getProductByName = function() {
     // });
 
     // SELECT2 from AJAX
+    $('.barcode').select2({
+        ajax: {
+            type: "GET",
+            url: "/v1/products?query={id, text}",
+            dataType: 'json',
+            data: function(params) {
+                var query = {
+                    barcode: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            }
+
+        },
+        theme: "bootstrap",
+        // selectOnClose: true,
+        placeholder: "Cari berdasarkan barcode produk",
+    });
+
     $('.product_name').select2({
         ajax: {
             type: "GET",
@@ -88,6 +109,13 @@ var getProductByName = function() {
     $('.product_name').on("select2:select", function(evt) {
         var id = $(this).val();
         $('#product_name').val('').trigger("change");
+        getProductByNameAPI(id);
+        $('#barcode').focus();
+    });
+
+    $('.barcode').on("select2:select", function(evt) {
+        var id = $(this).val();
+        $('#barcode').val('').trigger("change");
         getProductByNameAPI(id);
         $('#barcode').focus();
     });
@@ -136,7 +164,8 @@ var getProductByBarcode = function() {
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
     var member = $('#member').val()
-        // purchaseItemTotal = itemPrice * purchaseItemQty;
+    var idRow = itemBarcode;
+    // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
         type: "POST",
@@ -151,7 +180,6 @@ var drawPurchaseRow = function() {
             if (result.is_out_of_stock) {
                 toastr.error('Stok ' + result.product.name + ' KOSONG atau HABIS.');
             } else {
-                var idRow = itemBarcode;
                 var purchaseItemTotal = Number(result.sale.total);
                 var purchaseItemPrice = Number(result.price);
                 if ($('#item_table').find("#" + idRow).length > 0) {

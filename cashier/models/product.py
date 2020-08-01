@@ -27,6 +27,9 @@ class Product(BaseModel):
     minimal_stock = models.BigIntegerField(blank=True, null=True, verbose_name="batas minimal")
     purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
     selling_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="eceran")
+    grosir_1 = models.DecimalField(max_digits=9, decimal_places=0, blank=True, null=True)
+    grosir_2 = models.DecimalField(max_digits=9, decimal_places=0, blank=True, null=True)
+    grosir_3 = models.DecimalField(max_digits=9, decimal_places=0, blank=True, null=True)
 
     supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, blank=True, null=True)
 

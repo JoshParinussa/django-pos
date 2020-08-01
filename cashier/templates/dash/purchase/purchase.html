@@ -44,9 +44,11 @@
                     <div class="kt-portlet__body">
                         <div class="form-group row">
                             <div class="col-lg-3 col-xl-3">
+                                <label>Kasir</label>
                                 <input type="text" id="cashier" class="form-control" disabled>
                             </div>
                             <div class="col-lg-3 col-xl-3">
+                                <label>Supplier</label>
                                 <select name="supplier" id="supplier" class="form-control" >
                                     <option value="">Pilih Supplier</option>
                                 {% for supplier in suppliers %}
@@ -55,21 +57,27 @@
                                 </select>
                             </div>
                             <div class="col-lg-4 col-xl-2">
+                                <label>Tanggal</label>
                                 <input type="text" id="purchase-date" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-6">
+                                <label>Cari barcode</label>
                                 <div class="input-group">
-                                    <input class="form-control" id="barcode" type="text" placeholder="Scan atau ketik barcode produk.." autofocus>
-                                    <div class="input-group-append">
+                                    <select class="form-control barcode" id="barcode" autofocus>
+                                        <option value="">...</option>
+                                    </select>
+                                    {% comment %} <input class="form-control" id="barcode" type="text" placeholder="Scan atau ketik barcode produk.." autofocus> {% endcomment %}
+                                    {% comment %} <div class="input-group-append">
                                         <span class="input-group-text" type="button" id="search-product">
                                             <i class="flaticon-search" ></i>
                                         </span>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                             </div>
                             <div class="col-lg-6">
+                                <label>Cari nama produk</label>
                                 <div class="input-group">
                                     <select class="form-control product_name" id="product_name" ></select>
                                 </div> 
@@ -125,6 +133,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-xl-12">
+                                <label>Pembayaran</label>
                                 <select name="payment_status" id="payment_status" class="form-control">
                                     {% comment %} <option value="">Pilih Pembayaran</option> {% endcomment %}
                                     <option value="1">Cash</option>

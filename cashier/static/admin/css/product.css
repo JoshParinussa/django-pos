@@ -2,3 +2,10 @@
     border: 2px solid red;
     /* display: none; */
 }
+
+td a,
+td a:visited,
+td a:hover,
+td a:active {
+    color: inherit;
+}

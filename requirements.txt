@@ -23,3 +23,10 @@ flake8-docstrings==1.5.0
 pep8-naming==0.8.2
 coverage==4.5.4
 unittest-xml-reporting==2.5.1
+
+
+# Jupyter Notebooks
+# env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook
+# jupyter
+# ipython
+# django-extensions

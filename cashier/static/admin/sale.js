@@ -136,6 +136,9 @@ var getProductByBarcode = function() {
 var drawPurchaseRow = function() {
     purchaseItemQty = 1
     var member = $('#member').val()
+    var idRow = itemBarcode;
+    console.log("MASUK")
+    console.log($('#item_table').find("#" + idRow))
         // purchaseItemTotal = itemPrice * purchaseItemQty;
 
     $.ajax({
@@ -151,7 +154,6 @@ var drawPurchaseRow = function() {
             if (result.is_out_of_stock) {
                 toastr.error('Stok ' + result.product.name + ' KOSONG atau HABIS.');
             } else {
-                var idRow = itemBarcode;
                 var purchaseItemTotal = Number(result.sale.total);
                 var purchaseItemPrice = Number(result.price);
                 if ($('#item_table').find("#" + idRow).length > 0) {

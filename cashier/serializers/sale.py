@@ -15,7 +15,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
 
     def get_price(self, obj):
-        price = product_services.get_harga_bertingkat(obj.product, obj.qty)
+        price = product_services.get_harga_bertingkat_price(obj.product, obj.qty)
         return price
     class Meta:  # noqa D106
         model = Sale

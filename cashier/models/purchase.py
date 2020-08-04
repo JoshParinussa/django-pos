@@ -35,6 +35,7 @@ class PurchaseDetail(BaseModel):
     """PurchaseDetail"""
     invoice = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='purchase_invoice')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchase_product', verbose_name="produk")
+    purchase_price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga beli")
     qty = models.IntegerField(blank=False, null=False)
     total = models.DecimalField(max_digits=9, decimal_places=0)
 

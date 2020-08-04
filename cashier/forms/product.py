@@ -17,7 +17,8 @@ class DashProductForm(forms.ModelForm):
 
 HargaBertingkatFormset = modelformset_factory(
     HargaBertingkat,
-    fields=('min_quantity', 'max_quantity', 'price', ),
+    # fields=('min_quantity', 'max_quantity', 'price', ),
+    fields=('min_quantity', 'price', ),
     extra=1,
 )
 
@@ -31,7 +32,8 @@ HargaBertingkatInlineFormset = inlineformset_factory(
     Product,
     HargaBertingkat,
     form=DashProductHargaBertingkatForm,
-    fields=['max_quantity', 'min_quantity', 'price'],
+    # fields=['max_quantity', 'min_quantity', 'price'],
+    fields=['min_quantity', 'price'],
     extra=1,
     can_delete=True
 )

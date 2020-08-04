@@ -98,7 +98,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     render: function(data) {
                         return !$.trim(data) ? '' : data == 1 ?
                             '<span class="kt-badge kt-badge--primary kt-badge--inline kt-badge--pill">Cash</span>' :
-                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Hutang</span>';
+                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">kredit</span>';
                     }
                 },
                 {
@@ -106,7 +106,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="purchase/update/${row.id}" target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="purchase/update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },

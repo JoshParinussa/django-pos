@@ -141,12 +141,15 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
 
         item = PurchaseDetail.objects.get(invoice=purchase, product=product)
 
+        item.purchase_price = new_price
         item.qty = new_qty
         item.total = new_qty * new_price
         item.save()
+        context = {'item': model_to_dict(item),
+                    'product': model_to_dict(product)}
 
-
-        return Response(model_to_dict(item))
+        # return Response(model_to_dict(item))
+        return Response(context)
 
     @action(detail=False, methods=['POST'])
     def sale_report_by_product(self, request):

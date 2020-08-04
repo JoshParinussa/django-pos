@@ -13,7 +13,7 @@ class ProductSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
 
 
     def get_text(self, obj):
-        return '{item} Rp. {selling_price}'.format(item=obj.name, selling_price=f"{int(obj.selling_price):,d}") 
+        return '{barcode} {item} Rp. {selling_price}'.format(barcode=obj.barcode, item=obj.name, selling_price=f"{int(obj.selling_price):,d}") 
 
     class Meta:  # noqa D106
         model = Product

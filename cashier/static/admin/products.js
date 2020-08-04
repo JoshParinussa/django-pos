@@ -69,16 +69,15 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        console.log(row)
-                        return `<a href="products/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                        return `<a href="products/${row.id}" class="product btn btn-sm btn-clean btn-icon btn-icon-md" id="product" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
-                    </a>`;
+                        </a>`;
                     },
                 },
             ],
             columns: [
                 { data: 'name', orderable: true, searchable: true, name: 'name' },
-                { data: 'barcode', orderable: true, searchable: false, name: 'barcode' },
+                { data: 'barcode', orderable: true, searchable: true, name: 'barcode' },
                 { data: 'stock', orderable: true, searchable: false, name: 'stock' },
                 { data: 'category', orderable: true, searchable: false, name: 'category.name' },
                 { data: 'unit', orderable: true, searchable: false, name: 'unit' },

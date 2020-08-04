@@ -20,7 +20,7 @@ class ProductStatus(models.IntegerChoices):
 class Product(BaseModel):
     """Product model."""
     name = models.CharField(max_length=128, verbose_name="nama produk")
-    barcode = models.CharField(max_length=128, blank=False, null=False)
+    barcode = models.CharField(max_length=128, blank=False, null=False, unique=True)
     category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE, verbose_name="kategori", blank=True, null=True)
     unit = models.ForeignKey('Unit', on_delete=models.CASCADE, null=True, verbose_name="satuan")
     stock = models.BigIntegerField(blank=True, null=True, verbose_name="stok")
@@ -62,7 +62,7 @@ class HargaBertingkat(BaseModel):
     """HargaBertingkat."""
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='hargabertingkat')
     min_quantity = models.IntegerField(blank=True, null=True, verbose_name="min qty")
-    max_quantity = models.IntegerField(blank=True, null=True, verbose_name="max qty")
+    # max_quantity = models.IntegerField(blank=True, null=True, verbose_name="max qty")
     price = models.DecimalField(max_digits=9, decimal_places=0, null=True, verbose_name="harga jual")
 
     def __str__(self):

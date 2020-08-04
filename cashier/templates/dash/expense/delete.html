@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'dash_expenses_list' %}" class="kt-subheader__breadcrumbs-link">Pengeluaran</a>
+<a href="{% url 'dash_expense_list' %}" class="kt-subheader__breadcrumbs-link">Pengeluaran</a>
 {% if object %}
 <span class="kt-subheader__breadcrumbs-separator"></span>
 <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">{{ object.name }}</span>
@@ -58,7 +58,7 @@
                                     <div class="row">
                                         <label class="col-xl-3"></label>
                                         <div class="col-lg-9 col-xl-6">
-                                            <a href="{% url 'dash_expenses_update' object.id %}">
+                                            <a href="{% url 'dash_expense_update' object.id %}">
                                                 <h3 class="kt-section__title kt-section__title-sm">Pengeluaran : {{ object.information }}</h3>
                                             </a>
                                         </div>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-xl-3">
                                         <button type="submit" class="btn btn-danger">Hapus</button>&nbsp;
-                                        <a href="{% url 'dash_expenses_update' object.id %}">
+                                        <a href="{% url 'dash_expense_update' object.id %}">
                                             <button type="button" class="btn btn-secondary">Batal</button>&nbsp;
                                         </a>
                                     </div>

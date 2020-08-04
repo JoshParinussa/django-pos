@@ -1,20 +1,20 @@
 """Expenses forms module."""
 
 from cashier.forms.base import CustomModelForm
-from cashier.models import Expenses
+from cashier.models import Expense
 
 
-class DashExpensesCreationForm(CustomModelForm):
+class DashExpenseCreationForm(CustomModelForm):
     """Custom product creation form."""
 
     class Meta:  # noqa D106
-        model = Expenses
+        model = Expense
         fields = ('information', 'cost', )
 
 
-class DashExpensesUpdateForm(CustomModelForm):
+class DashExpenseUpdateForm(CustomModelForm):
     """CmsProductUpdateForm."""
 
     class Meta:  # noqa D106
-        model = Expenses
+        model = Expense
         fields = ('information', 'cost', )

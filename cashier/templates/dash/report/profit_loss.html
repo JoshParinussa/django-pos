@@ -17,6 +17,7 @@
 
 
 {% block content %}
+{% csrf_token %}
 <div class="kt-portlet">
     <div class="kt-portlet__body">
         <div class="row">
@@ -50,7 +51,7 @@
                     <h2>Pendapatan</h2>
                 </div>
                 <div class="row">
-                    <h4 id="income">Rp. 0</h4>
+                    <h4 id="revenue">Rp. {{revenue}}</h4>
                 </div>
             </div>
         </div>
@@ -62,7 +63,7 @@
                     <h2>Keuntungan</h2>
                 </div>
                 <div class="row">
-                    <h4 id="profit">Rp. 0</h4>
+                    <h4 id="profit">Rp. {{profit}}</h4>
                 </div>
             </div>
         </div>
@@ -74,7 +75,7 @@
                     <h2>Pengeluaran</h2>
                 </div>
                 <div class="row">
-                    <h4 id="loss">Rp. 0</h4>
+                    <h4 id="cost">Rp. {{cost}}</h4>
                 </div>
             </div>
         </div>
@@ -96,7 +97,8 @@
         <table class="table table-striped- table-hover table-checkable data-table">
             <thead>
                 <tr>
-                    <th>Nama</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
                     <th>Jumlah</th>
                 </tr>
             </thead>

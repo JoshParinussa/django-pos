@@ -4,7 +4,7 @@ from django.contrib import admin
 from cashier.models import (Pembayaran, PembayaranProduct, Product,
                             ProductCategory, HargaBertingkat, ConvertBarang,
                             User, Invoice, Sale, Supplier, Unit,
-                            Purchase)
+                            Purchase, Income, Expense)
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -61,9 +61,16 @@ class PurchaseAdmin(admin.ModelAdmin):
     """PurchaseAdmin."""
     pass
 
-
 class UnitAdmin(admin.ModelAdmin):
     """UnitAdmin."""
+    pass
+
+class IncomeAdmin(admin.ModelAdmin):
+    """IncomeAdmin"""
+    pass
+
+class ExpenseAdmin(admin.ModelAdmin):
+    """ExpenseAdmin"""
     pass
 
 
@@ -79,3 +86,5 @@ admin.site.register(Sale, SaleAdmin)
 admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Purchase, PurchaseAdmin)
 admin.site.register(Unit, UnitAdmin)
+admin.site.register(Income, IncomeAdmin)
+admin.site.register(Expense, ExpenseAdmin)

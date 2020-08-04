@@ -111,7 +111,3 @@ class ReportSalebyProductView(DashListView, BaseUserPassesTestMixin):
             context[f'{action}_url_name'] = url_name
 
         return context
-
-class ReportProfitLossView(DashListView, BaseUserPassesTestMixin):
-    template_name = "dash/report/profit_loss.html"
-    model = Invoice

@@ -296,22 +296,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 $('#date_list_transaction').change(function() {
     condition = this.value;
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/v1/report_transaction/set_income_profit",
-    //     data: {
-    //         'date': condition
-    //     },
-    //     success: function(result) {
-    //         $('#income').html('Rp. ' + result.income);
-    //         $('#profit').html('Rp. ' + result.profit);
-    //         income = result.income;
-    //         profit = result.profit;
-    //         currentDate = result.date;
-    //         data_2 = result.data_2;
-    //         product_all = result.product;
-    //     }
-    // });
     $.ajax({
         type: "POST",
         url: "/v1/report_purchase/set_datatable?format=datatables",

@@ -73,26 +73,26 @@ var getProductByName = function() {
     // });
 
     // SELECT2 from AJAX
-    $('.barcode').select2({
-        ajax: {
-            type: "GET",
-            url: "/v1/products?query={id, text}",
-            dataType: 'json',
-            data: function(params) {
-                var query = {
-                    barcode: params.term,
-                    type: 'public'
-                }
+    // $('.barcode').select2({
+    //     ajax: {
+    //         type: "GET",
+    //         url: "/v1/products?query={id, text}",
+    //         dataType: 'json',
+    //         data: function(params) {
+    //             var query = {
+    //                 barcode: params.term,
+    //                 type: 'public'
+    //             }
 
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            }
+    //             // Query parameters will be ?search=[term]&type=public
+    //             return query;
+    //         }
 
-        },
-        theme: "bootstrap",
-        // selectOnClose: true,
-        placeholder: "Cari berdasarkan barcode produk",
-    });
+    //     },
+    //     theme: "bootstrap",
+    //     // selectOnClose: true,
+    //     placeholder: "Cari berdasarkan barcode produk",
+    // });
 
     $('.product_name').select2({
         ajax: {
@@ -113,12 +113,12 @@ var getProductByName = function() {
         $('#barcode').focus();
     });
 
-    $('.barcode').on("select2:select", function(evt) {
-        var id = $(this).val();
-        $('#barcode').val('').trigger("change");
-        getProductByNameAPI(id);
-        $('#barcode').focus();
-    });
+    // $('.barcode').on("select2:select", function(evt) {
+    //     var id = $(this).val();
+    //     $('#barcode').val('').trigger("change");
+    //     getProductByNameAPI(id);
+    //     $('#barcode').focus();
+    // });
     // $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
     //     if (e.keyCode == 13) {
     //         var id = $('#product_name').select2('data')[0].id;

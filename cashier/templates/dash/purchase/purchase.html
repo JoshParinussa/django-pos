@@ -65,15 +65,15 @@
                             <div class="col-lg-6">
                                 <label>Cari barcode</label>
                                 <div class="input-group">
-                                    <select class="form-control barcode" id="barcode" autofocus>
+                                    {% comment %} <select class="form-control barcode" id="barcode" autofocus>
                                         <option value="">...</option>
-                                    </select>
-                                    {% comment %} <input class="form-control" id="barcode" type="text" placeholder="Scan atau ketik barcode produk.." autofocus> {% endcomment %}
-                                    {% comment %} <div class="input-group-append">
+                                    </select> {% endcomment %}
+                                    <input class="form-control" id="barcode" type="text" placeholder="Scan atau ketik barcode produk.." autofocus>
+                                    <div class="input-group-append">
                                         <span class="input-group-text" type="button" id="search-product">
                                             <i class="flaticon-search" ></i>
                                         </span>
-                                    </div> {% endcomment %}
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">

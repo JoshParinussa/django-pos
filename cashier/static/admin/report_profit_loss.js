@@ -100,6 +100,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
     var initEvents = function() {
         $('#btn-filter-date').on('click', function(e) {
+            initProfitLoss();
             table.api().ajax.reload();
         });
         $('#btn-print-report').on('click', function(e) {
@@ -232,10 +233,29 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
         });
     };
-
+    var initProfitLoss = function () {
+        var date_range = getDaterange();
+            $.ajax({
+                type: "POST",
+                url: "/v1/profit_loss/set_profit_loss",
+                data: {
+                    'date_range': date_range
+                },
+                success: function(result) {
+                    $('#revenue').html("Rp. "+Number(result.revenue).toLocaleString('id-ID'));
+                    $('#revenue_1').html("Rp. "+Number(result.revenue_1).toLocaleString('id-ID'));
+                    $('#revenue_2').html("Rp. "+Number(result.revenue_2).toLocaleString('id-ID'));
+                    $('#cost').html("Rp. "+Number(result.cost).toLocaleString('id-ID'));
+                    $('#cost_1').html("Rp. "+Number(result.cost_1).toLocaleString('id-ID'));
+                    $('#cost_2').html("Rp. "+Number(result.cost_2).toLocaleString('id-ID'));
+                    $('#profit').html("Rp. "+Number(result.profit).toLocaleString('id-ID'));
+                }
+            });
+    };
     return {
         init: function() {
             initDateRangePicker();
+            initProfitLoss();
             initTable1();
             initEvents();
         },
@@ -243,20 +263,22 @@ var KTDatatablesDataSourceAjaxServer = function() {
 }();
 
 $('#date-picker-range').change(function() {
-    condition = this.value;
-    $.ajax({
-        type: "POST",
-        url: "/v1/profit_loss/set_datatable?format=datatables",
-        data: function(data) {
-            data.date = getDaterange();
-        },
-        success: function(result) {
-            $('#revenue').html("Rp."+result.revenue);
-            $('#cost').html("Rp."+result.cost);
-            $('#profit').html("Rp."+result.profit);
-            table.api().ajax.reload();
-        }
-    });
+    // condition = this.value;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/v1/profit_loss/profit",
+    //     data: function(data) {
+    //         data.date_range = getDaterange();
+    //     },
+    //     success: function(result) {
+    //         console.log("Berubah")
+    //         console.log(result)
+    //         $('#revenue').html("Rp."+result.data['revenue']);
+    //         $('#cost').html("Rp."+result.data['cost']);
+    //         $('#profit').html("Rp."+result.data['profit']);
+    //         table.api().ajax.reload();
+    //     }
+    // });
 });
 
 

@@ -294,21 +294,6 @@ var KTDatatablesDataSourceAjaxServer = function() {
     };
 }();
 
-$('#date_list_transaction').change(function() {
-    condition = this.value;
-    $.ajax({
-        type: "POST",
-        url: "/v1/report_purchase/set_datatable?format=datatables",
-        data: function(data) {
-            data.date = condition;
-        },
-        success: function(result) {
-            table.api().ajax.reload();
-        }
-    });
-});
-
-
 jQuery(document).ready(function() {
     KTDatatablesDataSourceAjaxServer.init();
 });

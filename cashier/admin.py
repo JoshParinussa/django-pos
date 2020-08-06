@@ -4,11 +4,7 @@ from django.contrib import admin
 from cashier.models import (Pembayaran, PembayaranProduct, Product,
                             ProductCategory, HargaBertingkat, ConvertBarang,
                             User, Invoice, Sale, Supplier, Unit,
-<<<<<<< HEAD
-                            Purchase, Income, Expense)
-=======
-                            Purchase, PurchaseDetail)
->>>>>>> dc647a0b5867b7c5b2ad7c6cf39e22a3c1f1033b
+                            Purchase, PurchaseDetail, Income, Expense)
 
 
 class UserAdmin(admin.ModelAdmin):

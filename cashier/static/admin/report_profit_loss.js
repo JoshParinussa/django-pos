@@ -242,18 +242,18 @@ var KTDatatablesDataSourceAjaxServer = function() {
     };
 }();
 
-$('#date_list_transaction').change(function() {
+$('#date-picker-range').change(function() {
     condition = this.value;
     $.ajax({
         type: "POST",
         url: "/v1/profit_loss/set_datatable?format=datatables",
         data: function(data) {
-            data.date = condition;
+            data.date = getDaterange();
         },
         success: function(result) {
-            // $('#revenue').html("Rp."+result.revenue);
-            // $('#cost').html("Rp."+result.cost);
-            // $('#profit').html("Rp."+result.profit);
+            $('#revenue').html("Rp."+result.revenue);
+            $('#cost').html("Rp."+result.cost);
+            $('#profit').html("Rp."+result.profit);
             table.api().ajax.reload();
         }
     });

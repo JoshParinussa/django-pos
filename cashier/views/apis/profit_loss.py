@@ -40,9 +40,6 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             }
             datasets.append(array_temp)
             array_temp={}
-        for dataset in datasets:
-            for key in dataset:
-                print("-------------------"+datasets[key])
         for income in incomes:
             revenue += income.jumlah_pemasukan
 
@@ -53,9 +50,10 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             cost += expense.cost
 
         profit = revenue - cost
-        context = {'revenue': revenue,
-                   'cost': cost,
-                   'profit':profit}
+        context = {}
+        context['revenue'] = revenue
+        context['cost'] = cost
+        context['profit'] = profit
 
         return Response(context)
         

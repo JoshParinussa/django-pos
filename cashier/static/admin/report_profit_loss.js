@@ -60,7 +60,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             paging: true,
             scrollX: true,
             order: [
-                [0, "asc"]
+                [0, "dsc"]
             ],
             ajax: {
                 'type': 'POST',
@@ -84,9 +84,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 2,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data;
-                            // '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
-                            // '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
+                        return !$.trim(data) ? '' : data > 0 ? 
+                            '<span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>' :
+                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>';
                     }
                 },
             ],

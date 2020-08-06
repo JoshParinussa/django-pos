@@ -25,9 +25,40 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
         incomes = Income.objects.filter(date__range=dates).only("date","keterangan","jumlah_pemasukan")
         expenses = Expense.objects.filter(date__range=dates).only("date","information","cost")
         
-        array_temp={}
-        datasets=[]
-        context = {}
+        context = []
+        listtemp = {}
+        for invoice in invoices:
+            listtemp = {'date':invoice.date,
+                        'information':"Penjualan ke "+str(invoice.member),
+                        'total':invoice.total,
+                        'id':invoice.id}
+            context.append(listtemp)
+            listtemp = {}
+        
+        for purchase in purchases:
+            listtemp = {'date':purchase.date,
+                        'information':"Pembelian dari "+str(purchase.supplier),
+                        'total':-purchase.total,
+                        'id':purchase.id}
+            context.append(listtemp)
+            listtemp = {}
+
+        for income in incomes:
+            listtemp = {'date':income.date,
+                        'information':income.keterangan,
+                        'total':income.jumlah_pemasukan,
+                        'id':income.id}
+            context.append(listtemp)
+            listtemp = {}    
+
+        for expense in expenses:
+            listtemp = {'date':expense.date,
+                        'information':expense.information,
+                        'total':-expense.cost,
+                        'id':expense.id}
+            context.append(listtemp)
+            listtemp = {}    
+        
         return Response(context)
         
     @action(detail=False, methods=['POST'])

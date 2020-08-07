@@ -2,6 +2,7 @@
 from cashier.forms import income as income_forms
 from cashier.models import Income
 from cashier.views.dash.base import (DashCreateView, DashDeleteView, DashListView, DashUpdateView)  
+from cashier.services.code_generator import code_generator
 from datetime import datetime, date
 
 
@@ -27,7 +28,10 @@ class IncomeCreateView(DashIncomeMixin, DashCreateView):
 
     def form_valid(self, form):
         form.instance.cashier = self.request.user
+        form.instance.invoice = code_generator.generate(self.request.user, Income)
         return super().form_valid(form)
+
+    
 
 
 class IncomeUpdateView(DashIncomeMixin, DashUpdateView):
@@ -45,3 +49,8 @@ class IncomeDeleteView(DashIncomeMixin, DashDeleteView):
     """IncomeDeleteView."""
     model = Income
     template_name = 'dash/income/delete.html'
+
+class ReportIncomeView(DashIncomeMixin, DashListView):
+    """IncomeListView."""
+    template_name = 'dash/report/income.html'
+    model = Income

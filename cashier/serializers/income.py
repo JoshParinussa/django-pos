@@ -11,4 +11,4 @@ class IncomeSerializer(serializers.ModelSerializer):
         model = Income
         name = 'income'
         fields = '__all__'
-        datatables_always_serialize = ('id','date','cashier','information','cost')
+        datatables_always_serialize = ('id')

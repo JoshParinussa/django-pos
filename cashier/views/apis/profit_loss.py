@@ -28,7 +28,8 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
         context = []
         listtemp = {}
         for invoice in invoices:
-            listtemp = {'date':invoice.date,
+            listtemp = {'code':invoice.invoice,
+                        'date':invoice.date,
                         'information':"Penjualan ke "+str(invoice.member),
                         'total':invoice.total,
                         'id':invoice.id}
@@ -36,7 +37,8 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}
         
         for purchase in purchases:
-            listtemp = {'date':purchase.date,
+            listtemp = {'code':purchase.invoice,
+                        'date':purchase.date,
                         'information':"Pembelian dari "+str(purchase.supplier),
                         'total':-purchase.total,
                         'id':purchase.id}
@@ -44,7 +46,8 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}
 
         for income in incomes:
-            listtemp = {'date':income.date,
+            listtemp = {'code':income.invoice,
+                        'date':income.date,
                         'information':income.keterangan,
                         'total':income.jumlah_pemasukan,
                         'id':income.id}
@@ -52,7 +55,8 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}    
 
         for expense in expenses:
-            listtemp = {'date':expense.date,
+            listtemp = {'code':expense.invoice,
+                        'date':expense.date,
                         'information':expense.information,
                         'total':-expense.cost,
                         'id':expense.id}

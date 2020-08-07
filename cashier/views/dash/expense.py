@@ -1,7 +1,8 @@
 """Product views."""
 from cashier.forms import expense as expense_forms
 from cashier.models import Expense
-from cashier.views.dash.base import (DashCreateView, DashDeleteView, DashListView, DashUpdateView)  
+from cashier.views.dash.base import (DashCreateView, DashDeleteView, DashListView, DashUpdateView)
+from cashier.services.code_generator import code_generator  
 from datetime import datetime, date
 
 
@@ -27,6 +28,7 @@ class ExpenseCreateView(DashExpenseMixin, DashCreateView):
 
     def form_valid(self, form):
         form.instance.cashier = self.request.user
+        form.instance.invoice = code_generator.generate(self.request.user, Expense)
         return super().form_valid(form)
 
 
@@ -41,3 +43,8 @@ class ExpenseDeleteView(DashExpenseMixin, DashDeleteView):
     """ExpenseDeleteView."""
     model = Expense
     template_name = 'dash/expense/delete.html'
+
+class ReportExpenseView(DashExpenseMixin, DashListView):
+    """ExpenseListView."""
+    template_name = 'dash/report/expense.html'
+    model = Expense

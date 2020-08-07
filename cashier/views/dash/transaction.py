@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from cashier.models import Invoice, Sale, User
 from cashier.views.dash.base import DashListView, BaseUserPassesTestMixin, ManageBaseView
 from cashier.services.member import member_services
+from cashier.services.code_generator import code_generator
 
 logger = logging.getLogger(__name__)
 
@@ -33,18 +34,7 @@ class SaleTransactionView(ManageBaseView, TemplateView):
             print("# STATUS", invoice.status)
         except Exception as e:
             logger.error(e)
-            user = self.request.user
-            # today_invoice = datetime.now(timezone('Asia/Jakarta')).strftime("%d%m%Y")
-            today_invoice = datetime.now().strftime("%d%m%Y")
-            last_invoice = Invoice.objects.filter(created_at__startswith=datetime.now().date()).order_by('-created_at').first()
-            if not last_invoice:
-                count = 1
-                invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
-            else:
-                count = int((last_invoice.invoice)[14:]) + 1
-                invoice_number = 'K' + user.username.upper()[0] + str(user.id)[:5].upper() + today_invoice + str(count)
-        
-            context['invoice_number'] = invoice_number
+            context['invoice_number'] = code_generator.generate(self.request.user, Invoice)
         context['members'] = member_services.get_members_list()
         
         return context

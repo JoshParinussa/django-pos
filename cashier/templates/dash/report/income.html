@@ -6,15 +6,14 @@
 
 {% block js %}
 <script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
-<script src="{% static 'admin/report_profit_loss.js' %}"></script>
+<script src="{% static 'admin/report_income.js' %}"></script>
 {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
 {% endblock %}
 
 {% block breadcrumb %}
-<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Laporan Laba Rugi</span>
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Pemasukan</span>
 {% comment %} <a href="{% url 'dash_view' %}" class="kt-subheader__breadcrumbs-link">Dashboard</a> {% endcomment %}
 {% endblock %}
-
 
 {% block content %}
 {% csrf_token %}
@@ -34,83 +33,12 @@
                     <i class="flaticon-search"></i>Filter
                 </button>
             </div>
+            {% comment %} <div class="col-5">
+            </div> {% endcomment %}
             <div class="col-2">
                 <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
                     <i class="flaticon2-print"></i>Cetak
                 </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-4">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                <div class="row">
-                    <h1>Pendapatan</h1>
-                </div>
-                <div class="row">
-                    <h2 id="revenue"></h2>
-                </div>
-            </div>
-            <div class="kt-portlet__foot">
-                <div class="row">
-                    <h4>Penjualan Bersih</h4>
-                </div>
-                <div class="row">
-                    <h4 id="revenue_1"></h4>
-                </div>
-                <div class="row">
-                    <h4>Pendapatan Lain-lain</h4>
-                </div>
-                <div class="row">
-                    <h4 id="revenue_2"></h4>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                <div class="row">
-                    <h1>Laba Bersih</h1>
-                </div>
-                <div class="row">
-                    <h2 id="profit"></h2>
-                </div>
-            </div>
-            <div class="kt-portlet__foot">
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                <div class="row">
-                    <h1>Beban</h1>
-                </div>
-                <div class="row">
-                    <h2 id="cost"></h2>
-                </div>
-            </div>
-            <div class="kt-portlet__foot">
-                <div class="row">
-                    <h4>Harga Pokok Penjualan</h4>
-                </div>
-                <div class="row">
-                    <h4 id="cost_1"></h4>
-                </div>
-                <div class="row">
-                    <h4>Beban Lain-lain</h4>
-                </div>
-                <div class="row">
-                    <h4 id="cost_2"></h4>
-                </div>
             </div>
         </div>
     </div>
@@ -123,7 +51,7 @@
                 <i class="kt-font-brand flaticon2-soft-icons"></i>
             </span>
             <h3 class="kt-portlet__head-title">
-                List Laba Rugi
+                List Pemasukan
             </h3>
         </div>
     </div>
@@ -133,8 +61,10 @@
                 <tr>
                     <th>Kode</th>
                     <th>Tanggal</th>
+                    <th>Kasir</th>
                     <th>Keterangan</th>
                     <th>Jumlah</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

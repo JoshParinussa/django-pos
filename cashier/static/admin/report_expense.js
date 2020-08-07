@@ -1,18 +1,7 @@
 "use strict";
-window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 var table;
-var condition;
-var row;
-var income;
-var profit;
-var currentDate;
-var data;
-var data_2;
-var product_all;
 var dates;
-var payment_status;
-
-
+window.csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 var KTDatatablesDataSourceAjaxServer = function() {
     var initDateRangePicker = function() {
         var start = moment().subtract(29, 'days');
@@ -42,38 +31,35 @@ var KTDatatablesDataSourceAjaxServer = function() {
         dates = date_range.split(' to ');
         return dates
     }
-    var initTable1 = function() {
-        table = $('.data-table');
-        var date = moment.utc().format('YYYY-MM-DD HH:mm:ss');
-        // console.log(date); // 2015-09-13 03:39:27
-        var stillUtc = moment.utc(date).toDate();
-        var local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
 
-        // console.log(local); // 2015-09-13 09:39:27
+    var initTable = function() {
+        table = $('.data-table');
+        // begin first table
         table.dataTable({
-            autoWidth: false,
+            responsive: true,
+            searchDelay: 500,
             processing: true,
             serverSide: true,
-            serverSide: false,
+            autoWidth: false,
+            serverSide: true,
             pageLength: 10,
             ordering: true,
             paging: true,
-            scrollX: true,
             order: [
-                [1, "asc"]
+                [0, "asc"]
             ],
             ajax: {
                 'type': 'POST',
-                'url': '/v1/profit_loss/set_datatable?format=datatables',
+                'url': '/v1/report_expense/set_datatable?format=datatables',
                 'data': function(d) {
                     d.date_range = getDaterange();
                 }
             },
             columnDefs: [{
                     targets: 0,
-                    render: function(data, type, row) {
+                    render: function(data) {
                         return !$.trim(data) ? '' : data;
-                    },
+                    }
                 },
                 {
                     targets: 1,
@@ -90,24 +76,38 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 3,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data > 0 ? 
-                            '<span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>' :
-                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>';
+                        return !$.trim(data) ? '' : data;
                     }
+                },
+                {
+                    targets: 4,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
+                    }
+                },
+                {
+                    targets: -1,
+                    title: 'Actions',
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return `<a href="expense/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
+                          <i class="nav-icon fas fa-edit"></i>
+                    </a>`;
+                    },
                 },
             ],
             columns: [
-                { data: 'code', orderable: true, searchable: true, name: 'code' },
+                { data: 'invoice', orderable: true, searchable: true, name: 'invoice' },
                 { data: 'date', orderable: true, searchable: true, name: 'date' },
+                { data: 'cashier', orderable: true, searchable: true, name: 'cashier' },
                 { data: 'information', orderable: true, searchable: true, name: 'information' },
-                { data: 'total', orderable: true, searchable: true, name: 'total' },
+                { data: 'cost', orderable: true, searchable: true, name: 'cost' },
+                { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }
             ],
         });
     };
-
     var initEvents = function() {
         $('#btn-filter-date').on('click', function(e) {
-            initProfitLoss();
             table.api().ajax.reload();
         });
         $('#btn-print-report').on('click', function(e) {
@@ -115,7 +115,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             var date_range = getDaterange();
             $.ajax({
                 type: "POST",
-                url: "/v1/profit_loss/print_report",
+                url: "/v1/expense/print_report",
                 data: {
                     'date_range': date_range
                 },
@@ -235,59 +235,18 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     myPrintWindow.close();
                 }
             });
-
-
-
         });
-    };
-    var initProfitLoss = function () {
-        var date_range = getDaterange();
-            $.ajax({
-                type: "POST",
-                url: "/v1/profit_loss/set_profit_loss",
-                data: {
-                    'date_range': date_range
-                },
-                success: function(result) {
-                    $('#revenue').html("Rp. "+Number(result.revenue).toLocaleString('id-ID'));
-                    $('#revenue_1').html("Rp. "+Number(result.revenue_1).toLocaleString('id-ID'));
-                    $('#revenue_2').html("Rp. "+Number(result.revenue_2).toLocaleString('id-ID'));
-                    $('#cost').html("Rp. "+Number(result.cost).toLocaleString('id-ID'));
-                    $('#cost_1').html("Rp. "+Number(result.cost_1).toLocaleString('id-ID'));
-                    $('#cost_2').html("Rp. "+Number(result.cost_2).toLocaleString('id-ID'));
-                    $('#profit').html("Rp. "+Number(result.profit).toLocaleString('id-ID'));
-                }
-            });
     };
     return {
         init: function() {
             initDateRangePicker();
-            initProfitLoss();
-            initTable1();
+            initTable();
             initEvents();
         },
+
     };
+
 }();
-
-$('#date-picker-range').change(function() {
-    // condition = this.value;
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/v1/profit_loss/profit",
-    //     data: function(data) {
-    //         data.date_range = getDaterange();
-    //     },
-    //     success: function(result) {
-    //         console.log("Berubah")
-    //         console.log(result)
-    //         $('#revenue').html("Rp."+result.data['revenue']);
-    //         $('#cost').html("Rp."+result.data['cost']);
-    //         $('#profit').html("Rp."+result.data['profit']);
-    //         table.api().ajax.reload();
-    //     }
-    // });
-});
-
 
 jQuery(document).ready(function() {
     KTDatatablesDataSourceAjaxServer.init();

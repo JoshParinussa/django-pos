@@ -142,6 +142,18 @@
                         <span class="kt-menu__link-text">Penjualan Produk</span>
                     </a>
                 </li>
+                <li class="kt-menu__item {% if url_name == 'dash_report_income' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_report_income' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Pemasukan</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item {% if url_name == 'dash_report_expense' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_report_expense' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Pengeluaran</span>
+                    </a>
+                </li>
                 <li class="kt-menu__item {% if url_name == 'dash_report_out_of_stock' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_report_out_of_stock' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>

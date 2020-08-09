@@ -84,6 +84,12 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 2,
                     render: function(data) {
+                        return !$.trim(data) ? '' : data;
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function(data) {
                         if (data == 'beban' || data == "beban lain-lain") {
                             return '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">' + data + '</span>';
                         } else {
@@ -92,7 +98,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     }
                 },
                 {
-                    targets: 3,
+                    targets: 4,
                     render: function(data) {
                         return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
                         // return !$.trim(data) ? '' : data > 0 ?

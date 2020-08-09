@@ -125,7 +125,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, row) {
-                        return `<a href="../report/purchase/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detail">
+                        return `<a href="../transaction/purchase/update/${row.id}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Variant List">
                           <i class="nav-icon fas fa-edit"></i>
                     </a>`;
                     },

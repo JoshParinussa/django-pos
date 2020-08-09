@@ -6,14 +6,15 @@ from cashier.models import Product, User
 from .base import BaseModel
 
 
-class InvoiceStatus(models.IntegerChoices):
-    """StoreTier choice."""
-    ONPROCESS = 0
-    SUCCESS = 1
-
-
 class Invoice(BaseModel):
     """Invoice."""
+
+    class InvoiceStatus(models.IntegerChoices):
+        """StoreTier choice."""
+        ONPROCESS = 0
+        SUCCESS = 1
+        CANCEL = 2
+
     invoice = models.CharField(max_length=128, db_index=True)
     date = models.DateTimeField(auto_now_add=True)
     cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name='invoice_cashier', verbose_name="kasir")

@@ -21,25 +21,30 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
         date_range = request.POST.getlist('date_range[]')
         dates = common_services.convert_date_to_utc(date_range)
         invoices = Invoice.objects.filter(date__range=dates, status=1).only("date","total","member")
-        purchases = Purchase.objects.filter(date__range=dates, payment_status=1).only("date","total","supplier")
+        purchases = Purchase.objects.filter(date__range=dates, status=1, payment_status=1).only("date","total","supplier")
         incomes = Income.objects.filter(date__range=dates).only("date","keterangan","jumlah_pemasukan")
         expenses = Expense.objects.filter(date__range=dates).only("date","information","cost")
         
         context = []
         listtemp = {}
         for invoice in invoices:
+            member_name = invoice.member  if invoice.member else 'customer'
             listtemp = {'date':invoice.date,
-                        'information':"Penjualan ke "+str(invoice.member),
+                        'information':"Penjualan ke "+str(member_name),
                         'total':invoice.total,
-                        'id':invoice.id}
+                        'id':invoice.id,
+                        'type': 'pendapatan'}
             context.append(listtemp)
             listtemp = {}
         
         for purchase in purchases:
+            supp_name = purchase.supplier  if purchase.supplier else 'supplier'
             listtemp = {'date':purchase.date,
-                        'information':"Pembelian dari "+str(purchase.supplier),
-                        'total':-purchase.total,
-                        'id':purchase.id}
+                        'information':"Pembelian dari "+str(supp_name),
+                        # 'total':-purchase.total,
+                        'total':purchase.total,
+                        'id':purchase.id,
+                        'type': 'beban'}
             context.append(listtemp)
             listtemp = {}
 
@@ -47,15 +52,18 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {'date':income.date,
                         'information':income.keterangan,
                         'total':income.jumlah_pemasukan,
-                        'id':income.id}
+                        'id':income.id,
+                        'type': 'pendapatan lain-lain'}
             context.append(listtemp)
             listtemp = {}    
 
         for expense in expenses:
             listtemp = {'date':expense.date,
                         'information':expense.information,
-                        'total':-expense.cost,
-                        'id':expense.id}
+                        # 'total':-expense.cost,
+                        'total':expense.cost,
+                        'id':expense.id,
+                        'type': 'beban lain-lain'}
             context.append(listtemp)
             listtemp = {}    
         

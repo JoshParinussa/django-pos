@@ -84,15 +84,27 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 {
                     targets: 2,
                     render: function(data) {
-                        return !$.trim(data) ? '' : data > 0 ? 
-                            '<span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>' :
-                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">'+Number(data).toLocaleString('id-ID')+'</span>';
+                        if (data == 'beban' || data == "beban lain-lain") {
+                            return '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">' + data + '</span>';
+                        } else {
+                            return '<span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">' + data + '</span>';
+                        }
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function(data) {
+                        return !$.trim(data) ? '' : Number(data).toLocaleString('id-ID');
+                        // return !$.trim(data) ? '' : data > 0 ?
+                        //     '<span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">' + Number(data).toLocaleString('id-ID') + '</span>' :
+                        //     '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">' + Number(data).toLocaleString('id-ID') + '</span>';
                     }
                 },
             ],
             columns: [
                 { data: 'date', orderable: true, searchable: true, name: 'date' },
                 { data: 'information', orderable: true, searchable: true, name: 'information' },
+                { data: 'type', orderable: true, searchable: true, name: 'type' },
                 { data: 'total', orderable: true, searchable: true, name: 'total' },
             ],
         });
@@ -233,24 +245,24 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
         });
     };
-    var initProfitLoss = function () {
+    var initProfitLoss = function() {
         var date_range = getDaterange();
-            $.ajax({
-                type: "POST",
-                url: "/v1/profit_loss/set_profit_loss",
-                data: {
-                    'date_range': date_range
-                },
-                success: function(result) {
-                    $('#revenue').html("Rp. "+Number(result.revenue).toLocaleString('id-ID'));
-                    $('#revenue_1').html("Rp. "+Number(result.revenue_1).toLocaleString('id-ID'));
-                    $('#revenue_2').html("Rp. "+Number(result.revenue_2).toLocaleString('id-ID'));
-                    $('#cost').html("Rp. "+Number(result.cost).toLocaleString('id-ID'));
-                    $('#cost_1').html("Rp. "+Number(result.cost_1).toLocaleString('id-ID'));
-                    $('#cost_2').html("Rp. "+Number(result.cost_2).toLocaleString('id-ID'));
-                    $('#profit').html("Rp. "+Number(result.profit).toLocaleString('id-ID'));
-                }
-            });
+        $.ajax({
+            type: "POST",
+            url: "/v1/profit_loss/set_profit_loss",
+            data: {
+                'date_range': date_range
+            },
+            success: function(result) {
+                $('#revenue').html("Rp. " + Number(result.revenue).toLocaleString('id-ID'));
+                $('#revenue_1').html("Rp. " + Number(result.revenue_1).toLocaleString('id-ID'));
+                $('#revenue_2').html("Rp. " + Number(result.revenue_2).toLocaleString('id-ID'));
+                $('#cost').html("Rp. " + Number(result.cost).toLocaleString('id-ID'));
+                $('#cost_1').html("Rp. " + Number(result.cost_1).toLocaleString('id-ID'));
+                $('#cost_2').html("Rp. " + Number(result.cost_2).toLocaleString('id-ID'));
+                $('#profit').html("Rp. " + Number(result.profit).toLocaleString('id-ID'));
+            }
+        });
     };
     return {
         init: function() {

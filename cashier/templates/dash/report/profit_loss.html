@@ -34,11 +34,11 @@
                     <i class="flaticon-search"></i>Filter
                 </button>
             </div>
-            <div class="col-2">
+            {% comment %} <div class="col-2">
                 <button type="button" class="btn btn-warning btn-block btn-icon-sm" id="btn-print-report" title="Cetak Laporan">
                     <i class="flaticon2-print"></i>Cetak
                 </button>
-            </div>
+            </div> {% endcomment %}
         </div>
     </div>
 </div>
@@ -74,24 +74,6 @@
         <div class="kt-portlet">
             <div class="kt-portlet__body">
                 <div class="row">
-                    <h1>Laba Bersih</h1>
-                </div>
-                <div class="row">
-                    <h2 id="profit"></h2>
-                </div>
-            </div>
-            <div class="kt-portlet__foot">
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-                <div class="row"><h4><br></h4></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="kt-portlet">
-            <div class="kt-portlet__body">
-                <div class="row">
                     <h1>Beban</h1>
                 </div>
                 <div class="row">
@@ -114,6 +96,24 @@
             </div>
         </div>
     </div>
+    <div class="col-4">
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="row">
+                    <h1>Laba Bersih</h1>
+                </div>
+                <div class="row">
+                    <h2 id="profit"></h2>
+                </div>
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="row"><h4><br></h4></div>
+                <div class="row"><h4><br></h4></div>
+                <div class="row"><h4><br></h4></div>
+                <div class="row"><h4><br></h4></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="kt-portlet kt-portlet--mobile">
@@ -133,6 +133,7 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Keterangan</th>
+                    <th>Jenis</th>
                     <th>Jumlah</th>
                 </tr>
             </thead>

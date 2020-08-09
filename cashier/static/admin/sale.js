@@ -295,10 +295,21 @@ var getInvoiceSaleItem = function() {
                         $(this).find("th.col-actions").remove();
                         $(this).find("td.col-actions").remove();
                     });
+                } else if (invoice_data['status'] == 2) {
+                    var alert_status = $('.alert-status').attr("hidden", false);
+                    alert_status.find('.alert').removeClass('alert-success').addClass('alert-danger');
+                    alert_status.find('.alert-text').text('Transaksi telah dibatalkan !');
+                    if ($('#cash').val() > 0) {
+                        $("#btn-print-process-payment").prop('disabled', false);
+                    }
                 } else {
                     var alert_status = $('.alert-status').attr("hidden", false);
                     alert_status.find('.alert').removeClass('alert-success').addClass('alert-warning');
                     alert_status.find('.alert-text').text('Transaksi belum diproses, segera selesaikan transaksi !');
+                    if ($('#cash').val() > 0) {
+                        $("#btn-print-process-payment").prop('disabled', false);
+                    }
+
                 }
 
             } catch (err) {}
@@ -468,6 +479,20 @@ $('#modal-btn-update').click(function(e) {
     } else {
         $('.modal').modal('toggle');
     }
+});
+
+$('#cancel-transaction').click(function(e) {
+    $.ajax({
+        type: "POST",
+        url: "/v1/sales/update_cancel_transaction",
+        data: {
+            "invoice_number": invoice_number,
+        },
+        success: function(result) {
+            // location.reload()
+            window.location.href = '/dash/transaction/sale';
+        }
+    });
 });
 
 var printResult = function() {

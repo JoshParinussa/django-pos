@@ -167,6 +167,17 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
 
         return Response(products)
 
+    @action(detail=False, methods=['POST'])
+    def update_cancel_transaction(self, request):
+        """update_item."""
+        invoice_purchase = request.POST.get('invoice_purchase')
+        purchase = Purchase.objects.get(invoice=invoice_purchase)
+        
+        purchase.status = Purchase.PurchaseStatus.CANCEL
+        purchase.save()
+        context = {'message':'Transaksi di batalkan'}
+        return Response(context)
+
 class ReportPurchaseViewSet(viewsets.ModelViewSet):
     """ReportPurchaseViewSet."""
     serializer_class = PurchaseSerializer

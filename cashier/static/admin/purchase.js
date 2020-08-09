@@ -306,10 +306,14 @@ var getInvoicePurchaseItem = function() {
                         $(this).find("th.col-actions").remove();
                         $(this).find("td.col-actions").remove();
                     });
-                } else {
+                } else if (invoice_data['status'] == 0) {
                     var alert_status = $('.alert-status').attr("hidden", false);
                     alert_status.find('.alert').removeClass('alert-success').addClass('alert-warning');
                     alert_status.find('.alert-text').text('Transaksi belum diproses, segera selesaikan transaksi !');
+                } else if (invoice_data['status'] == 2) {
+                    var alert_status = $('.alert-status').attr("hidden", false);
+                    alert_status.find('.alert').removeClass('alert-success').addClass('alert-danger');
+                    alert_status.find('.alert-text').text('Transaksi telah dibatalkan !');
                 }
 
             } catch (err) {}
@@ -438,6 +442,19 @@ $('#modal-btn-update').click(function(e) {
             grandTotal += item.total;
             $('#grand_total').text(Number(grandTotal).toLocaleString('id-ID'));
             emptyingCashChange();
+        }
+    });
+});
+
+$('#cancel-transaction').click(function(e) {
+    $.ajax({
+        type: "POST",
+        url: "/v1/purchase_detail/update_cancel_transaction",
+        data: {
+            "invoice_purchase": invoice_number,
+        },
+        success: function(result) {
+            location.reload()
         }
     });
 });

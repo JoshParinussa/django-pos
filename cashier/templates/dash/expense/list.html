@@ -6,7 +6,7 @@
 
 {% block js %}
 <script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
-<script src="{% static 'admin/expenses.js' %}"></script>
+<script src="{% static 'admin/expense.js' %}"></script>
 {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
 {% endblock %}
 
@@ -30,7 +30,7 @@
         <div class="kt-portlet__head-toolbar">
             <div class="kt-portlet__head-wrapper">
                 <div class="kt-portlet__head-actions">
-                    <a href="{% url 'dash_expenses_create' %}" class="btn btn-brand btn-elevate btn-icon-sm">
+                    <a href="{% url 'dash_expense_create' %}" class="btn btn-brand btn-elevate btn-icon-sm">
                         <i class="la la-plus"></i>
                         Tambah Pengeluaran
                     </a>

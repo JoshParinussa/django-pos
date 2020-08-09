@@ -113,8 +113,8 @@
                         <span class="kt-menu__link-text">Pemasukan</span>
                     </a>
                 </li>
-                <li class="kt-menu__item {% if url_name == 'dash_expenses_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
-                    <a href="{% url 'dash_expenses_list' %}" class="kt-menu__link ">
+                <li class="kt-menu__item {% if url_name == 'dash_expense_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_expense_list' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Pengeluaran</span>
                     </a>
@@ -148,12 +148,12 @@
                         <span class="kt-menu__link-text">Stok Kosong</span>
                     </a>
                 </li>
-                {% comment %} <li class="kt-menu__item {% if url_name == 'dash_report_profit_loss' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                <li class="kt-menu__item {% if url_name == 'dash_report_profit_loss' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
                     <a href="{% url 'dash_report_profit_loss' %}" class="kt-menu__link ">
                         <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
                         <span class="kt-menu__link-text">Laba Rugi</span>
                     </a>
-                </li> {% endcomment %}
+                </li>
             </ul>
         </div>
     </div>

@@ -19,7 +19,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
             ],
             ajax: {
                 'type': 'GET',
-                'url': '/v1/expenses?format=datatables',
+                'url': '/v1/expense?format=datatables',
             },
             columnDefs: [{
                     targets: 0,

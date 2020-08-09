@@ -10,11 +10,12 @@ from cashier.views.apis import user as api_user
 from cashier.views.apis import supplier as api_supplier
 from cashier.views.apis import sale as api_sale
 from cashier.views.apis import income as api_income
-from cashier.views.apis import expenses as api_expenses
+from cashier.views.apis import expense as api_expense
 from cashier.views.apis import invoice as api_invoice
 from cashier.views.apis import purchase as api_purchase
 from cashier.views.apis import purchase_detail as api_purchase_detail
 from cashier.views.apis import member as api_member
+from cashier.views.apis import profit_loss as api_profit_loss
 from cashier.views.dash import account as account_view
 from cashier.views.dash import product as dash_product_view
 from cashier.views.dash import category as dash_category_view
@@ -24,8 +25,9 @@ from cashier.views.dash import supplier as dash_supplier_view
 from cashier.views.dash import transaction as dash_transaction_view
 from cashier.views.dash import purchase as dash_purchase_view
 from cashier.views.dash import income as dash_income_view
-from cashier.views.dash import expenses as dash_expenses_view
+from cashier.views.dash import expense as dash_expense_view
 from cashier.views.dash import member as dash_member_view
+from cashier.views.dash import profit_loss as dash_profit_loss_view
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r'sales', api_sale.SaleViewSet)
@@ -37,7 +39,7 @@ router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
 router.register(r'supplier', api_supplier.SupplierViewSet)
 router.register(r'income', api_income.IncomeViewSet)
-router.register(r'expenses', api_expenses.ExpensesViewSet)
+router.register(r'expense', api_expense.ExpenseViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
 router.register(r'invoice', api_invoice.InvoiceViewSet)
@@ -45,6 +47,7 @@ router.register(r'purchase', api_purchase.PurchaseViewSet)
 router.register(r'purchase_detail', api_purchase_detail.PurchaseDetailViewSet)
 router.register(r'report_purchase', api_purchase.ReportPurchaseViewSet)
 router.register(r'member', api_member.MemberViewSet)
+router.register(r'profit_loss', api_profit_loss.ProfitLossViewSet)
 
 urlpatterns = [
     path('v1/', include((router.urls, 'api_views'), namespace='v1')),
@@ -112,16 +115,16 @@ urlpatterns = [
     path('dash/transaction/income/<str:pk>/delete', dash_income_view.IncomeDeleteView.as_view(), name='dash_income_delete'),
 
     # EXPENSES
-    path('dash/transaction/expenses', dash_expenses_view.ExpensesListView.as_view(), name='dash_expenses_list'),
-    path('dash/transaction/expenses/create', dash_expenses_view.ExpensesCreateView.as_view(), name='dash_expenses_create'),
-    path('dash/transaction/expenses/<str:pk>', dash_expenses_view.ExpensesUpdateView.as_view(), name='dash_expenses_update'),
-    path('dash/transaction/expenses/<str:pk>/delete', dash_expenses_view.ExpensesDeleteView.as_view(), name='dash_expenses_delete'),
+    path('dash/transaction/expense', dash_expense_view.ExpenseListView.as_view(), name='dash_expense_list'),
+    path('dash/transaction/expense/create', dash_expense_view.ExpenseCreateView.as_view(), name='dash_expense_create'),
+    path('dash/transaction/expense/<str:pk>', dash_expense_view.ExpenseUpdateView.as_view(), name='dash_expense_update'),
+    path('dash/transaction/expense/<str:pk>/delete', dash_expense_view.ExpenseDeleteView.as_view(), name='dash_expense_delete'),
 
     #REPORTS
     path('dash/report/transaction', dash_transaction_view.ReportTransactionView.as_view(), name='dash_report_transaction'),
     path('dash/report/sale-product', dash_transaction_view.ReportSalebyProductView.as_view(), name='dash_report_sale_by_product'),
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
-    path('dash/report/profit_loss', dash_transaction_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
+    path('dash/report/profit_loss', dash_profit_loss_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
     path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock'),
     path('dash/report/purchase',dash_purchase_view.ReportPurchaseView.as_view(),name='dash_report_purchase')
 ]   

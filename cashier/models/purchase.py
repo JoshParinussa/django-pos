@@ -6,18 +6,20 @@ from cashier.models import Product, User, Supplier
 from .base import BaseModel
 
 
-class PurchaseStatus(models.IntegerChoices):
-    """PurchaseStatus choice."""
-    ONPROCESS = 0
-    SUCCESS = 1
-
-class PurchasePaymentStatus(models.IntegerChoices):
-    """PurchaseStatus choice."""
-    DEBT = 0
-    CASH = 1
-
 class Purchase(BaseModel):
     """Purchase"""
+
+    class PurchaseStatus(models.IntegerChoices):
+        """PurchaseStatus choice."""
+        ONPROCESS = 0
+        SUCCESS = 1
+        CANCEL = 2
+
+    class PurchasePaymentStatus(models.IntegerChoices):
+        """PurchaseStatus choice."""
+        DEBT = 0
+        CASH = 1
+
     invoice = models.CharField(max_length=128, db_index=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name="tanggal")
     cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name='purchase_cashier', verbose_name="kasir")

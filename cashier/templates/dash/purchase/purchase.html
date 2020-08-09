@@ -146,11 +146,19 @@
                 <div class="kt-portlet__foot">
                     <div class="kt-form__actions">
                         <div class="row">
-                            <div class="col-lg-12 col-xl-12">
+                            {% if invoice_status == 0 or invoice_status == 2%}
+                            <div class="col-lg-6 col-xl-6 btn-process-payment">
                                 <button type="submit" class="btn btn-success btn-block m-1" id="process_payment">
                                     <i class="flaticon2-shopping-cart-1"></i>&nbsp;Akhiri Transaksi
                                 </button>&nbsp;
                             </div>
+                            {% elif invoice_status == 1 %}
+                            <div class="col-lg-6 col-xl-6 btn-cancel">
+                                <button class="btn btn-danger btn-block m-1" id="cancel-transaction">
+                                    <i class="flaticon2-cross"></i>&nbsp;Batalkan Transaksi
+                                </button>&nbsp;
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

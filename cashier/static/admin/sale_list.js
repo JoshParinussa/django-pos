@@ -84,7 +84,9 @@ var KTDatatablesDataSourceAjaxServer = function() {
                     render: function(data) {
                         return !$.trim(data) ? '' : data == 1 ?
                             '<span class="kt-badge kt-badge--success     kt-badge--inline kt-badge--pill">Success</span>' :
-                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>';
+                            data == 0 ?
+                            '<span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill">On Process</span>' :
+                            '<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Batal</span>';
                     }
                 },
                 {

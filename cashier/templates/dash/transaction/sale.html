@@ -212,6 +212,17 @@
                                     <i class="flaticon2-print"></i>&nbsp;Cetak nota
                                 </button>
                             </div>
+                            <div class="col-lg-6 col-xl-6 btn-cancel">
+                                <button class="btn btn-danger btn-block m-1" id="cancel-transaction">
+                                    <i class="flaticon2-cross"></i>&nbsp;Batalkan Transaksi
+                                </button>&nbsp;
+                            </div>
+                            {% comment %} {% elif invoice_status == 2 %}
+                            <div class="col-lg-6 col-xl-6 btn-cancel">
+                                <button class="btn btn-danger btn-block m-1" id="cancel-transaction">
+                                    <i class="flaticon2-cross"></i>&nbsp;Batalkan Transaksi
+                                </button>&nbsp;
+                            </div> {% endcomment %}
                             {% else %}
                             <div class="col-lg-6 col-xl-6">
                                 <button type="button" class="btn btn-info btn-block m-1" id="btn-print-process-payment" disabled>

@@ -24,16 +24,18 @@ class PurchaseDetailView(ManageBaseView, TemplateView):
     def get_context_data(self, **kwargs):
         """Override get context."""
         context = super().get_context_data(**kwargs)
+        invoice_status = 0
         try:
             invoice_id = self.kwargs['pk']
             invoice = Purchase.objects.get(id=invoice_id)
+            invoice_status = invoice.status
             context['invoice_number'] = invoice.invoice
-            context['invoice_status'] = invoice.status
+            context['invoice_status'] = invoice_status
         except Exception as e:
             logger.error(e)
             context['invoice_number'] = code_generator.generate(self.request.user, Purchase)
+            context['invoice_status'] = invoice_status
         context['suppliers'] = supplier_services.get_suppliers_list()
-        
         return context
 
 class ReportPurchaseView(DashListView):

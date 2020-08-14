@@ -6,6 +6,7 @@ from .base import BaseModel
 
 class Expense(BaseModel):
     """Expense model."""
+    invoice = models.CharField(max_length=128, db_index=True, verbose_name="kode")
     date = models.DateTimeField(auto_now_add=True, verbose_name="tanggal")
     cashier = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, verbose_name="kasir")
     information = models.CharField(max_length=128, db_index=True, verbose_name="informasi")

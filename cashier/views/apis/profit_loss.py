@@ -28,8 +28,11 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
         context = []
         listtemp = {}
         for invoice in invoices:
+            if invoice.total == None:
+                invoice.total = 0
             member_name = invoice.member  if invoice.member else 'customer'
-            listtemp = {'date':invoice.date,
+            listtemp = {'code':invoice.invoice,
+                        'date':invoice.date,
                         'information':"Penjualan ke "+str(member_name),
                         'total':invoice.total,
                         'id':invoice.id,
@@ -38,8 +41,11 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}
         
         for purchase in purchases:
+            if purchase.total == None:
+                purchase.total = 0
             supp_name = purchase.supplier  if purchase.supplier else 'supplier'
-            listtemp = {'date':purchase.date,
+            listtemp = {'code':purchase.invoice,
+                        'date':purchase.date,
                         'information':"Pembelian dari "+str(supp_name),
                         # 'total':-purchase.total,
                         'total':purchase.total,
@@ -49,7 +55,10 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}
 
         for income in incomes:
-            listtemp = {'date':income.date,
+            if income.jumlah_pemasukan == None:
+                income.jumlah_pemasukan = 0
+            listtemp = {'code':income.invoice,
+                        'date':income.date,
                         'information':income.keterangan,
                         'total':income.jumlah_pemasukan,
                         'id':income.id,
@@ -58,7 +67,10 @@ class ProfitLossViewSet(viewsets.ModelViewSet):
             listtemp = {}    
 
         for expense in expenses:
-            listtemp = {'date':expense.date,
+            if expense.cost == None:
+                expense.cost = 0
+            listtemp = {'code':expense.invoice,
+                        'date':expense.date,
                         'information':expense.information,
                         # 'total':-expense.cost,
                         'total':expense.cost,

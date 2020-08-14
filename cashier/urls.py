@@ -39,7 +39,9 @@ router.register(r'converts', api_product.ConvertViewSet)
 router.register(r'employees', api_user.UserViewSet)
 router.register(r'supplier', api_supplier.SupplierViewSet)
 router.register(r'income', api_income.IncomeViewSet)
+router.register(r'report_income', api_income.ReportIncomeViewSet)
 router.register(r'expense', api_expense.ExpenseViewSet)
+router.register(r'report_expense', api_expense.ReportExpenseViewSet)
 router.register(r'report_transaction', api_sale.ReportTransactionViewSet)
 router.register(r'report_sale', api_sale.ReportSaleViewSet)
 router.register(r'invoice', api_invoice.InvoiceViewSet)
@@ -126,5 +128,7 @@ urlpatterns = [
     path('dash/report/sale/<str:pk>', dash_transaction_view.ReportSaleView.as_view(), name='dash_report_sale'),
     path('dash/report/profit_loss', dash_profit_loss_view.ReportProfitLossView.as_view(), name='dash_report_profit_loss'),
     path('dash/report/product_out_of_stock',dash_product_view.ReportOutOfStockListView.as_view(),name='dash_report_out_of_stock'),
-    path('dash/report/purchase',dash_purchase_view.ReportPurchaseView.as_view(),name='dash_report_purchase')
+    path('dash/report/purchase',dash_purchase_view.ReportPurchaseView.as_view(),name='dash_report_purchase'),
+    path('dash/report/income',dash_income_view.ReportIncomeView.as_view(),name='dash_report_income'),
+    path('dash/report/expense',dash_expense_view.ReportExpenseView.as_view(),name='dash_report_expense')
 ]   

@@ -188,6 +188,12 @@ class SaleViewSet(viewsets.ModelViewSet):
         """update_item."""
         invoice_number = request.POST.get('invoice_number')
         invoice = Invoice.objects.get(invoice=invoice_number)
+        sale_items = invoice.invoice_sale.all()
+
+        for sale_item in sale_items:
+            product_update = sale_item.product
+            product_update.stock = F('stock') + sale_item.qty
+            product_update.save()
         
         invoice.status = Invoice.InvoiceStatus.CANCEL
         invoice.save()

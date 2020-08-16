@@ -167,12 +167,19 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
 
         return Response(products)
 
+
     @action(detail=False, methods=['POST'])
     def update_cancel_transaction(self, request):
         """update_item."""
         invoice_purchase = request.POST.get('invoice_purchase')
         purchase = Purchase.objects.get(invoice=invoice_purchase)
-        
+        purchase_items = purchase.purchase_invoice.all()
+
+        for purchase_item in purchase_items:
+            product_update = purchase_item.product
+            product_update.stock = F('stock') - purchase_item.qty
+            product_update.save()
+
         purchase.status = Purchase.PurchaseStatus.CANCEL
         purchase.save()
         context = {'message':'Transaksi di batalkan'}

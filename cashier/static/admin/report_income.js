@@ -49,8 +49,8 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 [0, "asc"]
             ],
             ajax: {
-                'type': 'POST',
-                'url': '/v1/report_income/set_datatable?format=datatables',
+                'type': 'GET',
+                'url': '/v1/income?format=datatables',
                 'data': function(d) {
                     d.date_range = getDaterange();
                 }
@@ -110,6 +110,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
         $('#btn-filter-date').on('click', function(e) {
             table.api().ajax.reload();
         });
+
         $('#btn-print-report').on('click', function(e) {
             var table_body = '';
             var date_range = getDaterange();

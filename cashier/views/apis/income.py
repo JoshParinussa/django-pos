@@ -43,6 +43,7 @@ class ReportIncomeViewSet(viewsets.ModelViewSet):
     def set_datatable(self, request):
         """set_datatable."""
         date_range = request.POST.getlist('date_range[]')
+        print("#DATE RANGE", date_range)
         dates = common_services.convert_date_to_utc(date_range)
         queryset = Income.objects.all()
         if date_range:

@@ -10,6 +10,7 @@ class ProductSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     text = serializers.SerializerMethodField()
     category = serializers.CharField(source='category.name', read_only=True)
     unit = serializers.CharField(source='unit.name', read_only=True)
+    supplier = serializers.CharField(source='supplier.kode', read_only=True)
 
 
     def get_text(self, obj):

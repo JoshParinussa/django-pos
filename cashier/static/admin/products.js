@@ -80,7 +80,8 @@ var KTDatatablesDataSourceAjaxServer = function() {
                 { data: 'barcode', orderable: true, searchable: true, name: 'barcode' },
                 { data: 'stock', orderable: true, searchable: false, name: 'stock' },
                 { data: 'category', orderable: true, searchable: false, name: 'category.name' },
-                { data: 'unit', orderable: true, searchable: false, name: 'unit' },
+                // { data: 'unit', orderable: true, searchable: false, name: 'unit' },
+                { data: 'supplier', orderable: true, searchable: true, name: 'supplier.kode' },
                 { data: 'purchase_price', orderable: true, searchable: false, name: 'purchase_price' },
                 { data: 'selling_price', orderable: true, searchable: false, name: 'selling_price' },
                 { data: 'Actions', searchable: false, orderable: false, responsivePriority: -1 }

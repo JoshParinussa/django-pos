@@ -1,0 +1,51 @@
+{% extends 'dash/layout/base.html' %}
+{% load static i18n %}
+{% block css %}
+<link href="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'vendors/metronic/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+{% comment %} <script src="{% static 'admin/supplier.js' %}"></script> {% endcomment %}
+<script src="{% static 'admin/js/report/supplier/supplier.js' %}"></script>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> {% endcomment %}
+{% endblock %}
+
+{% block breadcrumb %}
+<span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Supplier</span>
+{% comment %} <a href="{% url 'dash_view' %}" class="kt-subheader__breadcrumbs-link">Dashboard</a> {% endcomment %}
+{% endblock %}
+
+
+{% block content %}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-soft-icons"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Laporan List Supplier
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <table class="table table-striped- table-hover table-checkable data-table">
+            <thead>
+                <tr>
+                    <th>Kode</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Alamat</th>
+                    <th>Nama Kontak</th>
+                    <th>No Telp Kantor</th>
+                    <th>No HP</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

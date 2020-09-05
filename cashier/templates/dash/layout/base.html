@@ -15,6 +15,7 @@
 		<!--begin::Global Theme Styles(used by all pages) -->
 		<link href="{% static 'vendors/metronic/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
 		<link href="{% static 'vendors/metronic/css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'vendors/metronic/plugins/custom/prismjs/prismjs.bundle.css' %}" rel="stylesheet" type="text/css" />
 		<!--end::Global Theme Styles -->
 
 		<!--begin::Layout Skins(used by all pages) -->
@@ -166,9 +167,12 @@
 
 		<!--begin::Global Theme Bundle(used by all pages) -->
 		<script src="{% static 'vendors/metronic/plugins/global/plugins.bundle.js' %}"></script>
+		<script src="{% static 'vendors/metronic/plugins/custom/prismjs/prismjs.bundle.js' %}"></script>
 		<script src="{% static 'vendors/metronic/js/scripts.bundle.js' %}"></script>
 		<!--end::Global Theme Bundle -->
 		<script src="{% static 'common.js' %}"></script>
+
+		{% comment %} <script src="{% static 'vendors/metronic/js/pages/crud/metronic-datatable/child/data-local.js' %}"></script> {% endcomment %}
 
 		{% block js %}{% endblock %}
 	</body>

@@ -114,7 +114,7 @@ class SaleViewSet(viewsets.ModelViewSet):
 
         sales = Sale.objects.filter(invoice=invoice)
         for sale in sales:
-            product = Product.objects.get(name=sale.product)
+            product = Product.objects.get(barcode=sale.product.barcode)
             try:
                 product.stock = product.stock - int(sale.qty)
                 product.save(update_fields=["stock"])

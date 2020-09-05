@@ -102,7 +102,8 @@ class PurchaseDetailViewSet(viewsets.ModelViewSet):
 
         purchase_details = PurchaseDetail.objects.filter(invoice=purchase)
         for purchase_detail in purchase_details:
-            product = Product.objects.get(name=purchase_detail.product)
+            print("# PURCHASE DETAIL", purchase_detail.product.barcode)
+            product = Product.objects.get(barcode=purchase_detail.product.barcode)
             try:
                 product.purchase_price = (int(purchase_detail.total)/int(purchase_detail.qty))
                 product.stock = product.stock + int(purchase_detail.qty)

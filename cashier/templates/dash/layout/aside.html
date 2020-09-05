@@ -166,6 +166,12 @@
                         <span class="kt-menu__link-text">Laba Rugi</span>
                     </a>
                 </li>
+                <li class="kt-menu__item {% if url_name == 'dash_report_supplier_list' %}kt-menu__item--active{% endif %}" aria-haspopup="true">
+                    <a href="{% url 'dash_report_supplier_list' %}" class="kt-menu__link ">
+                        <i class="kt-menu__link-icon flaticon-cogwheel-1"></i>
+                        <span class="kt-menu__link-text">Supplier</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

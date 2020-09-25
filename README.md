@@ -1,4 +1,6 @@
-# django-cashier
+Apps for manage store, have cashier system, report system, stock system, etc
+
+# django-pos
 
 Create venv first
 pip install -r requirements.txt
